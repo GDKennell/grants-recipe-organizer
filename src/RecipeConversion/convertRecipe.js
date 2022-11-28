@@ -42,6 +42,21 @@ class Ingredient {
   }
 }
 
+class VolumeMeasure {
+  /**
+   * @param {string[]} names
+   * @param {number} ratioToCup
+   */
+  constructor(names, ratioToCup) {
+    this.names = names;
+    this.ratioToCup = ratioToCup;
+  }
+}
+
+/** ***************************** */
+/*    Volume type & Ingredient lists      */
+/** ***************************** */
+
 const butter = new Ingredient(
   ["butter", "unsalted butter", "salted butter", "melted butter"],
   227.0
@@ -93,15 +108,62 @@ const Chili_powder = new Ingredient(["Chili powder"], 1.0);
 const Vanilla_Extract = new Ingredient(["Vanilla Extract"], 208.0);
 const Vinegar = new Ingredient(["Vinegar", "white vinegar"], 238.0); // Distilled white
 
-class VolumeMeasure {
-  /**
-   * @param {string[]} names
-   * @param {number} ratioToCup
-   */
-  constructor(names, ratioToCup) {
-    this.names = names;
-    this.ratioToCup = ratioToCup;
+const allIngredients = [
+  butter,
+  Flour,
+  Parmesan_cheese,
+  Honey,
+  Sugar,
+  Dried_Basil,
+  Brown_sugar,
+  Evaporated_milk,
+  Yeast,
+  Water,
+  Poppy_seeds,
+  Sesame_seeds,
+  Salt,
+  Yogurt,
+  Olive_oil,
+  Five_Spice_mix,
+  Soy_Sauce,
+  Shaoxing_Wine,
+  Garlic_powder,
+  Black_pepper,
+  Baking_powder,
+  Baking_soda,
+  Thyme,
+  Milk,
+  Heavy_cream,
+  Monterey_Jack_cheese,
+  Cottage_cheese,
+  Cajun_seasoning,
+  Oregano,
+  Cornstarch,
+  Walnuts,
+  Cinnamon,
+  Ginger,
+  Nutmeg,
+  Cloves,
+  Onion_salt,
+  Paprika,
+  Chili_powder,
+  Vanilla_Extract,
+  Vinegar,
+];
+
+const allIngredientNameStrings = allIngredients
+  .flatMap((m) => m.names)
+  .map((m) => m.toLocaleLowerCase());
+console.log(allIngredientNameStrings);
+var nameToIngredient = {};
+for (const ingredient of allIngredients) {
+  for (const name of ingredient.names) {
+    nameToIngredient[name.toLocaleLowerCase()] = ingredient;
   }
+}
+
+function isIngredientName(str) {
+  return allIngredientNameStrings.includes(str.toLocaleLowerCase());
 }
 
 const cupMeasure = new VolumeMeasure(["cup"], 1.0);
@@ -110,10 +172,6 @@ const tablespoonMeasure = new VolumeMeasure(
   ["tbsp", "tablespoon"],
   0.062499920209125003
 );
-
-/** ***************************** */
-/*    Volume type lists      */
-/** ***************************** */
 
 const allVolumeMeasurements = [cupMeasure, teaspoonMeasure, tablespoonMeasure];
 
@@ -191,7 +249,22 @@ function findVolumeString(line) {
   return [volumeStringStartIndex, volumeInCups, volumeStringEndIndex];
 }
 
-function findIngredientName(lineIn, volumeStringEndIndex) {}
+function findIngredientName(lineIn, volumeStringEndIndex) {
+  const words = lineIn
+    .toLocaleLowerCase()
+    .substring(volumeStringEndIndex + 1)
+    .split(" ");
+  var wordIndex = 0;
+  var testWord = words[wordIndex++];
+  while (!isIngredientName(testWord) && wordIndex < words.length) {
+    testWord += " " + words[wordIndex++];
+  }
+  if (!isIngredientName(testWord)) {
+    console.log('Error: unknown ingredient "' + testWord + '"');
+    return "";
+  }
+  return testWord;
+}
 
 /**
  * @param {string} lineIn
@@ -206,11 +279,24 @@ export function convertLine(lineIn) {
   const [volumeStringStartIndex, volumeInCups, volumeStringEndIndex] =
     findVolumeString(newLine);
   const cupsValueString = volumeInCups.toFixed(4) + " cups";
-  const finalLine =
-    newLine.slice(0, volumeStringStartIndex) +
-    cupsValueString +
-    newLine.slice(volumeStringEndIndex);
-  // const ingredientName = findIngredientName(lineIn, volumeStringEndIndex);
-
-  return finalLine;
+  const ingredientName = findIngredientName(lineIn, volumeStringEndIndex);
+  if (ingredientName == "") {
+    return lineIn;
+  }
+  const ingredient = nameToIngredient[ingredientName];
+  const gramsAmount = ingredient.gramsPerCup & volumeInCups;
+  const oldVolumeMeasurement = lineIn.substring(
+    volumeStringStartIndex,
+    volumeStringEndIndex
+  );
+  const prefix = lineIn.substring(0, volumeStringStartIndex);
+  const suffix = lineIn.substring(volumeStringEndIndex);
+  return (
+    prefix +
+    gramsAmount.toFixed(1) +
+    "g (" +
+    oldVolumeMeasurement +
+    ") " +
+    suffix
+  );
 }
