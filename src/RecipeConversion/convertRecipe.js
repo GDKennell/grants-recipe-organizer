@@ -291,14 +291,14 @@ function findIngredientName(lineIn, volumeStringEndIndex) {
  * @param {string} lineIn
  */
 export function convertLine(lineIn) {
-  if (!containsVolumeMeasurement(lineIn)) {
-    return lineIn;
-  }
-
   //  ------- Pre Processing ------------ //
   var newLine = wordsToNumbers(lineIn);
   newLine = fractionsToDecimals(newLine);
   newLine = sanitizePunctuation(newLine);
+
+  if (!containsVolumeMeasurement(newLine)) {
+    return lineIn;
+  }
 
   //  ------- Finding Volume Amount ------------ //
 

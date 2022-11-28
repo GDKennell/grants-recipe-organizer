@@ -86,10 +86,47 @@ export function wordsToNumbers(str) {
   return words.map(wordToNumber).join(" ");
 }
 
-export function fractionsToDecimals(str) {
+function unicodeFractionsToRegularFractions(strIn) {
+  var str = strIn;
+  const unicodes = ["¼", "½", "⅐", "⅔", "⅖", "¾", "⅙", "⅞", "⅒", "⅑"];
+  var hasUnicode = false;
+  for (const char of unicodes) {
+    if (strIn.indexOf(char) != -1) {
+      hasUnicode = true;
+      break;
+    }
+  }
+  if (!hasUnicode) {
+    return strIn;
+  }
+
+  var unicodeToString = {};
+  unicodes.forEach((char) => {
+    const normalized = char.normalize("NFKD");
+    const operands = normalized.split("⁄");
+    const num = parseInt(operands[0]);
+    const denom = parseInt(operands[1]);
+    unicodeToString[char] = " " + num + "/" + denom;
+  });
+  for (const char of unicodes) {
+    str = str.replace(char, unicodeToString[char]);
+  }
+  return str;
+}
+
+export function fractionsToDecimals(strIn) {
+  console.log("Before unicode: " + strIn);
+  const str = unicodeFractionsToRegularFractions(strIn);
+  console.log("After unicode: " + str);
   // console.log(str + " starting ");
   const slashIndex = str.indexOf("/");
-  if (slashIndex == -1) {
+  if (
+    slashIndex == -1 ||
+    slashIndex == 0 ||
+    !isDecimal(str[slashIndex - 1]) ||
+    slashIndex == str.length - 1 ||
+    !isDecimal(str[slashIndex + 1])
+  ) {
     return str;
   }
   var numeratorStartIndex = slashIndex - 1;

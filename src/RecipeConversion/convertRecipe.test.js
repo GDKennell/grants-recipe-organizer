@@ -41,15 +41,36 @@ test("handles modifiers to ingredients and extraneous notes", () => {
     ["1/4 cup cold vodka", "56.0g (0.25 cup)  cold vodka"],
     ["1/4 cup  cold water", "59.1g (0.25 cup)   cold water"],
   ];
-  /**
- * 312.5g (2.50 cups)  flour
-6.0g (1 teaspoon)  salt
-24.7g (2 tablespoons)  sugar
-170.2g (12 tablespoons)  butter , cut into 0.25-inch slices
-102.5g (0.50 cup)  shortening , cut into small bits
-56.0g (0.25 cup)  vodka
-59.1g (0.25 cup)  wate
- */
+
+  for (const testCase of testCases) {
+    //   console.log("testing " + testCase[0]);
+    const result = convertLine(testCase[0]);
+    expect(result).toEqual(testCase[1]);
+  }
+});
+
+test("handles unicode fractions", () => {
+  const testCases = [
+    [
+      "1½ cups/180 grams all-purpose flour",
+      "187.5g (1.50 cups) /180 grams all-purpose flour",
+    ],
+    ["1 teaspoon cream of tartar", "5.0g (1 teaspoon)  cream of tartar"],
+    ["½ teaspoon baking soda", " 2.3g (0.50 teaspoon)  baking soda"],
+    ["½ teaspoon kosher salt", " 3.0g (0.50 teaspoon)  kosher salt"],
+    [
+      "10 tablespoons/140 grams unsalted butter (1¼ sticks), at room temperature",
+      "141.9g (10 tablespoons) /140 grams unsalted butter (1 1/4 sticks), at room temperature",
+    ],
+    [
+      "¾ cup/150 grams granulated sugar, ",
+      " 148.5g (0.75 cup) /150 grams granulated sugar, ",
+    ],
+    ["1 large egg", "1 large egg"],
+    ["½ teaspoon vanilla extract", " 2.2g (0.50 teaspoon)  vanilla extract"],
+    ["1 tablespoon ground cinnamon", "7.8g (1 tablespoon)  ground cinnamon"],
+  ];
+
   for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
     const result = convertLine(testCase[0]);
