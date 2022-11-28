@@ -78,7 +78,7 @@ export function fractionsToDecimals(str) {
   }
   return (
     str.substring(0, numeratorStartIndex) +
-    fraction.toFixed(4) +
+    fraction.toFixed(2) +
     str.substring(denomEndIndex)
   );
 }
