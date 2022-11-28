@@ -47,6 +47,7 @@ export function wordsToNumbers(str) {
 }
 
 export function fractionsToDecimals(str) {
+  // console.log(str + " starting ");
   const slashIndex = str.indexOf("/");
   if (slashIndex == -1) {
     return str;
@@ -64,7 +65,7 @@ export function fractionsToDecimals(str) {
 
   const numString = str.substring(numeratorStartIndex, slashIndex);
   const denomString = str.substring(slashIndex + 1, denomEndIndex);
-  console.log("str ; found " + numString + " / " + denomString);
+  // console.log(str + " ; found " + numString + " / " + denomString);
   var fraction = parseFloat(numString) / parseFloat(denomString);
   var wholeNumStart = numeratorStartIndex - 2;
   while (wholeNumStart >= 0 && isDecimal(str[wholeNumStart])) {
