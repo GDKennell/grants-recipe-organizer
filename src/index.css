@@ -21,6 +21,11 @@ code {
   flex-direction: column;
 }
 
+.instructions {
+  text-align: left;
+  padding: 10px;
+}
+
 .recipe-input-field {
   width: 100%;
   left: 0;
