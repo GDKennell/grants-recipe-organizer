@@ -30,10 +30,11 @@ var NumberStrings = {
 };
 
 function wordToNumber(word) {
-  if (!(word.toLowerCase() in NumberStrings)) {
+  const lowerWord = word.toLocaleLowerCase();
+  if (!(lowerWord in NumberStrings)) {
     return word;
   }
-  return NumberStrings[word];
+  return NumberStrings[lowerWord];
 }
 
 export function wordsToNumbers(str) {

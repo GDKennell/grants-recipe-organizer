@@ -32,8 +32,9 @@ const allVolumeMeasurements = [cupMeasure, teaspoonMeasure, tablespoonMeasure];
 function containsVolumeMeasurement(line) {
   var allStrings = allVolumeMeasurements.flatMap((m) => m.names);
   allStrings = allStrings.flatMap((str) => [str, str + "s"]);
+  const lowerLine = line.toLocaleLowerCase();
   for (const str of allStrings) {
-    if (line.indexOf(str) != -1) {
+    if (lowerLine.indexOf(str) != -1) {
       return true;
     }
   }
@@ -49,5 +50,5 @@ function convertLine(lineIn) {
   }
   console.log("converting ", lineIn);
   var newLine = wordsToNumbers(lineIn);
-  return lineIn;
+  return newLine;
 }

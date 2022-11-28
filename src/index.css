@@ -18,17 +18,16 @@ code {
  */
 .root-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .recipe-input-field {
-  width: 50%;
+  width: 100%;
   left: 0;
 }
 
 .output-field {
-  width: 50%;
-  height: 100%;
+  width: 100%;
   margin-left: 20px;
   white-space: pre-line;
   text-align: left;
