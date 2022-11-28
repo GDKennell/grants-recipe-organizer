@@ -107,6 +107,7 @@ const Paprika = new Ingredient(["Paprika"], 108.8);
 const Chili_powder = new Ingredient(["Chili powder"], 1.0);
 const Vanilla_Extract = new Ingredient(["Vanilla Extract"], 208.0);
 const Vinegar = new Ingredient(["Vinegar", "white vinegar"], 238.0); // Distilled white
+const Vodka = new Ingredient(["Vodka"], 224.0);
 
 const allIngredients = [
   butter,
@@ -149,6 +150,7 @@ const allIngredients = [
   Chili_powder,
   Vanilla_Extract,
   Vinegar,
+  Vodka,
 ];
 
 const allIngredientNameStrings = allIngredients
@@ -278,7 +280,7 @@ export function convertLine(lineIn) {
   const [volumeStringStartIndex, volumeInCups, volumeStringEndIndex] =
     findVolumeString(newLine);
   const cupsValueString = volumeInCups.toFixed(4) + " cups";
-  const ingredientName = findIngredientName(lineIn, volumeStringEndIndex);
+  const ingredientName = findIngredientName(newLine, volumeStringEndIndex);
   if (ingredientName == "") {
     return lineIn;
   }
@@ -290,12 +292,12 @@ export function convertLine(lineIn) {
       JSON.stringify(ingredient)
   );
   const gramsAmount = ingredient.gramsPerCup * volumeInCups;
-  const oldVolumeMeasurement = lineIn.substring(
+  const oldVolumeMeasurement = newLine.substring(
     volumeStringStartIndex,
     volumeStringEndIndex
   );
-  const prefix = lineIn.substring(0, volumeStringStartIndex);
-  const suffix = lineIn.substring(volumeStringEndIndex);
+  const prefix = newLine.substring(0, volumeStringStartIndex);
+  const suffix = newLine.substring(volumeStringEndIndex);
   return (
     prefix +
     gramsAmount.toFixed(1) +
