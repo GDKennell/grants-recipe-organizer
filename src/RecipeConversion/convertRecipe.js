@@ -154,7 +154,6 @@ const allIngredients = [
 const allIngredientNameStrings = allIngredients
   .flatMap((m) => m.names)
   .map((m) => m.toLocaleLowerCase());
-console.log(allIngredientNameStrings);
 var nameToIngredient = {};
 for (const ingredient of allIngredients) {
   for (const name of ingredient.names) {
@@ -284,7 +283,13 @@ export function convertLine(lineIn) {
     return lineIn;
   }
   const ingredient = nameToIngredient[ingredientName];
-  const gramsAmount = ingredient.gramsPerCup & volumeInCups;
+  console.log(
+    "found ingredient for name " +
+      ingredientName +
+      " ; " +
+      JSON.stringify(ingredient)
+  );
+  const gramsAmount = ingredient.gramsPerCup * volumeInCups;
   const oldVolumeMeasurement = lineIn.substring(
     volumeStringStartIndex,
     volumeStringEndIndex
