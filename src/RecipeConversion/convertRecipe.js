@@ -1,4 +1,7 @@
-import { wordsToNumbers } from "./utilities/numberConversion";
+import {
+  wordsToNumbers,
+  fractionsToDecimals,
+} from "./utilities/numberConversion";
 
 /** ***************************** */
 /*    Public Function        */
@@ -141,6 +144,7 @@ export function convertLine(lineIn) {
   }
   // console.log("converting ", lineIn);
   var newLine = wordsToNumbers(lineIn);
+  newLine = fractionsToDecimals(newLine);
   const [volumeStringStartIndex, volumeInCups, volumeStringEndIndex] =
     findVolumeString(newLine);
   const cupsValueString = volumeInCups.toFixed(4) + " cups";
