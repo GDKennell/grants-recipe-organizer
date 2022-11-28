@@ -17,6 +17,7 @@ code {
   *******************************
  */
 .root-container {
+  position: absolute;
   display: flex;
   flex-direction: column;
 }
@@ -24,15 +25,17 @@ code {
 .instructions {
   text-align: left;
   padding: 10px;
+  margin-left: 10px;
 }
 
 .recipe-input-field {
-  width: 100%;
+  width: 90%;
+  margin-left: 20px;
   left: 0;
 }
 
 .output-field {
-  width: 100%;
+  width: 90%;
   margin-left: 20px;
   white-space: pre-line;
   text-align: left;
