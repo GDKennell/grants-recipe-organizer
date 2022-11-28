@@ -36,9 +36,7 @@ function wordToNumber(word) {
   return NumberStrings[word];
 }
 
-function wordsToNumbers(str) {
+export function wordsToNumbers(str) {
   const words = str.split(" ");
   return words.map(wordToNumber).join(" ");
 }
-
-console.log(wordsToNumbers(" - three cups milk"));

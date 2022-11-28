@@ -1,3 +1,5 @@
+import { wordsToNumbers } from "./utilities/numberConversion";
+
 /**
  * @param {string} recipeStringIn
  */
@@ -46,5 +48,6 @@ function convertLine(lineIn) {
     return lineIn;
   }
   console.log("converting ", lineIn);
+  var newLine = wordsToNumbers(lineIn);
   return lineIn;
 }
