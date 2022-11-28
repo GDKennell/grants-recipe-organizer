@@ -24,16 +24,22 @@ test("converts values to cups", () => {
 
 test("handles modifiers to ingredients and extraneous notes", () => {
   const testCases = [
-    ["2 1/2 cups (12 1/2 ounces) unbleached all-purpose flour", ""],
-    ["1 teaspoon table salt", ""],
-    ["2 tablespoons sugar", ""],
+    [
+      "2 1/2 cups (12 1/2 ounces) unbleached all-purpose flour",
+      "312.5g (2.50 cups)  (12 1/2 ounces) unbleached all-purpose flour",
+    ],
+    ["1 teaspoon table salt", "6.0g (1 teaspoon)  table salt"],
+    ["2 tablespoons sugar", "24.7g (2 tablespoons)  sugar"],
     [
       "12 tablespoons (1 1/2 sticks) cold unsalted butter, cut into 1/4-inch slices",
-      "",
+      "170.2g (12 tablespoons)  (1.50 sticks) cold unsalted butter, cut into 1/4-inch slices",
     ],
-    ["1/2 cup cold vegetable shortening, cut into small bits", ""],
-    ["1/4 cup cold vodka", ""],
-    ["1/4 cup  cold water", ""],
+    [
+      "1/2 cup cold vegetable shortening, cut into small bits",
+      "102.5g (0.50 cup)  cold vegetable shortening, cut into small bits",
+    ],
+    ["1/4 cup cold vodka", "56.0g (0.25 cup)  cold vodka"],
+    ["1/4 cup  cold water", "59.1g (0.25 cup)   cold water"],
   ];
   /**
  * 312.5g (2.50 cups)  flour

@@ -1,6 +1,8 @@
 import {
   wordsToNumbers,
   fractionsToDecimals,
+  sanitizePunctuation,
+  removeSpacesBeforePunctuation,
 } from "./utilities/numberConversion";
 
 /** ***************************** */
@@ -163,11 +165,18 @@ const allIngredients = [
 const allIngredientNameStrings = allIngredients
   .flatMap((m) => m.names)
   .map((m) => m.toLocaleLowerCase());
+const allIngredientWords = allIngredientNameStrings.flatMap((m) =>
+  m.toLocaleLowerCase().split(" ")
+);
 var nameToIngredient = {};
 for (const ingredient of allIngredients) {
   for (const name of ingredient.names) {
     nameToIngredient[name.toLocaleLowerCase()] = ingredient;
   }
+}
+
+function isIngredientWord(str) {
+  return allIngredientWords.includes(str.toLocaleLowerCase());
 }
 
 function isIngredientName(str) {
@@ -264,6 +273,10 @@ function findIngredientName(lineIn, volumeStringEndIndex) {
     .split(" ");
   var wordIndex = 0;
   var testWord = words[wordIndex++];
+  // Skip any non-ingredient words
+  while (!isIngredientWord(testWord) && wordIndex < words.length) {
+    testWord = words[wordIndex++];
+  }
   while (!isIngredientName(testWord) && wordIndex < words.length) {
     testWord += " " + words[wordIndex++];
   }
@@ -281,23 +294,27 @@ export function convertLine(lineIn) {
   if (!containsVolumeMeasurement(lineIn)) {
     return lineIn;
   }
-  // console.log("converting ", lineIn);
+
+  //  ------- Pre Processing ------------ //
   var newLine = wordsToNumbers(lineIn);
   newLine = fractionsToDecimals(newLine);
+  newLine = sanitizePunctuation(newLine);
+
+  //  ------- Finding Volume Amount ------------ //
+
   const [volumeStringStartIndex, volumeInCups, volumeStringEndIndex] =
     findVolumeString(newLine);
-  const cupsValueString = volumeInCups.toFixed(4) + " cups";
+
+  //  ------- Finding Ingredient Name  ------------ //
+
   const ingredientName = findIngredientName(newLine, volumeStringEndIndex);
   if (ingredientName == "") {
     return lineIn;
   }
   const ingredient = nameToIngredient[ingredientName];
-  console.log(
-    "found ingredient for name " +
-      ingredientName +
-      " ; " +
-      JSON.stringify(ingredient)
-  );
+
+  //  ------- Conversion & String Building ------------ //
+
   const gramsAmount = ingredient.gramsPerCup * volumeInCups;
   const oldVolumeMeasurement = newLine.substring(
     volumeStringStartIndex,
@@ -305,12 +322,16 @@ export function convertLine(lineIn) {
   );
   const prefix = newLine.substring(0, volumeStringStartIndex);
   const suffix = newLine.substring(volumeStringEndIndex);
-  return (
+
+  var finalString =
     prefix +
     gramsAmount.toFixed(1) +
     "g (" +
     oldVolumeMeasurement +
     ") " +
-    suffix
-  );
+    suffix;
+
+  //  ------- Post Processing ------------ //
+  finalString = removeSpacesBeforePunctuation(finalString);
+  return finalString;
 }

@@ -41,6 +41,46 @@ function wordToNumber(word) {
   return NumberStrings[lowerWord];
 }
 
+function isPunctuation(character) {
+  return ",.);!?/\\".indexOf(character) != -1;
+}
+
+function isAlphabetic(character) {
+  return !isPunctuation(character) && !isDecimal(character) && character != " ";
+}
+
+function strInsert(baseString, insertionString, index) {
+  return (
+    baseString.substring(0, index) +
+    insertionString +
+    baseString.substring(index)
+  );
+}
+
+function strRemoveAt(baseString, index) {
+  return baseString.substring(0, index - 1) + baseString.substring(index);
+}
+
+export function sanitizePunctuation(strIn) {
+  var str = strIn;
+  for (var i = 0; i < str.length; i++) {
+    if (i > 0 && isPunctuation(str[i]) && isAlphabetic(str[i - 1])) {
+      str = strInsert(str, " ", i++);
+    }
+  }
+  return str;
+}
+
+export function removeSpacesBeforePunctuation(strIn) {
+  var str = strIn;
+  for (var i = 0; i < str.length; i++) {
+    if (i > 0 && isPunctuation(str[i]) && str[i - 1] == " ") {
+      str = strRemoveAt(str, i--);
+    }
+  }
+  return str;
+}
+
 export function wordsToNumbers(str) {
   const words = str.split(" ");
   return words.map(wordToNumber).join(" ");
