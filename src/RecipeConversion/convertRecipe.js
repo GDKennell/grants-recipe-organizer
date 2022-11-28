@@ -107,7 +107,12 @@ const Paprika = new Ingredient(["Paprika"], 108.8);
 const Chili_powder = new Ingredient(["Chili powder"], 1.0);
 const Vanilla_Extract = new Ingredient(["Vanilla Extract"], 208.0);
 const Vinegar = new Ingredient(["Vinegar", "white vinegar"], 238.0); // Distilled white
-const Vodka = new Ingredient(["Vodka"], 224.0);
+const Vodka = new Ingredient(
+  ["Vodka", "rum", "whiskey", "gin", "tequila"],
+  224.0
+);
+const Shortening = new Ingredient(["Shortening"], 205.0);
+const Beer = new Ingredient(["Beer"], 236.0);
 
 const allIngredients = [
   butter,
@@ -151,6 +156,8 @@ const allIngredients = [
   Vanilla_Extract,
   Vinegar,
   Vodka,
+  Shortening,
+  Beer,
 ];
 
 const allIngredientNameStrings = allIngredients
