@@ -35,6 +35,58 @@ function stringContainsWord(haystack, needle) {
 /*    Data & Data Structure      */
 /** ***************************** */
 
+class Ingredient {
+  constructor(names, gramsPerCup) {
+    this.names = names;
+    this.gramsPerCup = gramsPerCup;
+  }
+}
+
+const butter = new Ingredient(
+  ["butter", "unsalted butter", "salted butter", "melted butter"],
+  227.0
+);
+
+const Flour = new Ingredient(["Flour"], 125.0);
+const Parmesan_cheese = new Ingredient(["Parmesan cheese"], 100.0);
+const Honey = new Ingredient(["Honey"], 337.6);
+const Sugar = new Ingredient(["Sugar"], 198.0);
+const Dried_Basil = new Ingredient(["Dried Basil"], 72.0);
+const Brown_sugar = new Ingredient(["Brown sugar"], 192.0);
+const Evaporated_milk = new Ingredient(["Evaporated milk"], 252.0);
+const Yeast = new Ingredient(["Yeast"], 192.0);
+const Water = new Ingredient(["Water"], 236.6);
+const Poppy_seeds = new Ingredient(["Poppy seeds"], 140.8);
+const Sesame_seeds = new Ingredient(["Sesame seeds"], 245.0);
+const Salt = new Ingredient(["Salt"], 288.0);
+const Yogurt = new Ingredient(["Yogurt"], 245.0);
+const Olive_oil = new Ingredient(["Olive oil"], 216.0);
+const Five_Spice_mix = new Ingredient(["5_Spice mix"], 120.0);
+const Soy_Sauce = new Ingredient(["Soy Sauce"], 248.0);
+const Shaoxing_Wine = new Ingredient(["Shaoxing Wine"], 236.0);
+const Garlic_powder = new Ingredient(["Garlic powder"], 155.2);
+const Black_pepper = new Ingredient(["Black pepper"], 110.0);
+const Baking_powder = new Ingredient(["Baking powder"], 220.8);
+const Baking_soda = new Ingredient(["Baking soda"], 220.8);
+const Thyme = new Ingredient(["Thyme"], 68.8);
+const Milk = new Ingredient(["Milk"], 223.0); // 2%
+const Heavy_cream = new Ingredient(["Heavy cream"], 238.0);
+const Monterey_Jack_cheese = new Ingredient(["Monterey Jack cheese"], 112.0);
+const Cottage_cheese = new Ingredient(["Cottage cheese"], 226.0);
+const Cajun_seasoning = new Ingredient(["Cajun seasoning"], 172.0);
+const Oregano = new Ingredient(["Oregano"], 86.4);
+const Cornstarch = new Ingredient(["Cornstarch"], 128.0);
+const Walnuts = new Ingredient(["Walnuts"], 120.0);
+const Cinnamon = new Ingredient(["Cinnamon"], 124.8);
+const Ginger = new Ingredient(["Ginger"], 83.2);
+const Nutmeg = new Ingredient(["Nutmeg"], 112.0);
+const Cloves = new Ingredient(["Cloves"], 104.0); // ground
+const Onion_salt = new Ingredient(["Onion salt"], 225.6);
+const Paprika = new Ingredient(["Paprika"], 108.8);
+const Chili_powder = new Ingredient(["Chili powder"], 1.0);
+const Vanilla_Extract = new Ingredient(["Vanilla Extract"], 208.0);
+const Vinegar = new Ingredient(["Vinegar"], 238.0); // Distilled white
+
 class VolumeMeasure {
   /**
    * @param {string[]} names
@@ -152,6 +204,7 @@ export function convertLine(lineIn) {
     newLine.slice(0, volumeStringStartIndex) +
     cupsValueString +
     newLine.slice(volumeStringEndIndex);
-  // const ingredientName = findIngredientName(lineIn, volumeStringEndIndex)
+  // const ingredientName = findIngredientName(lineIn, volumeStringEndIndex);
+
   return finalLine;
 }
