@@ -66,7 +66,7 @@ for (const volume of allVolumeMeasurements) {
     nameToVolume[name + "s"] = volume;
   }
 }
-console.log(nameToVolume);
+// console.log(nameToVolume);
 
 /** ***************************** */
 /*    Parsing Helpers       */
@@ -89,6 +89,7 @@ function findVolumeString(line) {
   var volumeType = null;
   for (const str of allVolumeNameStrings) {
     if (stringContainsWord(lowerLine, str)) {
+      // console.log("found match " + str + " in " + line);
       volumeNamePos = lowerLine.indexOf(str);
       volumeType = nameToVolume[str];
       volumeTypeString = str;
@@ -118,6 +119,14 @@ function findVolumeString(line) {
   const numberString = line.substring(testIndex, volumeNamePos);
   const volumeAmount = parseFloat(numberString);
   const volumeInCups = volumeAmount * volumeType.ratioToCup;
+  // console.log(
+  //   "result for line " +
+  //     line +
+  //     " ; start " +
+  //     volumeStringStartIndex +
+  //     " end " +
+  //     volumeStringEndIndex
+  // );
   return [volumeStringStartIndex, volumeInCups, volumeStringEndIndex];
 }
 
@@ -126,19 +135,19 @@ function findIngredientName(lineIn, volumeStringEndIndex) {}
 /**
  * @param {string} lineIn
  */
-function convertLine(lineIn) {
+export function convertLine(lineIn) {
   if (!containsVolumeMeasurement(lineIn)) {
     return lineIn;
   }
-  console.log("converting ", lineIn);
+  // console.log("converting ", lineIn);
   var newLine = wordsToNumbers(lineIn);
   const [volumeStringStartIndex, volumeInCups, volumeStringEndIndex] =
     findVolumeString(newLine);
   const cupsValueString = volumeInCups.toFixed(4) + " cups";
   const finalLine =
-    lineIn.slice(0, volumeStringStartIndex) +
+    newLine.slice(0, volumeStringStartIndex) +
     cupsValueString +
-    lineIn.slice(volumeStringEndIndex);
+    newLine.slice(volumeStringEndIndex);
   // const ingredientName = findIngredientName(lineIn, volumeStringEndIndex)
   return finalLine;
 }
