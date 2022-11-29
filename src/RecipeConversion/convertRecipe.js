@@ -32,13 +32,23 @@ function strInsert(baseString, insertionString, index) {
   );
 }
 
+const NEW_LINE_MARKER = "#$%^";
+
 function insertNewLinesAround(recipeString, ingredientString, startIndex) {
   const lineStarter = " - ";
   const ingredientStart = recipeString.indexOf(ingredientString, startIndex);
-  var newRecipe = strInsert(recipeString, "\n" + lineStarter, ingredientStart);
+  var newRecipe = strInsert(
+    recipeString,
+    "\n" + NEW_LINE_MARKER + lineStarter,
+    ingredientStart
+  );
   const ingredientEnd =
-    ingredientStart + ingredientString.length + lineStarter.length + 1;
-  newRecipe = strInsert(newRecipe, "\n", ingredientEnd);
+    ingredientStart +
+    ingredientString.length +
+    NEW_LINE_MARKER.length +
+    lineStarter.length +
+    1;
+  newRecipe = strInsert(newRecipe, "\n" + NEW_LINE_MARKER, ingredientEnd);
   return [newRecipe, ingredientEnd];
 }
 
@@ -84,12 +94,43 @@ function putIngredientsOnOwnLine(recipeStringIn) {
   return recipe;
 }
 
+function isSimpleWord(word) {
+  return word.length == 0 || word == "and" || word == ",";
+}
+
+function isSimpleLine(lineIn) {
+  const words = lineIn.split(" ");
+  for (const word of words) {
+    if (!isSimpleWord(word)) {
+      return false;
+    }
+  }
+  return lineIn.length < 6;
+}
+
+function removeSimpleLines(recipeStringIn) {
+  const lines = recipeStringIn.split("\n");
+  var finalLines = [];
+  for (const line of lines) {
+    var finalLine = line;
+    if (line.indexOf(NEW_LINE_MARKER) != -1) {
+      finalLine = line.replace(NEW_LINE_MARKER, "");
+      if (isSimpleLine(finalLine)) {
+        continue;
+      }
+    }
+    finalLines.push(finalLine);
+  }
+  return finalLines.join("\n");
+}
+
 export function parseRecipe(recipeStringIn) {
   var recipe = recipeStringIn.replaceAll(".", "\n");
   var recipe = recipe.replaceAll(",", " ,");
   var recipe = recipe.replaceAll("\n", " \n");
 
   recipe = putIngredientsOnOwnLine(recipe);
+  recipe = removeSimpleLines(recipe);
   return recipe;
 }
 
