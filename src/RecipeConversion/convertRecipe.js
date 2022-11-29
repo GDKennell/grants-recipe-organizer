@@ -14,15 +14,82 @@ import {
  */
 export function convertRecipe(ingredientListStringIn, recipeStringIn) {
   const ingredientsString = parseIngredientList(ingredientListStringIn);
-
+  const recipeString = parseRecipe(recipeStringIn);
   const ingredientsHeader = "=============\n===Ingredients===\n=============\n";
   const recipeHeader = "\n\n=============\n====Recipe=====\n=============\n";
-  return ingredientsHeader + ingredientsString + recipeHeader + recipeStringIn;
+  return ingredientsHeader + ingredientsString + recipeHeader + recipeString;
 }
 
 /** ***************************** */
 /*    General Helpers      */
 /** ***************************** */
+
+function strInsert(baseString, insertionString, index) {
+  return (
+    baseString.substring(0, index) +
+    insertionString +
+    baseString.substring(index)
+  );
+}
+
+function insertNewLinesAround(recipeString, ingredientString, startIndex) {
+  const lineStarter = " - ";
+  const ingredientStart = recipeString.indexOf(ingredientString, startIndex);
+  var newRecipe = strInsert(recipeString, "\n" + lineStarter, ingredientStart);
+  const ingredientEnd =
+    ingredientStart + ingredientString.length + lineStarter.length + 1;
+  newRecipe = strInsert(newRecipe, "\n", ingredientEnd);
+  return [newRecipe, ingredientEnd];
+}
+
+export function putIngredientsOnOwnLine(recipeStringIn) {
+  var recipe = recipeStringIn;
+  var words = recipe.split(" ");
+  // check each word if it's start of an ingredient
+  var testString = "";
+  var startIndex = 0;
+  // TODO: handle case where false positive of ingredient word and need to backtrack to the next word
+  // e.g. we have ingredients "unbleached flour" and "milk"
+  // And text contains "unbleached milk". must still find milk
+  for (
+    var startWordIndex = 0;
+    startWordIndex < words.length;
+    startWordIndex++
+  ) {
+    const startWord = words[startWordIndex];
+    testString = startWord;
+    var word = startWord;
+    var innerIndex = startWordIndex + 1;
+    while (isIngredientWord(word)) {
+      if (isIngredientName(testString)) {
+        [recipe, startIndex] = insertNewLinesAround(
+          recipe,
+          testString,
+          startIndex
+        );
+        break;
+      } else if (innerIndex < words.length) {
+        word = words[innerIndex++];
+        testString += " " + word;
+      } else {
+        testString = "";
+        break;
+      }
+    }
+  }
+
+  // If testWord is start of an ingredient put a new line before it and after it
+  //
+  return recipe;
+}
+
+function parseRecipe(recipeStringIn) {
+  var recipe = recipeStringIn.replaceAll(".", "\n");
+  var recipe = recipe.replaceAll(",", " ,");
+
+  recipe = putIngredientsOnOwnLine(recipe);
+  return recipe;
+}
 
 function parseIngredientList(ingredientListStringIn) {
   const lines = ingredientListStringIn.split("\n");
@@ -188,7 +255,11 @@ function isIngredientWord(str) {
   return allIngredientWords.includes(str.toLocaleLowerCase());
 }
 
-function isIngredientName(str) {
+function isIngredientName(strIn) {
+  var str = strIn;
+  if (str[str.length - 1] == " ") {
+    str = str.substring(0, str.length - 1);
+  }
   return allIngredientNameStrings.includes(str.toLocaleLowerCase());
 }
 

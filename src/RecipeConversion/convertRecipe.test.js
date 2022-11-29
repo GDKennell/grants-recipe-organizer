@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { convertLine } from "./convertRecipe";
+import { convertLine, putIngredientsOnOwnLine } from "./convertRecipe";
 
 test("converts values to cups", () => {
   const testCases = [
@@ -76,4 +76,14 @@ test("handles unicode fractions", () => {
     const result = convertLine(testCase[0]);
     expect(result).toEqual(testCase[1]);
   }
+});
+
+test("puts ingredients on new lines", () => {
+  const prepSteps =
+    "In the bowl of an electric mixer, beat together the butter and ¾ cup sugar until fluffy, about 2 minutes, scraping down the sides as necessary. Beat in the egg until creamy, and then add the vanilla, again scraping down the sides. Add the flour mixture to the butter mixture and beat on low until just combined.";
+
+  const expected =
+    "In the bowl of an electric mixer, beat together the \n - butter\n and ¾ cup \n - sugar\n until fluffy, about 2 minutes, scraping down the sides as necessary. Beat in the egg until creamy, and then add the vanilla, again scraping down the sides. Add the \n - flour\n mixture to the \n - butter\n mixture and beat on low until just combined.";
+  const result = putIngredientsOnOwnLine(prepSteps);
+  expect(expected).toEqual(result);
 });
