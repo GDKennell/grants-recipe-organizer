@@ -1,29 +1,50 @@
+import { useEffect, useState } from "react";
 import "./App.css";
-import { useState } from "react";
 import { convertRecipe } from "./RecipeConversion/convertRecipe";
 function App() {
-  const initialText =
-    "\nPie 101 page \n\npie crust 101 – smitten kitchen\n\n- 2.5 cups flour\n- 1 tsp salt\n- Two Tbsp sugar \n- 2 cups butter \n- 1/4 cup water\n- 1/4 cup vodka \n\n";
-  const initialLines = initialText.split("\n").length;
   const [outputText, setOutputText] = useState("");
+
   const minRows = 5;
-  const [numRows, setNumRows] = useState(minRows);
-  const textAreaChange = (event) => {
+  const [ingredientListText, setIngredientListText] = useState("");
+  const [recipeText, setRecipeText] = useState("");
+
+  const [ingredientListNumRows, setIngredientListNumRows] = useState(minRows);
+  const ingredientTextAreaChange = (event) => {
     const textInput = event.target.value;
-    const newValue = convertRecipe(textInput);
+    setIngredientListText(textInput);
     const numLines = textInput.split("\n").length;
-    setNumRows(Math.max(minRows, numLines));
-    setOutputText(newValue);
+    setIngredientListNumRows(Math.max(minRows, numLines));
   };
+
+  const [recipeNumRows, setRecipeNumRows] = useState(minRows);
+  const recipeTextAreaChange = (event) => {
+    const textInput = event.target.value;
+    setRecipeText(textInput);
+    const numLines = textInput.split("\n").length;
+    setRecipeNumRows(Math.max(minRows, numLines));
+  };
+
+  useEffect(() => {
+    const newValue = convertRecipe(ingredientListText);
+    setOutputText(newValue);
+  }, [ingredientListText]);
+
   return (
     <div className="App">
       <div className="root-container">
         <h1 className="title"> Recipe Converter </h1>
-        <div className="instructions"> Paste recipe below:</div>
+        <h3 className="instructions"> Paste recipe below:</h3>
+        <div className="instructions">Ingredient list</div>
         <textarea
-          className="recipe-input-field"
-          rows={numRows}
-          onChange={textAreaChange}
+          className="ingredient-list input-field"
+          rows={ingredientListNumRows}
+          onChange={ingredientTextAreaChange}
+        ></textarea>
+        <div className="instructions">Preparation Steps</div>
+
+        <textarea
+          className="main-recipe input-field"
+          onChange={recipeTextAreaChange}
         ></textarea>
         <div className="output-field">{outputText}</div>
       </div>

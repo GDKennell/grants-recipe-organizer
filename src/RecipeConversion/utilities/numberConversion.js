@@ -115,10 +115,7 @@ function unicodeFractionsToRegularFractions(strIn) {
 }
 
 export function fractionsToDecimals(strIn) {
-  console.log("Before unicode: " + strIn);
   const str = unicodeFractionsToRegularFractions(strIn);
-  console.log("After unicode: " + str);
-  // console.log(str + " starting ");
   const slashIndex = str.indexOf("/");
   if (
     slashIndex == -1 ||
