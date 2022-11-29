@@ -45,7 +45,10 @@ function App() {
         <textarea
           className="main-recipe input-field"
           onChange={recipeTextAreaChange}
+          rows={recipeNumRows}
         ></textarea>
+        <h3 className="instructions"> Converted Recipe:</h3>
+
         <div className="output-field">{outputText}</div>
       </div>
     </div>
