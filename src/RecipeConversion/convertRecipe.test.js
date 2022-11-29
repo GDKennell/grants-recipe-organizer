@@ -93,7 +93,7 @@ test("looks for longer ingredient if present", () => {
     "Step 1\nHeat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt.\n\n";
 
   const expected =
-    "Step 1 \nHeat the oven to 375 degrees \n In a medium bowl , whisk together the \n - flour\n , \n - cream of tartar\n , \n - baking soda\n and \n - salt\n \n \n \n";
+    "Step 1 \nHeat the oven to 375 degrees \n In a medium bowl , whisk together the \n - flour\n - cream of tartar\n - baking soda\n - salt\n \n \n";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
@@ -102,7 +102,7 @@ test("salt stuff I guess", () => {
   const prepSteps =
     "In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt.";
   const expected =
-    "In a medium bowl , whisk together the \n - flour\n , \n - cream of tartar\n , \n - baking soda\n and \n - salt\n \n";
+    "In a medium bowl , whisk together the \n - flour\n - cream of tartar\n - baking soda\n - salt\n";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
