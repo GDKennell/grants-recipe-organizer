@@ -1,8 +1,64 @@
-import { stringContainsWord, stringContains } from "../utilities/stringHelpers";
+import {
+  stringContainsWord,
+  stringContains,
+  wordBefore,
+} from "../utilities/stringHelpers";
 import {
   findVolumeByName,
   getAllVolumeNameStrings,
 } from "../DataStructures/volumeMeasures";
+
+export function findVolumeStringBefore(
+  recipeString,
+  ingredientString,
+  startIndex
+) {
+  // Find Volume Name
+  const ingredientStart = recipeString.indexOf(ingredientString, startIndex);
+  const [volumeString, volumeStringStart] = wordBefore(
+    recipeString,
+    ingredientStart
+  );
+  const volume = findVolumeByName(volumeString);
+  if (volume == undefined) {
+    return ["", null, -1.0];
+  }
+
+  const [numberString, numberStringStartIndex] = findVolumeQuantityBefore(
+    recipeString,
+    volumeStringStart - 1
+  );
+  if (isNaN(parseFloat(numberString))) {
+    // No number before volume marker, so assuming 1
+    // e.g. "and a cup water"
+    return [volumeString, volume, 1.0];
+  }
+  const fullVolumeString = numberString + " " + volumeString;
+  const quantity = parseFloat(numberString);
+  return [fullVolumeString, volume, quantity];
+}
+
+function findVolumeQuantityBefore(line, startCharIndex) {
+  const allowedNumberChars = "0123456789./ ";
+  // Step back from start of name string to find last non-number char\
+  var testIndex = startCharIndex - 1;
+  while (
+    testIndex >= 0 &&
+    stringContains(allowedNumberChars, line[testIndex])
+  ) {
+    testIndex--;
+  }
+  // Step forward to last actually valid char
+  if (!stringContains(allowedNumberChars, line[testIndex])) {
+    testIndex++;
+  }
+  // Step forward past any whitespace
+  while (line[testIndex] == " ") {
+    testIndex++;
+  }
+  const numberString = line.substring(testIndex, startCharIndex);
+  return [numberString, testIndex];
+}
 
 export function findVolumeString(line) {
   const lowerLine = line.toLocaleLowerCase();
@@ -19,26 +75,14 @@ export function findVolumeString(line) {
     }
   }
   const volumeStringEndIndex = volumeNamePos + volumeTypeString.length;
-  const allowedNumberChars = "0123456789./ ";
-  // Step back from start of name string to find last non-number char\
-  var testIndex = volumeNamePos - 1;
-  while (
-    testIndex >= 0 &&
-    stringContains(allowedNumberChars, lowerLine[testIndex])
-  ) {
-    testIndex--;
-  }
-  // Step forward to last actually valid char
-  if (!stringContains(allowedNumberChars, lowerLine[testIndex])) {
-    testIndex++;
-  }
-  // Step forward past any whitespace
-  while (lowerLine[testIndex] == " ") {
-    testIndex++;
-  }
+
+  const [numberString, numberStringStartIndex] = findVolumeQuantityBefore(
+    lowerLine,
+    volumeNamePos - 1
+  );
+
   // testIndex is now start of number sequence
-  const volumeStringStartIndex = testIndex;
-  const numberString = line.substring(testIndex, volumeNamePos);
+  const volumeStringStartIndex = numberStringStartIndex;
   const volumeAmount = parseFloat(numberString);
   const volumeInCups = volumeAmount * volumeType.ratioToCup;
 

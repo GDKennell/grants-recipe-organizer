@@ -30,6 +30,27 @@ export function insertNewLinesAround(
   return [newRecipe, ingredientEnd];
 }
 
+function isWhitespace(character) {
+  const whitespaceChars = " \n\r\t";
+  return stringContains(whitespaceChars, character);
+}
+
+export function wordBefore(str, startIndex) {
+  var index = startIndex - 1;
+  // Skip initial spaces
+  while (index >= 0 && str[index] == " ") {
+    index--;
+  }
+  const wordEnd = index + 1;
+  // Go until next whitespace / start of string
+  while (index >= 0 && !isWhitespace(str[index])) {
+    index--;
+  }
+  const wordStart = index + 1;
+  const word = str.substring(wordStart, wordEnd);
+  return [word, wordStart];
+}
+
 function isSimpleWord(word) {
   return word.length == 0 || word == "and" || word == ",";
 }

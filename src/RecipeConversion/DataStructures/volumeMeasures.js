@@ -22,7 +22,7 @@ export function containsVolumeMeasurement(line) {
 }
 
 export function findVolumeByName(name) {
-  return nameToVolume[name];
+  return nameToVolume[name.toLocaleLowerCase()];
 }
 
 export function getAllVolumeNameStrings() {

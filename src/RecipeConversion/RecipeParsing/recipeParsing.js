@@ -5,12 +5,21 @@ import {
 
 import { removeSimpleLines } from "./recipePostProcessing";
 
-import { insertNewLinesAround } from "../utilities/stringHelpers";
+import { findVolumeStringBefore } from "./volumeParsing";
+
+import {
+  insertNewLinesAround,
+  stringContains,
+} from "../utilities/stringHelpers";
+import { convertFractionsToDecimals } from "../utilities/numberConversion";
 
 export function parseRecipe(recipeStringIn) {
   var recipe = recipeStringIn.replaceAll(".", "\n");
   var recipe = recipe.replaceAll(",", " ,");
   var recipe = recipe.replaceAll("\n", " \n");
+  var recipe = convertFractionsToDecimals(recipe);
+
+  // Todo: pre-process removing all double spaces (should only be single spaces)
 
   recipe = putIngredientsOnOwnLine(recipe);
   recipe = removeSimpleLines(recipe);
@@ -31,6 +40,7 @@ function putIngredientsOnOwnLine(recipeStringIn) {
     startWordIndex < words.length;
     startWordIndex++
   ) {
+    // TODO: Refactor this ingredient parsing into a helper function
     const startWord = words[startWordIndex];
     testString = startWord;
     var word = startWord;
@@ -45,13 +55,32 @@ function putIngredientsOnOwnLine(recipeStringIn) {
       word = words[innerIndex++];
       testString += " " + word;
     }
-    if (ingredientFound != "") {
-      [recipe, startIndex] = insertNewLinesAround(
-        recipe,
-        ingredientFound,
-        startIndex
-      );
+    if (ingredientFound == "") {
+      continue;
     }
+
+    const [volumeString, volumeType, quantity] = findVolumeStringBefore(
+      recipe,
+      ingredientFound,
+      startIndex
+    );
+    if (volumeString != "") {
+      if (!stringContains(recipeStringIn, volumeString)) {
+        console.log(
+          "ERROR: parsed non existent volume measurement " +
+            volumeString +
+            " before ingredient " +
+            ingredientFound
+        );
+      }
+      startIndex -= volumeString.length;
+      ingredientFound = volumeString + " " + ingredientFound;
+    }
+    [recipe, startIndex] = insertNewLinesAround(
+      recipe,
+      ingredientFound,
+      startIndex
+    );
   }
 
   // If testWord is start of an ingredient put a new line before it and after it

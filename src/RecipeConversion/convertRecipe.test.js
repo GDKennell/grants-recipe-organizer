@@ -84,7 +84,7 @@ test("puts ingredients on new lines", () => {
     "In the bowl of an electric mixer, beat together the butter and ¾ cup sugar until fluffy, about 2 minutes, scraping down the sides as necessary. Beat in the egg until creamy, and then add the vanilla, again scraping down the sides. Add the flour mixture to the butter mixture and beat on low until just combined.";
 
   const expected =
-    "In the bowl of an electric mixer , beat together the \n - butter\n and ¾ cup \n - sugar\n until fluffy , about 2 minutes , scraping down the sides as necessary \n Beat in the egg until creamy , and then add the vanilla , again scraping down the sides \n Add the \n - flour\n mixture to the \n - butter\n mixture and beat on low until just combined \n";
+    "In the bowl of an electric mixer , beat together the \n - butter\n and  \n - 0.75 cup sugar\n until fluffy , about 2 minutes , scraping down the sides as necessary \n Beat in the egg until creamy , and then add the vanilla , again scraping down the sides \n Add the \n - flour\n mixture to the \n - butter\n mixture and beat on low until just combined \n";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
@@ -107,3 +107,14 @@ test("salt stuff I guess", () => {
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
+
+test("Keeps measurement with ingredient in recipe", () => {
+  const prepSteps =
+    "In a small bowl, combine the remaining 2 tablespoons sugar and the cinnamon. Roll the dough into golf-ball-size balls, then roll each one in the cinnamon-sugar mixture";
+  const expected =
+    "In a small bowl , combine the remaining \n - 2 tablespoons sugar\n and the \n - cinnamon\n Roll the dough into golf-ball-size balls , then roll each one in the cinnamon-sugar mixture";
+  const result = parseRecipe(prepSteps);
+  expect(result).toEqual(expected);
+});
+
+// Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
