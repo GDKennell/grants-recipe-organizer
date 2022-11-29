@@ -42,7 +42,7 @@ function insertNewLinesAround(recipeString, ingredientString, startIndex) {
   return [newRecipe, ingredientEnd];
 }
 
-export function putIngredientsOnOwnLine(recipeStringIn) {
+function putIngredientsOnOwnLine(recipeStringIn) {
   var recipe = recipeStringIn;
   var words = recipe.split(" ");
   // check each word if it's start of an ingredient
@@ -60,21 +60,22 @@ export function putIngredientsOnOwnLine(recipeStringIn) {
     testString = startWord;
     var word = startWord;
     var innerIndex = startWordIndex + 1;
+    var ingredientFound = "";
     while (isIngredientWord(word)) {
       if (isIngredientName(testString)) {
-        [recipe, startIndex] = insertNewLinesAround(
-          recipe,
-          testString,
-          startIndex
-        );
-        break;
-      } else if (innerIndex < words.length) {
-        word = words[innerIndex++];
-        testString += " " + word;
-      } else {
-        testString = "";
+        ingredientFound = testString;
+      } else if (innerIndex >= words.length) {
         break;
       }
+      word = words[innerIndex++];
+      testString += " " + word;
+    }
+    if (ingredientFound != "") {
+      [recipe, startIndex] = insertNewLinesAround(
+        recipe,
+        ingredientFound,
+        startIndex
+      );
     }
   }
 
@@ -83,7 +84,7 @@ export function putIngredientsOnOwnLine(recipeStringIn) {
   return recipe;
 }
 
-function parseRecipe(recipeStringIn) {
+export function parseRecipe(recipeStringIn) {
   var recipe = recipeStringIn.replaceAll(".", "\n");
   var recipe = recipe.replaceAll(",", " ,");
 
@@ -191,7 +192,7 @@ const Vodka = new Ingredient(
 );
 const Shortening = new Ingredient(["Shortening"], 205.0);
 const Beer = new Ingredient(["Beer"], 236.0);
-
+const Cream_Of_Tartar = new Ingredient(["Cream of tartar"], 144.0);
 const allIngredients = [
   butter,
   Flour,
@@ -236,6 +237,7 @@ const allIngredients = [
   Vodka,
   Shortening,
   Beer,
+  Cream_Of_Tartar,
 ];
 
 const allIngredientNameStrings = allIngredients
