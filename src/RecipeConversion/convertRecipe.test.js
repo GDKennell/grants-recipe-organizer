@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { convertLine, parseRecipe } from "./convertRecipe";
+import { parseIngredientListLine } from "./RecipeParsing/ingredientParsing";
+import { parseRecipe } from "./RecipeParsing/recipeParsing";
 
 test("converts values to cups", () => {
   const testCases = [
@@ -17,7 +18,7 @@ test("converts values to cups", () => {
 
   for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const result = convertLine(testCase[0]);
+    const result = parseIngredientListLine(testCase[0]);
     expect(result).toEqual(testCase[1]);
   }
 });
@@ -44,7 +45,7 @@ test("handles modifiers to ingredients and extraneous notes", () => {
 
   for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const result = convertLine(testCase[0]);
+    const result = parseIngredientListLine(testCase[0]);
     expect(result).toEqual(testCase[1]);
   }
 });
@@ -73,7 +74,7 @@ test("handles unicode fractions", () => {
 
   for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const result = convertLine(testCase[0]);
+    const result = parseIngredientListLine(testCase[0]);
     expect(result).toEqual(testCase[1]);
   }
 });

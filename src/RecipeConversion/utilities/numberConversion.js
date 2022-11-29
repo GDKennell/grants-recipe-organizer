@@ -114,7 +114,7 @@ function unicodeFractionsToRegularFractions(strIn) {
   return str;
 }
 
-export function fractionsToDecimals(strIn) {
+export function convertFractionsToDecimals(strIn) {
   const str = unicodeFractionsToRegularFractions(strIn);
   const slashIndex = str.indexOf("/");
   if (
