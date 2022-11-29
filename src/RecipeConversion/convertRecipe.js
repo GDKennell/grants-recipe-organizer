@@ -10,17 +10,26 @@ import {
 /** ***************************** */
 
 /**
- * @param {string} recipeStringIn
+ * @param {string} ingredientListStringIn
  */
-export function convertRecipe(recipeStringIn) {
-  const lines = recipeStringIn.split("\n");
-  const newLines = lines.map(convertLine);
-  return newLines.join("\n");
+export function convertRecipe(ingredientListStringIn, recipeStringIn) {
+  const ingredientsString = parseIngredientList(ingredientListStringIn);
+
+  const ingredientsHeader = "=============\n===Ingredients===\n=============\n";
+  const recipeHeader = "\n\n=============\n====Recipe=====\n=============\n";
+  return ingredientsHeader + ingredientsString + recipeHeader + recipeStringIn;
 }
 
 /** ***************************** */
 /*    General Helpers      */
 /** ***************************** */
+
+function parseIngredientList(ingredientListStringIn) {
+  const lines = ingredientListStringIn.split("\n");
+  const newLines = lines.map(convertLine);
+  return newLines.join("\n");
+}
+
 function stringContains(haystack, needle) {
   return haystack.indexOf(needle) != -1;
 }

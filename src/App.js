@@ -25,9 +25,9 @@ function App() {
   };
 
   useEffect(() => {
-    const newValue = convertRecipe(ingredientListText);
+    const newValue = convertRecipe(ingredientListText, recipeText);
     setOutputText(newValue);
-  }, [ingredientListText]);
+  }, [ingredientListText, recipeText]);
 
   return (
     <div className="App">
