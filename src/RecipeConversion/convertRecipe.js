@@ -87,6 +87,7 @@ function putIngredientsOnOwnLine(recipeStringIn) {
 export function parseRecipe(recipeStringIn) {
   var recipe = recipeStringIn.replaceAll(".", "\n");
   var recipe = recipe.replaceAll(",", " ,");
+  var recipe = recipe.replaceAll("\n", " \n");
 
   recipe = putIngredientsOnOwnLine(recipe);
   return recipe;

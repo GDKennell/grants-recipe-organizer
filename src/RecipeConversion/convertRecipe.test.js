@@ -83,7 +83,7 @@ test("puts ingredients on new lines", () => {
     "In the bowl of an electric mixer, beat together the butter and ¾ cup sugar until fluffy, about 2 minutes, scraping down the sides as necessary. Beat in the egg until creamy, and then add the vanilla, again scraping down the sides. Add the flour mixture to the butter mixture and beat on low until just combined.";
 
   const expected =
-    "In the bowl of an electric mixer , beat together the \n - butter\n and ¾ cup \n - sugar\n until fluffy , about 2 minutes , scraping down the sides as necessary\n Beat in the egg until creamy , and then add the vanilla , again scraping down the sides\n Add the \n - flour\n mixture to the \n - butter\n mixture and beat on low until just combined\n";
+    "In the bowl of an electric mixer , beat together the \n - butter\n and ¾ cup \n - sugar\n until fluffy , about 2 minutes , scraping down the sides as necessary \n Beat in the egg until creamy , and then add the vanilla , again scraping down the sides \n Add the \n - flour\n mixture to the \n - butter\n mixture and beat on low until just combined \n";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
@@ -93,7 +93,16 @@ test("looks for longer ingredient if present", () => {
     "Step 1\nHeat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt.\n\n";
 
   const expected =
-    "Step 1\nHeat the oven to 375 degrees\n In a medium bowl , whisk together the \n - flour\n , \n - cream of tartar\n , \n - baking soda\n and salt\n\n\n";
+    "Step 1 \nHeat the oven to 375 degrees \n In a medium bowl , whisk together the \n - flour\n , \n - cream of tartar\n , \n - baking soda\n and \n - salt\n \n \n \n";
+  const result = parseRecipe(prepSteps);
+  expect(result).toEqual(expected);
+});
+
+test("salt stuff I guess", () => {
+  const prepSteps =
+    "In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt.";
+  const expected =
+    "In a medium bowl , whisk together the \n - flour\n , \n - cream of tartar\n , \n - baking soda\n and \n - salt\n \n";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
