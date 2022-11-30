@@ -1,9 +1,3 @@
-import {
-  wordsToNumbers,
-  convertFractionsToDecimals,
-  sanitizePunctuation,
-  removeSpacesBeforePunctuation,
-} from "./utilities/numberConversion";
 import { parseIngredientList } from "./RecipeParsing/ingredientParsing";
 import { parseRecipe } from "./RecipeParsing/recipeParsing";
 
@@ -14,10 +8,16 @@ import { parseRecipe } from "./RecipeParsing/recipeParsing";
 /**
  * @param {string} ingredientListStringIn
  */
+
+export const INGREDIENTS_HEADER =
+  "=============\n===Ingredients===\n=============\n";
+export const RECIPES_HEADER =
+  "\n\n=============\n====Recipe=====\n=============\n";
 export function convertRecipe(ingredientListStringIn, recipeStringIn) {
-  const ingredientsString = parseIngredientList(ingredientListStringIn);
-  const recipeString = parseRecipe(recipeStringIn);
-  const ingredientsHeader = "=============\n===Ingredients===\n=============\n";
-  const recipeHeader = "\n\n=============\n====Recipe=====\n=============\n";
-  return ingredientsHeader + ingredientsString + recipeHeader + recipeString;
+  const [ingredientsString, measuredIngredients] = parseIngredientList(
+    ingredientListStringIn
+  );
+  const recipeString = parseRecipe(recipeStringIn, measuredIngredients);
+
+  return INGREDIENTS_HEADER + ingredientsString + RECIPES_HEADER + recipeString;
 }

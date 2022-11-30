@@ -2,7 +2,7 @@ import {
   isIngredientWord,
   isIngredientName,
 } from "../DataStructures/ingredient";
-
+import { findIngredientName } from "./ingredientParsing";
 import { removeSimpleLines } from "./recipePostProcessing";
 
 import { findVolumeStringBefore } from "./volumeParsing";
@@ -10,10 +10,11 @@ import { findVolumeStringBefore } from "./volumeParsing";
 import {
   insertNewLinesAround,
   stringContains,
+  strInsert,
 } from "../utilities/stringHelpers";
 import { convertFractionsToDecimals } from "../utilities/numberConversion";
 
-export function parseRecipe(recipeStringIn) {
+export function parseRecipe(recipeStringIn, measuredIngredients) {
   var recipe = recipeStringIn.replaceAll(".", "\n");
   var recipe = recipe.replaceAll(",", " ,");
   var recipe = recipe.replaceAll("\n", " \n");
@@ -22,8 +23,45 @@ export function parseRecipe(recipeStringIn) {
   // Todo: pre-process removing all double spaces (should only be single spaces)
 
   recipe = putIngredientsOnOwnLine(recipe);
+  recipe = addAndConvertIngredientUnits(recipe, measuredIngredients);
   recipe = removeSimpleLines(recipe);
   return recipe;
+}
+
+function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients) {
+  if (measuredIngredients == undefined) {
+    return recipeStringIn;
+  }
+  var nameToMeasured = {};
+  for (const measuredIngredient of measuredIngredients) {
+    for (const name of measuredIngredient.ingredient.names) {
+      nameToMeasured[name.toLocaleLowerCase()] = measuredIngredient;
+      nameToMeasured[name.toLocaleLowerCase() + "s"] = measuredIngredient;
+    }
+  }
+  const lines = recipeStringIn.split("\n");
+  var finalString = "";
+  for (const line of lines) {
+    const ingredientName = findIngredientName(line, 0);
+    if (ingredientName == "") {
+      finalString += line + "\n";
+      continue;
+    }
+    const measuredIngredient = nameToMeasured[ingredientName];
+    if (measuredIngredient == undefined) {
+      finalString += line + "\n";
+      continue;
+    }
+    var newLine = line;
+    const startIndex = line.indexOf(ingredientName);
+    newLine = strInsert(
+      newLine,
+      measuredIngredient.description() + " ",
+      startIndex
+    );
+    finalString += newLine + "\n";
+  }
+  return finalString;
 }
 
 function putIngredientsOnOwnLine(recipeStringIn) {

@@ -6,6 +6,9 @@ export class Ingredient {
 }
 
 export function isIngredientWord(str) {
+  if (str == undefined) {
+    return false;
+  }
   return allIngredientWords.includes(str.toLocaleLowerCase());
 }
 

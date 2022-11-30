@@ -1,4 +1,8 @@
-import { isSimpleLine, NEW_LINE_MARKER } from "../utilities/stringHelpers";
+import {
+  isSimpleLine,
+  NEW_LINE_MARKER,
+  removeTrailingWhitespace,
+} from "../utilities/stringHelpers";
 
 export function removeSimpleLines(recipeStringIn) {
   const lines = recipeStringIn.split("\n");
@@ -13,5 +17,6 @@ export function removeSimpleLines(recipeStringIn) {
     }
     finalLines.push(finalLine);
   }
-  return finalLines.join("\n");
+  var result = finalLines.join("\n");
+  return removeTrailingWhitespace(result);
 }

@@ -4,7 +4,7 @@ import {
   isIngredientWord,
   isIngredientName,
 } from "../DataStructures/ingredient";
-
+import { removeNulls } from "../utilities/stringHelpers";
 import {
   wordsToNumbers,
   convertFractionsToDecimals,
@@ -13,11 +13,21 @@ import {
 } from "../utilities/numberConversion";
 
 import { findVolumeString } from "./volumeParsing";
+import { MeasuredIngredient } from "../DataStructures/measuredIngredient";
 
 export function parseIngredientList(ingredientListStringIn) {
   const lines = ingredientListStringIn.split("\n");
-  const newLines = lines.map(parseIngredientListLine);
-  return newLines.join("\n");
+  var newLines = [];
+  var measuredIngredients = [];
+  for (const line of lines) {
+    const [newLine, measuredIngredient] = parseIngredientListLine(line);
+    newLines.push(newLine);
+    if (measuredIngredient != null) {
+      measuredIngredients.push(measuredIngredient);
+    }
+  }
+  const finalString = newLines.join("\n");
+  return [finalString, measuredIngredients];
 }
 
 /**
@@ -30,7 +40,7 @@ export function parseIngredientListLine(lineIn) {
   newLine = sanitizePunctuation(newLine);
 
   if (!containsVolumeMeasurement(newLine)) {
-    return lineIn;
+    return [lineIn, null];
   }
 
   //  ------- Finding Volume Amount ------------ //
@@ -42,7 +52,7 @@ export function parseIngredientListLine(lineIn) {
 
   const ingredientName = findIngredientName(newLine, volumeStringEndIndex);
   if (ingredientName == "") {
-    return lineIn;
+    return [lineIn, null];
   }
   const ingredient = findIngredientByName(ingredientName);
 
@@ -66,10 +76,15 @@ export function parseIngredientListLine(lineIn) {
 
   //  ------- Post Processing ------------ //
   finalString = removeSpacesBeforePunctuation(finalString);
-  return finalString;
+  const finalIngredient = new MeasuredIngredient(
+    ingredient,
+    volumeInCups,
+    oldVolumeMeasurement
+  );
+  return [finalString, finalIngredient];
 }
 
-function findIngredientName(lineIn, volumeStringEndIndex) {
+export function findIngredientName(lineIn, volumeStringEndIndex) {
   const words = lineIn
     .toLocaleLowerCase()
     .substring(volumeStringEndIndex + 1)

@@ -8,6 +8,21 @@ export function strInsert(baseString, insertionString, index) {
   );
 }
 
+export function removeNulls(arr) {
+  if (arr == undefined) {
+    return undefined;
+  }
+  return arr.filter((value) => value != null);
+}
+
+export function removeTrailingWhitespace(string) {
+  var lastIndex = string.length - 1;
+  while (string.length > 0 && isWhitespace(string[lastIndex])) {
+    lastIndex--;
+  }
+  return string.substring(lastIndex);
+}
+
 export function insertNewLinesAround(
   recipeString,
   ingredientString,
