@@ -176,14 +176,15 @@ test("weird line breaks", () => {
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
-// test("cream vs sour cream", () => {
-//   const ingredientList = "";
-//   const prepSteps =
-//     "Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
-
-//   const result = convertRecipe(ingredientList, prepSteps);
-//   expect(result).toEqual("");
-// });
+test("cream vs sour cream", () => {
+  const ingredientList = "";
+  const prepSteps =
+    "Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
+  const expectedRecipe =
+    "Whisk together the \n - mayonnaise\n - sour cream\n - lemon juice\n - salt\n - pepper\n until fully combined , tasting as you go , then set aside";
+  const result = convertRecipe(ingredientList, prepSteps);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
 
 // test("new line before ingredient", () => {
 //   const ingredientList = "";
