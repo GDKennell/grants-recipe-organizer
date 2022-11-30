@@ -20,7 +20,7 @@ export function removeTrailingWhitespace(string) {
   while (string.length > 0 && isWhitespace(string[lastIndex])) {
     lastIndex--;
   }
-  return string.substring(lastIndex);
+  return string.substring(0, lastIndex + 1);
 }
 
 export function insertNewLinesAround(
