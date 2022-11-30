@@ -96,6 +96,8 @@ function putIngredientsOnOwnLine(recipeStringIn) {
     if (ingredientFound == "") {
       continue;
     }
+    const numWordsInIngredient = ingredientFound.split(" ").length;
+    startWordIndex += numWordsInIngredient - 1;
 
     const [volumeString, volumeType, quantity] = findVolumeStringBefore(
       recipe,
