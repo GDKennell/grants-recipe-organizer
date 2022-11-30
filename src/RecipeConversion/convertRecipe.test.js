@@ -54,6 +54,10 @@ test("handles modifiers to ingredients and extraneous notes", () => {
   }
 });
 
+test("cold water = water", () => {
+  const [result, ingredient] = parseIngredientListLine("1/4 cup  cold water");
+  expect(result).toEqual("59.1g (0.25 cup)   cold water");
+});
 test("handles unicode fractions", () => {
   const testCases = [
     [
@@ -121,9 +125,33 @@ test("Keeps measurement with ingredient in recipe", () => {
   expect(result).toEqual(expected);
 });
 
+test("chicken salad ingredients", () => {
+  //https://www.tasteofhome.com/article/easy-chicken-salad/
+  const ingredientList =
+    "1/2 cup mayonnaise\n    2 tablespoons sour cream\n    1 tablespoon lemon juice\n    1/8 teaspoon salt\n    1/8 teaspoon pepper\n    4 cups shredded rotisserie chicken\n    1-1/4 cups seedless red grapes, halved\n    1/2 cup chopped pecans\n    1/2 cup chopped celery\n    1/4 cup chopped sweet onion, optional\n\n";
+  const expectedIngredientList =
+    "110.0g (0.50 cup)  mayonnaise\n    28.7g (2 tablespoons)  sour cream\n    15.5g (1 tablespoon)  lemon juice\n    0.8g (0.13 teaspoon)  salt\n    0.3g (0.13 teaspoon)  pepper\n    595.2g (4 cups)  shredded rotisserie chicken\n    115.0g (1.25 cups)  seedless red grapes, halved\n    56.0g (0.50 cup)  chopped pecans\n    1/2 cup chopped celery\n    28.8g (0.25 cup)  chopped sweet onion, optional";
+  const result = convertRecipe(ingredientList, "");
+  expect(result.indexOf(expectedIngredientList)).toBeGreaterThan(0);
+});
+
 test("Brings ingredient amounts from list to prep steps", () => {
   const ingredientList =
     "1½ cups/180 grams all-purpose flour\n1 teaspoon cream of tartar\n½ teaspoon baking soda\n½ teaspoon kosher salt\n\n";
+  const prepSteps =
+    "Step 1\nHeat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt";
+  const ingredientsString =
+    "187.5g (1.50 cups) /180 grams all-purpose flour\n5.0g (1 teaspoon)  cream of tartar\n 2.3g (0.50 teaspoon)  baking soda\n 3.0g (0.50 teaspoon)  kosher salt";
+  const recipeString =
+    "Step 1 \nHeat the oven to 375 degrees \n In a medium bowl , whisk together the \n - 187.50g (1.50 cups) flour\n - 4.96g (1 teaspoon) cream of tartar\n - 2.30g (0.50 teaspoon) baking soda\n - 3.00g (0.50 teaspoon) salt";
+  const result = convertRecipe(ingredientList, prepSteps);
+  expect(result.indexOf(ingredientsString)).toBeGreaterThan(0);
+  expect(result.indexOf(recipeString)).toBeGreaterThan(0);
+});
+
+test("ingredients moved over and skip 'and'", () => {
+  const ingredientList =
+    "1½ cups/180 grams all-purpose flour\n1 teaspoon cream of tartar\n½ teaspoon baking soda\n½ teaspoon kosher salt\n10 tablespoons/140 grams unsalted butter (1¼ sticks), at room temperature\n¾ cup/150 grams granulated sugar, plus 2 tablespoons\n1 large egg\n½ teaspoon vanilla extract\n1 tablespoon ground cinnamon\n\n";
   const prepSteps =
     "Step 1\nHeat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt";
   const ingredientsString =

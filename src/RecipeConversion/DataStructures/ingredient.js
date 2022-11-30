@@ -6,7 +6,7 @@ export class Ingredient {
 }
 
 export function isIngredientWord(str) {
-  if (str == undefined) {
+  if (str == undefined || str == "") {
     return false;
   }
   return allIngredientWords.includes(str.toLocaleLowerCase());
@@ -81,7 +81,7 @@ const Vodka = new Ingredient(
 const Shortening = new Ingredient(["Shortening"], 205.0);
 const Beer = new Ingredient(["Beer"], 236.0);
 const Cream_Of_Tartar = new Ingredient(["Cream of tartar"], 144.0);
-const allIngredients = [
+var allIngredients = [
   butter,
   Flour,
   Parmesan_cheese,
@@ -127,6 +127,30 @@ const allIngredients = [
   Beer,
   Cream_Of_Tartar,
 ];
+
+const shortIngredients = [
+  "mayonnaise 220.0",
+  "sour cream 230.0",
+  "lemon juice 248.0",
+  "pepper 110.4",
+  "chicken 148.8",
+  "grapes 92.0",
+  "pecans 112.0",
+  "celery 120.0 ",
+  "onion 115.2",
+];
+
+export function parseShortIngredient(shortIngredient) {
+  const words = shortIngredient.split(" ");
+  const gramsPerCupString = words[words.length - 1];
+  const gramsPerCupStringStart = shortIngredient.indexOf(gramsPerCupString);
+  const nameString = shortIngredient.substring(0, gramsPerCupStringStart - 1);
+  return new Ingredient([nameString], parseFloat(gramsPerCupString));
+}
+
+for (const shortIngredient of shortIngredients) {
+  allIngredients.push(parseShortIngredient(shortIngredient));
+}
 
 const allIngredientNameStrings = allIngredients
   .flatMap((m) => m.names)
