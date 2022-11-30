@@ -17,7 +17,7 @@ import { convertFractionsToDecimals } from "../utilities/numberConversion";
 export function parseRecipe(recipeStringIn, measuredIngredients) {
   var recipe = recipeStringIn.replaceAll(".", "\n");
   var recipe = recipe.replaceAll(",", " ,");
-  var recipe = recipe.replaceAll("\n", " \n");
+  var recipe = recipe.replaceAll("\n", " \n ");
   var recipe = convertFractionsToDecimals(recipe);
 
   // Todo: pre-process removing all double spaces (should only be single spaces)

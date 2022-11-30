@@ -92,7 +92,7 @@ test("puts ingredients on new lines", () => {
     "In the bowl of an electric mixer, beat together the butter and ¾ cup sugar until fluffy, about 2 minutes, scraping down the sides as necessary. Beat in the egg until creamy, and then add the vanilla, again scraping down the sides. Add the flour mixture to the butter mixture and beat on low until just combined.";
 
   const expected =
-    "In the bowl of an electric mixer , beat together the \n - butter\n and  \n - 0.75 cup sugar\n until fluffy , about 2 minutes , scraping down the sides as necessary \n Beat in the egg until creamy , and then add the vanilla , again scraping down the sides \n Add the \n - flour\n mixture to the \n - butter\n mixture and beat on low until just combined";
+    "In the bowl of an electric mixer , beat together the \n - butter\n and  \n - 0.75 cup sugar\n until fluffy , about 2 minutes , scraping down the sides as necessary \n  Beat in the egg until creamy , and then add the vanilla , again scraping down the sides \n  Add the \n - flour\n mixture to the \n - butter\n mixture and beat on low until just combined";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
@@ -102,7 +102,7 @@ test("looks for longer ingredient if present", () => {
     "Step 1\nHeat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt.\n\n";
 
   const expected =
-    "Step 1 \nHeat the oven to 375 degrees \n In a medium bowl , whisk together the \n - flour\n - cream of tartar\n - baking soda\n - salt";
+    "Step 1 \n Heat the oven to 375 degrees \n  In a medium bowl , whisk together the \n - flour\n - cream of tartar\n - baking soda\n - salt";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
@@ -120,7 +120,7 @@ test("Keeps measurement with ingredient in recipe", () => {
   const prepSteps =
     "In a small bowl, combine the remaining 2 tablespoons sugar and the cinnamon. Roll the dough into golf-ball-size balls, then roll each one in the cinnamon-sugar mixture";
   const expected =
-    "In a small bowl , combine the remaining \n - 2 tablespoons sugar\n and the \n - cinnamon\n Roll the dough into golf-ball-size balls , then roll each one in the cinnamon-sugar mixture";
+    "In a small bowl , combine the remaining \n - 2 tablespoons sugar\n and the \n - cinnamon\n  Roll the dough into golf-ball-size balls , then roll each one in the cinnamon-sugar mixture";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
@@ -143,7 +143,7 @@ test("Brings ingredient amounts from list to prep steps", () => {
   const expectedIngredients =
     "187.5g (1.50 cups) /180 grams all-purpose flour\n5.0g (1 teaspoon)  cream of tartar\n 2.3g (0.50 teaspoon)  baking soda\n 3.0g (0.50 teaspoon)  kosher salt";
   const expectedRecipe =
-    "Step 1 \nHeat the oven to 375 degrees \n In a medium bowl , whisk together the \n - 187.50g (1.50 cups) flour\n - 4.96g (1 teaspoon) cream of tartar\n - 2.30g (0.50 teaspoon) baking soda\n - 3.00g (0.50 teaspoon) salt";
+    "Step 1 \n Heat the oven to 375 degrees \n  In a medium bowl , whisk together the \n - 187.50g (1.50 cups) flour\n - 4.96g (1 teaspoon) cream of tartar\n - 2.30g (0.50 teaspoon) baking soda\n - 3.00g (0.50 teaspoon) salt";
   const result = convertRecipe(ingredientList, prepSteps);
   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
@@ -157,7 +157,7 @@ test("ingredients moved over and skip 'and'", () => {
   const expectedIngredients =
     "187.5g (1.50 cups) /180 grams all-purpose flour\n5.0g (1 teaspoon)  cream of tartar\n 2.3g (0.50 teaspoon)  baking soda\n 3.0g (0.50 teaspoon)  kosher salt";
   const expectedRecipe =
-    "Step 1 \nHeat the oven to 375 degrees \n In a medium bowl , whisk together the \n - 187.50g (1.50 cups) flour\n - 4.96g (1 teaspoon) cream of tartar\n - 2.30g (0.50 teaspoon) baking soda\n - 3.00g (0.50 teaspoon) salt";
+    "Step 1 \n Heat the oven to 375 degrees \n  In a medium bowl , whisk together the \n - 187.50g (1.50 cups) flour\n - 4.96g (1 teaspoon) cream of tartar\n - 2.30g (0.50 teaspoon) baking soda\n - 3.00g (0.50 teaspoon) salt";
   const result = convertRecipe(ingredientList, prepSteps);
   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
@@ -165,12 +165,10 @@ test("ingredients moved over and skip 'and'", () => {
 
 test("weird line breaks", () => {
   const ingredientList = "";
-  const longprepSteps =
-    "Step 1: Make Your Sauce\n\nStart by mixing the first five ingredients together for a creamy sauce. The sour cream and lemon juice add a tangy kick to this chunky chicken salad. Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.\n\nNot a mayo fan? We’ve got you covered. Learn how to make chicken salad without mayo. We like using plain Greek yogurt or mashed avocado for extra creaminess.\nStep 2: Mix Together\n\nIn a large bowl, mix together the shredded chicken, halved red grapes, chopped pecans and chopped celery. If using onion, add it along with your mayonnaise sauce. Toss to coat.\n\nStep 3: Serve and Store\n\nOnce your chicken salad is combined, serve with fresh homemade bread, mixed greens salad or whole-grain crackers. Store leftovers in a sealed container in the refrigerator right away\n\n";
   const prepSteps =
     "Step 1: Make Your Sauce\n\nStart by mixing the first five ingredients together for a creamy sauce. The sour cream and lemon juice add a tangy kick to this chunky chicken salad. Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
   const expectedRecipe =
-    "Step 1: Make Your Sauce \n \nStart by mixing the first five ingredients together for a creamy sauce \n The \n - sour cream\n - lemon juice\n add a tangy kick to this chunky \n - chicken\n salad \n Whisk together the \n - mayonnaise\n - sour cream\n - lemon juice\n - salt\n - pepper\n until fully combined , tasting as you go , then set aside";
+    "Step 1: Make Your Sauce \n  \n Start by mixing the first five ingredients together for a creamy sauce \n  The \n - sour cream\n - lemon juice\n add a tangy kick to this chunky \n - chicken\n salad \n  Whisk together the \n - mayonnaise\n - sour cream\n - lemon juice\n - salt\n - pepper\n until fully combined , tasting as you go , then set aside";
 
   const result = convertRecipe(ingredientList, prepSteps);
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
@@ -186,13 +184,14 @@ test("cream vs sour cream", () => {
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
-// test("new line before ingredient", () => {
-//   const ingredientList = "";
-//   const prepSteps =
-//     "Whisk together the \nmayonnaise, \nsour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
-
-//   const result = convertRecipe(ingredientList, prepSteps);
-//   expect(result).toEqual("");
-// });
+test("new line before ingredient", () => {
+  const ingredientList = "";
+  const prepSteps =
+    "Whisk together the \nmayonnaise, \nsour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
+  const expectedRecipe =
+    "Whisk together the  \n \n - mayonnaise\n \n - sour cream\n - lemon juice\n - salt\n - pepper\n until fully combined , tasting as you go , then set aside";
+  const result = convertRecipe(ingredientList, prepSteps);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
 
 // Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
