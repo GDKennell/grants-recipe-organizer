@@ -437,19 +437,40 @@ test("recipe ingredients with 'comma and ' last one", () => {
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
-// test("carne asada", () => {
-//   const ingredientList =
-//     "2-3 lbs skirt or flank steak (roughly trimmed)\n1/4 cup regular strength soy sauce\n6 cloves garlic (minced)\n3 TB freshly squeezed lime juice\n2 TB olive or canola oil\n1 TB sugar\n2 tsp ground cumin\n2 tsp onion powder\n2 tsp ancho chili powder\n2 kiwi fruits\n\n";
-//   const prepSteps =
-//     "Seasonings: In a 9x13 pan or large dish, add the soy sauce, garlic, lime juice, oil, sugar, cumin, onion powder, and chili powder. Use hand whisk to incorporate well. Set aside.";
-//   const expectedIngredients = "";
-//   const expectedRecipe = "";
-//   const result = convertRecipe(ingredientList, prepSteps);
-//   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
-//   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
-// });
+test("carne asada", () => {
+  const ingredientList =
+    "2-3 lbs skirt or flank steak (roughly trimmed)\n1/4 cup regular strength soy sauce\n6 cloves garlic (minced)\n3 TB freshly squeezed lime juice\n2 TB olive or canola oil\n1 TB sugar\n2 tsp ground cumin\n2 tsp onion powder\n2 tsp ancho chili powder\n2 kiwi fruits\n\n";
+  const prepSteps =
+    "Seasonings: In a 9x13 pan or large dish, add the soy sauce, garlic, lime juice, oil, sugar, cumin, onion powder, and chili powder. Use hand whisk to incorporate well. Set aside.";
+  const expectedIngredients =
+    "2-3 lbs skirt or flank steak (roughly trimmed)\n" +
+    "62.0g (0.25 cup)  regular strength soy sauce\n" +
+    "6 cloves garlic (minced)\n" +
+    "46.5g (3 TB)  freshly squeezed lime juice\n" +
+    "27.0g (2 TB)  olive or canola oil\n" +
+    "12.4g (1 TB)  sugar\n" +
+    "4.0g (2 tsp)  ground cumin\n" +
+    "4.6g (2 tsp)  onion powder\n" +
+    "5.3g (2 tsp)  ancho chili powder\n" +
+    "2 kiwi fruits";
+  const expectedRecipe =
+    "> Seasonings: In a 9x13 pan or large dish \n" +
+    ">  - -  add the \n" +
+    ">  - 62.00g (0.25 cup) soy sauce\n" +
+    ">  - garlic\n" +
+    ">  - 46.50g (3 TB) lime juice\n" +
+    ">  - 27.00g (2 TB) oil\n" +
+    ">  - 12.37g (1 TB) sugar\n" +
+    ">  - 4.00g (2 tsp) cumin\n" +
+    ">  - 4.60g (2 tsp) onion powder\n" +
+    ">  - 5.33g (2 tsp) chili powder\n" +
+    ">   Use hand whisk to incorporate well \n" +
+    ">   Set aside";
+  const result = convertRecipe(ingredientList, prepSteps);
+  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
 
-// Todo: "new line before ingredient" test shouldn't have new lines inside the final result. Same in "b oil bug"
 // Todo: clean up empty space at start of new lines like in "puts ingredients on new lines" test
 // Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
 // Todo: Test "puts ingredients on new lines" should pull out the "egg" and "vanilla" ingredients
