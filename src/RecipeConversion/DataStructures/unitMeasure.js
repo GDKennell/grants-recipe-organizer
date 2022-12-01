@@ -4,10 +4,24 @@ export class UnitMeasure {
   /**
    * @param {string[]} names
    * @param {number} ratioToCup
+   *
    */
-  constructor(names, ratioToCup) {
+  constructor(names, ratioToCup, ratioToGram) {
     this.names = names;
     this.ratioToCup = ratioToCup;
+    this.ratioToGram = ratioToGram;
+  }
+
+  isVolumeMeasure() {
+    return this.ratioToCup != null;
+  }
+
+  isWeightMeasure() {
+    return this.ratioToGram != null;
+  }
+
+  isUnitMeasure() {
+    return !this.isVolumeMeasure() && !this.isWeightMeasure();
   }
 }
 
@@ -29,19 +43,35 @@ export function getAllVolumeNameStrings() {
   return allVolumeNameStrings;
 }
 
-const cupMeasure = new UnitMeasure(["cup"], 1.0);
-const teaspoonMeasure = new UnitMeasure(["tsp", "teaspoon"], 0.0208333);
+const cupMeasure = new UnitMeasure(["cup"], 1.0, null);
+const teaspoonMeasure = new UnitMeasure(["tsp", "teaspoon"], 0.0208333, null);
 const tablespoonMeasure = new UnitMeasure(
   ["tbsp", "tablespoon"],
-  0.062499920209125003
+  0.062499920209125003,
+  null
 );
-const pintMeasure = new UnitMeasure(["pint", "pt"], 2.0);
+const pintMeasure = new UnitMeasure(["pint", "pt"], 2.0, null);
+const fluidOunceMeasure = new UnitMeasure(
+  ["fl. oz.", "fl oz", "fluid ounce"],
+  0.125,
+  null
+);
+
+const gramMeasure = new UnitMeasure(["g", "gram"], null, 1.0);
+const poundMeasure = new UnitMeasure(["lb", "pound"], null, 453.5924);
+const kiloMeasure = new UnitMeasure(["kg", "kilo", "kilogram"], null, 1000.0);
+const ounceWeightMeasure = new UnitMeasure(["oz", "ounce"], null, 28.3495);
 
 const allUnitMeasurements = [
   cupMeasure,
   teaspoonMeasure,
   tablespoonMeasure,
   pintMeasure,
+  fluidOunceMeasure,
+  gramMeasure,
+  poundMeasure,
+  kiloMeasure,
+  ounceWeightMeasure,
 ];
 
 var allVolumeNameStrings = allUnitMeasurements.flatMap((m) => m.names);
