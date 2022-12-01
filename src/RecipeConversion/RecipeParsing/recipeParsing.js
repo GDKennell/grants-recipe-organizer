@@ -80,6 +80,7 @@ function putIngredientsOnOwnLine(recipeStringIn) {
   // And text contains "unbleached milk". must still find milk
   while (ingredientName != "") {
     var ingredientStartIndex = ingredientEndIndex - ingredientName.length - 1;
+    // TODO: swap this to findUnitMeasureString()
     const [volumeString, volumeType, quantity] = findVolumeStringBefore(
       recipe,
       ingredientName,

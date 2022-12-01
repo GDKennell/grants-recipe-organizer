@@ -161,6 +161,7 @@ const shortIngredients = [
   "vanilla 208.0",
   "vanilla extract 208.0",
   "dark chocolate 259.88",
+  "egg 0.0",
 ];
 
 export function parseShortIngredient(shortIngredient) {
@@ -168,7 +169,10 @@ export function parseShortIngredient(shortIngredient) {
   const gramsPerCupString = words[words.length - 1];
   const gramsPerCupStringStart = shortIngredient.indexOf(gramsPerCupString);
   const nameString = shortIngredient.substring(0, gramsPerCupStringStart - 1);
-  return new Ingredient([nameString], parseFloat(gramsPerCupString));
+  return new Ingredient(
+    [nameString, nameString + "s"],
+    parseFloat(gramsPerCupString)
+  );
 }
 
 for (const shortIngredient of shortIngredients) {

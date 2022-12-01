@@ -9,7 +9,7 @@ import {
   convertFractionsToDecimals,
 } from "../utilities/numberConversion";
 
-import { findVolumeString } from "./volumeParsing";
+import { findUnitMeasureString, findVolumeString } from "./volumeParsing";
 import { MeasuredIngredient } from "../DataStructures/measuredIngredient";
 import {
   removeLeadingWhiteSpace,
@@ -47,14 +47,19 @@ export function parseIngredientListLine(lineIn) {
 
   //  ------- Finding Volume Amount ------------ //
 
-  const [volumeStringStartIndex, volumeInCups, volumeStringEndIndex] =
-    findVolumeString(newLine);
+  const [
+    unitStringStartIndex,
+    volumeInCups,
+    weightInGrams,
+    unitQuantity,
+    unitStringEndIndex,
+  ] = findUnitMeasureString(newLine);
 
   //  ------- Finding Ingredient Name  ------------ //
 
   const [ingredientName, ingredientEndIndex] = findIngredientName(
     newLine,
-    volumeStringEndIndex
+    unitStringStartIndex
   );
   if (ingredientName == "") {
     return [postProcessIngredientLine(lineIn), null];
@@ -63,17 +68,19 @@ export function parseIngredientListLine(lineIn) {
 
   //  ------- Conversion & String Building ------------ //
 
-  const gramsAmount = ingredient.gramsPerCup * volumeInCups;
-  const oldUnitMeasurement = newLine.substring(
-    volumeStringStartIndex,
-    volumeStringEndIndex
+  const oldUnitMeasurementString = newLine.substring(
+    unitStringStartIndex,
+    unitStringEndIndex
   );
-  const prefix = newLine.substring(0, volumeStringStartIndex);
-  const suffix = newLine.substring(volumeStringEndIndex);
+
+  const prefix = newLine.substring(0, unitStringStartIndex);
+  const suffix = newLine.substring(unitStringEndIndex);
   const finalIngredient = new MeasuredIngredient(
     ingredient,
     volumeInCups,
-    oldUnitMeasurement
+    weightInGrams,
+    unitQuantity,
+    oldUnitMeasurementString
   );
   var finalString = prefix + finalIngredient.description() + suffix;
 

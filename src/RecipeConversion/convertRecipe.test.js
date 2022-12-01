@@ -485,19 +485,33 @@ test("carne asada", () => {
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
-// test("countable eggs", () => {
-//   const ingredientList =
-//     "5 tbsp unsalted butter melted\n" + "2 large eggs\n" + "12 oz whole milk\n";
-//   const prepSteps =
-//     "In a large bowl, add melted butter, eggs, milk, and vanilla extract. Whisk until evenly combined and no egg streaks remain. Add in dry ingredients. Mix until evenly blended.";
-//   const expectedIngredients = "";
-//   const expectedRecipe = "";
-//   const result = convertRecipe(ingredientList, prepSteps);
-//   // expect(result).toEqual(expectedIngredients);
+test("countable eggs", () => {
+  const ingredientList =
+    "5 tbsp unsalted butter melted\n" + "2 large eggs\n" + "12 oz whole milk\n";
+  const prepSteps =
+    "In a large bowl, add melted butter, eggs, milk, and vanilla extract. Whisk until evenly combined and no egg streaks remain. Add in dry ingredients. Mix until evenly blended.";
+  const expectedIngredients =
+    "70.9g (5 tbsp) unsalted butter melted\n" +
+    "2 large eggs\n" +
+    "366g (12 oz) whole milk";
+  const expectedRecipe =
+    "> In a large bowl \n" +
+    ">  - -  add \n" +
+    ">  - 70.9g (5 tbsp) melted butter\n" +
+    ">  - 2 eggs\n" +
+    ">  - 366g (12 oz) milk\n" +
+    ">  - vanilla extract\n" +
+    ">   Whisk until evenly combined and no \n" +
+    ">  - 2 egg\n" +
+    ">  streaks remain \n" +
+    ">   Add in dry ingredients \n" +
+    ">   Mix until evenly blended";
+  const result = convertRecipe(ingredientList, prepSteps);
+  // expect(result).toEqual(expectedIngredients);
 
-//   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
-//   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
-// });
+  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
 
 // https://kirbiecravings.com/mochi-brownies/#recipe
 

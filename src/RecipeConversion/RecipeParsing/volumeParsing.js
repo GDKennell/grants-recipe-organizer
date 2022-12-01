@@ -5,7 +5,9 @@ import {
 } from "../utilities/stringHelpers";
 import {
   findVolumeByName,
+  findWeightByName,
   getAllVolumeNameStrings,
+  getAllWeightNameStrings,
 } from "../DataStructures/unitMeasure";
 
 export function findVolumeStringBefore(
@@ -24,7 +26,7 @@ export function findVolumeStringBefore(
     return ["", null, -1.0];
   }
 
-  const [numberString, numberStringStartIndex] = findVolumeQuantityBefore(
+  const [numberString, numberStringStartIndex] = findUnitQuantityBefore(
     recipeString,
     volumeStringStart - 1
   );
@@ -38,7 +40,7 @@ export function findVolumeStringBefore(
   return [fullVolumeString, volume, quantity];
 }
 
-function findVolumeQuantityBefore(line, startCharIndex) {
+function findUnitQuantityBefore(line, startCharIndex) {
   const allowedNumberChars = "0123456789./ ";
   // Step back from start of name string to find last non-number char\
   var testIndex = startCharIndex - 1;
@@ -60,31 +62,100 @@ function findVolumeQuantityBefore(line, startCharIndex) {
   return [numberString, testIndex];
 }
 
+export function findUnitMeasureString(line) {
+  var unitStringStartIndex = -1;
+  var volumeInCups = null;
+  var weightInGrams = null;
+  var unitQuantity = null;
+  var unitStringendIndex = -1;
+  [unitStringStartIndex, volumeInCups, unitStringendIndex] =
+    findVolumeString(line);
+
+  if (isNaN(volumeInCups)) {
+    [unitStringStartIndex, weightInGrams, unitStringendIndex] =
+      findWeightString(line);
+  }
+  if (isNaN(volumeInCups) && isNaN(weightInGrams)) {
+    [unitStringStartIndex, unitQuantity, unitStringendIndex] =
+      findUnitQuantityString(line);
+  }
+  return [
+    unitStringStartIndex,
+    volumeInCups,
+    weightInGrams,
+    unitQuantity,
+    unitStringendIndex,
+  ];
+}
+
+function findUnitQuantityString(line) {
+  const words = line.split(" ");
+  for (const word of words) {
+    if (!isNaN(parseFloat(word))) {
+      const quantity = parseFloat(word);
+      const numberStartIndex = line.indexOf(word);
+      const numberEndIndex = numberStartIndex + word.length;
+      return [numberStartIndex, quantity, numberEndIndex];
+    }
+  }
+  return [-1, null, -1];
+}
+
+export function findWeightString(line) {
+  const [unitStringStartIndex, unitAmount, unitType, unitStringEndIndex] =
+    findGenericUnitMeasureString(
+      line,
+      findWeightByName,
+      getAllWeightNameStrings
+    );
+  const weight = unitType;
+  const weightInGrams = unitAmount * weight.ratioToGram;
+  return [unitStringStartIndex, weightInGrams, unitStringEndIndex];
+}
+
 export function findVolumeString(line) {
+  const [unitStringStartIndex, unitAmount, unitType, unitStringEndIndex] =
+    findGenericUnitMeasureString(
+      line,
+      findVolumeByName,
+      getAllVolumeNameStrings
+    );
+  const volume = unitType;
+  const volumeInCups = unitAmount * volume.ratioToCup;
+  return [unitStringStartIndex, volumeInCups, unitStringEndIndex];
+}
+
+export function findGenericUnitMeasureString(
+  line,
+  findByNameFn,
+  getAllStringsFn
+) {
   const lowerLine = line.toLocaleLowerCase();
-  var volumeNamePos = -1;
-  var volumeTypeString = "";
-  var volumeType = null;
-  for (const str of getAllVolumeNameStrings()) {
+  var unitNamePos = -1;
+  var unitTypeString = "";
+  var unitType = null;
+  for (const str of getAllStringsFn()) {
     if (stringContainsWord(lowerLine, str)) {
       // console.log("found match " + str + " in " + line);
-      volumeNamePos = lowerLine.indexOf(str);
-      volumeType = findVolumeByName(str);
-      volumeTypeString = str;
+      unitNamePos = lowerLine.indexOf(str);
+      unitType = findByNameFn(str);
+      unitTypeString = str;
       break;
     }
   }
-  const volumeStringEndIndex = volumeNamePos + volumeTypeString.length;
+  if (unitType == null) {
+    return [-1, null, -1];
+  }
+  const unitStringEndIndex = unitNamePos + unitTypeString.length;
 
-  const [numberString, numberStringStartIndex] = findVolumeQuantityBefore(
+  const [numberString, numberStringStartIndex] = findUnitQuantityBefore(
     lowerLine,
-    volumeNamePos - 1
+    unitNamePos - 1
   );
 
   // testIndex is now start of number sequence
-  const volumeStringStartIndex = numberStringStartIndex;
-  const volumeAmount = parseFloat(numberString);
-  const volumeInCups = volumeAmount * volumeType.ratioToCup;
+  const unitStringStartIndex = numberStringStartIndex;
+  const unitAmount = parseFloat(numberString);
 
-  return [volumeStringStartIndex, volumeInCups, volumeStringEndIndex];
+  return [unitStringStartIndex, unitAmount, unitType, unitStringEndIndex];
 }

@@ -1,15 +1,33 @@
 import { roundDecimalNumber } from "../utilities/stringHelpers";
 
 export class MeasuredIngredient {
-  constructor(ingredient, volumeInCups, volumeString) {
+  constructor(
+    ingredient,
+    volumeInCups,
+    weightInGrams,
+    unitQuantity,
+    originalString
+  ) {
     this.ingredient = ingredient;
-    this.volumeInCups = volumeInCups;
-    this.volumeString = volumeString;
+    this.volumeInCups = isNaN(volumeInCups) ? null : volumeInCups;
+    this.originalString = originalString;
+    this.weightInGrams = isNaN(weightInGrams) ? null : weightInGrams;
+    this.unitQuantity = unitQuantity;
   }
-  weightInGrams() {
-    return roundDecimalNumber(this.volumeInCups * this.ingredient.gramsPerCup);
+  getWeightInGrams() {
+    const convertedWeight =
+      this.volumeInCups != null
+        ? this.volumeInCups * this.ingredient.gramsPerCup
+        : null;
+    return this.weightInGrams ?? convertedWeight;
   }
   description() {
-    return this.weightInGrams() + "g (" + this.volumeString + ")";
+    const weight = this.getWeightInGrams();
+    if (weight != null) {
+      return (
+        roundDecimalNumber(weight) + "g" + " (" + this.originalString + ")"
+      );
+    }
+    return roundDecimalNumber(this.unitQuantity);
   }
 }
