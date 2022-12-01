@@ -38,6 +38,10 @@ export function strIndexOfWord(string, word, startIndex) {
   return index;
 }
 
+export function debugString(string) {
+  return string.replaceAll("\n", "\\n");
+}
+
 export function insertNewLinesAround(
   recipeString,
   ingredientString,

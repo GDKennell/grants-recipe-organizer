@@ -49,7 +49,10 @@ export function parseIngredientListLine(lineIn) {
 
   //  ------- Finding Ingredient Name  ------------ //
 
-  const ingredientName = findIngredientName(newLine, volumeStringEndIndex);
+  const [ingredientName, ingredientEndIndex] = findIngredientName(
+    newLine,
+    volumeStringEndIndex
+  );
   if (ingredientName == "") {
     return [lineIn, null];
   }
@@ -83,23 +86,44 @@ export function parseIngredientListLine(lineIn) {
   return [finalString, finalIngredient];
 }
 
-export function findIngredientName(lineIn, volumeStringEndIndex) {
+export function findIngredientName(lineIn, startIndex) {
   const words = lineIn
     .toLocaleLowerCase()
-    .substring(volumeStringEndIndex + 1)
+    .substring(startIndex + 1)
     .split(" ");
-  var wordIndex = 0;
-  var testWord = words[wordIndex++];
-  // Skip any non-ingredient words
-  while (!isIngredientWord(testWord) && wordIndex < words.length) {
-    testWord = words[wordIndex++];
+
+  var testString = "";
+  var ingredientFound = "";
+  for (
+    var startWordIndex = 0;
+    startWordIndex < words.length;
+    startWordIndex++
+  ) {
+    const startWord = words[startWordIndex];
+    testString = startWord;
+    var word = startWord;
+    var innerIndex = startWordIndex + 1;
+
+    while (isIngredientWord(word)) {
+      if (isIngredientName(testString)) {
+        ingredientFound = testString;
+      }
+      if (innerIndex >= words.length) {
+        break;
+      }
+      word = words[innerIndex++];
+      testString += " " + word;
+    }
+    if (ingredientFound != "") {
+      break;
+    }
   }
-  while (!isIngredientName(testWord) && wordIndex < words.length) {
-    testWord += " " + words[wordIndex++];
-  }
-  if (!isIngredientName(testWord)) {
-    console.log('Error: unknown ingredient "' + testWord + '"');
-    return "";
-  }
-  return testWord;
+
+  const testStringStartPosition = lineIn
+    .toLocaleLowerCase()
+    .indexOf(ingredientFound, startIndex);
+  const testStringEndPosition =
+    testStringStartPosition + ingredientFound.length;
+
+  return [ingredientFound, testStringEndPosition];
 }
