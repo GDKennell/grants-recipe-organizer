@@ -8,6 +8,21 @@ export function strInsert(baseString, insertionString, index) {
   );
 }
 
+function hasSuffix(string, suffix) {
+  if (suffix.length > string.length) {
+    return false;
+  }
+  return string.indexOf(suffix) == string.length - suffix.length;
+}
+
+export function roundDecimalNumber(number) {
+  var result = number.toFixed(1);
+  if (hasSuffix(result, ".0")) {
+    return result.substring(0, result.length - 2);
+  }
+  return result;
+}
+
 export function strRemoveRange(baseString, startIndex, endIndex) {
   return baseString.substring(0, startIndex) + baseString.substring(endIndex);
 }

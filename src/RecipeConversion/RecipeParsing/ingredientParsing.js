@@ -70,22 +70,16 @@ export function parseIngredientListLine(lineIn) {
   );
   const prefix = newLine.substring(0, volumeStringStartIndex);
   const suffix = newLine.substring(volumeStringEndIndex);
-
-  var finalString =
-    prefix +
-    gramsAmount.toFixed(1) +
-    "g (" +
-    oldUnitMeasurement +
-    ") " +
-    suffix;
-
-  //  ------- Post Processing ------------ //
-  finalString = postProcessIngredientLine(finalString);
   const finalIngredient = new MeasuredIngredient(
     ingredient,
     volumeInCups,
     oldUnitMeasurement
   );
+  var finalString = prefix + finalIngredient.description() + suffix;
+
+  //  ------- Post Processing ------------ //
+  finalString = postProcessIngredientLine(finalString);
+
   return [finalString, finalIngredient];
 }
 
