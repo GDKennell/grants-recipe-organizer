@@ -88,6 +88,10 @@ const Vodka = new Ingredient(
 const Shortening = new Ingredient(["Shortening"], 205.0);
 const Beer = new Ingredient(["Beer"], 236.0);
 const Cream_Of_Tartar = new Ingredient(["Cream of tartar"], 144.0);
+const Mochiko_Flour = new Ingredient(
+  ["Mochiko", "Mochiko Flour", "sweet rice flour", "glutinous rice flour"],
+  144.0
+);
 var allIngredients = [
   butter,
   Flour,
@@ -96,6 +100,7 @@ var allIngredients = [
   Sugar,
   Dried_Basil,
   Brown_sugar,
+  Mochiko_Flour,
   Evaporated_milk,
   Yeast,
   Cumin,
@@ -152,6 +157,10 @@ const shortIngredients = [
   "onion 115.2",
   "sake 232.8",
   "wine 232",
+  "cocoa powder 86.0",
+  "vanilla 208.0",
+  "vanilla extract 208.0",
+  "dark chocolate 259.88",
 ];
 
 export function parseShortIngredient(shortIngredient) {

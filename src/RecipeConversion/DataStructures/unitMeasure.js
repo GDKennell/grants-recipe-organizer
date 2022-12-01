@@ -52,7 +52,7 @@ const tablespoonMeasure = new UnitMeasure(
 );
 const pintMeasure = new UnitMeasure(["pint", "pt"], 2.0, null);
 const fluidOunceMeasure = new UnitMeasure(
-  ["fl. oz.", "fl oz", "fluid ounce"],
+  ["fl. oz.", "fl oz", "fluid ounce", "oz"],
   0.125,
   null
 );
@@ -60,7 +60,6 @@ const fluidOunceMeasure = new UnitMeasure(
 const gramMeasure = new UnitMeasure(["g", "gram"], null, 1.0);
 const poundMeasure = new UnitMeasure(["lb", "pound"], null, 453.5924);
 const kiloMeasure = new UnitMeasure(["kg", "kilo", "kilogram"], null, 1000.0);
-const ounceWeightMeasure = new UnitMeasure(["oz", "ounce"], null, 28.3495);
 
 const allUnitMeasurements = [
   cupMeasure,
@@ -71,7 +70,6 @@ const allUnitMeasurements = [
   gramMeasure,
   poundMeasure,
   kiloMeasure,
-  ounceWeightMeasure,
 ];
 
 var allVolumeNameStrings = allUnitMeasurements.flatMap((m) => m.names);
