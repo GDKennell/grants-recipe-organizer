@@ -12,6 +12,10 @@ export function strRemoveRange(baseString, startIndex, endIndex) {
   return baseString.substring(0, startIndex) + baseString.substring(endIndex);
 }
 
+export function isDecimal(character) {
+  return "0123456789".indexOf(character) != -1;
+}
+
 const whitespaceChars = " \n\r\t";
 function isWhitespace(character) {
   return stringContains(whitespaceChars, character);
@@ -38,6 +42,10 @@ export function removeAllPunctuation(string) {
   return result;
 }
 
+function isAlphabetic(character) {
+  return !isPunctuation(character) && !isDecimal(character) && character != " ";
+}
+
 export function removeNulls(arr) {
   if (arr == undefined) {
     return undefined;
@@ -51,6 +59,14 @@ export function removeTrailingWhitespace(string) {
     lastIndex--;
   }
   return string.substring(0, lastIndex + 1);
+}
+
+export function removeLeadingWhiteSpace(string) {
+  var lastIndex = 0;
+  while (lastIndex < string.length && isWhitespace(string[lastIndex])) {
+    lastIndex++;
+  }
+  return string.substring(lastIndex);
 }
 
 function isWordSeparator(character) {
@@ -147,4 +163,34 @@ export function stringContainsWord(haystack, needle) {
   return (
     index != -1 && (endIndex >= haystack.length || haystack[endIndex] == " ")
   );
+}
+
+function strRemoveAt(baseString, index) {
+  return baseString.substring(0, index - 1) + baseString.substring(index);
+}
+
+export function sanitizePunctuation(strIn) {
+  var str = strIn;
+  for (var i = 0; i < str.length; i++) {
+    if (i > 0 && isPunctuation(str[i]) && isAlphabetic(str[i - 1])) {
+      str = strInsert(str, " ", i++);
+    }
+  }
+  return str;
+}
+
+export function removeSpacesBeforePunctuation(strIn) {
+  var str = strIn;
+  const excludedPunctuation = "(";
+  for (var i = 0; i < str.length; i++) {
+    if (
+      i > 0 &&
+      isPunctuation(str[i]) &&
+      str[i - 1] == " " &&
+      !stringContains(excludedPunctuation, str[i])
+    ) {
+      str = strRemoveAt(str, i--);
+    }
+  }
+  return str;
 }

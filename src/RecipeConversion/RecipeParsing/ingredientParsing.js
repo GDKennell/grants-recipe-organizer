@@ -7,12 +7,15 @@ import {
 import {
   wordsToNumbers,
   convertFractionsToDecimals,
-  sanitizePunctuation,
-  removeSpacesBeforePunctuation,
 } from "../utilities/numberConversion";
 
 import { findVolumeString } from "./volumeParsing";
 import { MeasuredIngredient } from "../DataStructures/measuredIngredient";
+import {
+  removeLeadingWhiteSpace,
+  removeSpacesBeforePunctuation,
+  sanitizePunctuation,
+} from "../utilities/stringHelpers";
 
 export function parseIngredientList(ingredientListStringIn) {
   const lines = ingredientListStringIn.split("\n");
@@ -54,7 +57,7 @@ export function parseIngredientListLine(lineIn) {
     volumeStringEndIndex
   );
   if (ingredientName == "") {
-    return [lineIn, null];
+    return [postProcessIngredientLine(lineIn), null];
   }
   const ingredient = findIngredientByName(ingredientName);
 
@@ -77,13 +80,19 @@ export function parseIngredientListLine(lineIn) {
     suffix;
 
   //  ------- Post Processing ------------ //
-  finalString = removeSpacesBeforePunctuation(finalString);
+  finalString = postProcessIngredientLine(finalString);
   const finalIngredient = new MeasuredIngredient(
     ingredient,
     volumeInCups,
     oldUnitMeasurement
   );
   return [finalString, finalIngredient];
+}
+
+function postProcessIngredientLine(line) {
+  var finalString = removeSpacesBeforePunctuation(line);
+  finalString = removeLeadingWhiteSpace(finalString);
+  return finalString;
 }
 
 export function findIngredientName(lineIn, startIndex) {

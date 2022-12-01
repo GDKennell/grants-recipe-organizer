@@ -9,7 +9,6 @@ import { parseRecipe } from "./RecipeParsing/recipeParsing";
 
 test("converts values to cups", () => {
   const testCases = [
-    ["- 2.5 cups flour", "- 312.5g (2.5 cups)  flour"],
     ["- 1 tsp salt", "- 6.0g (1 tsp)  salt"],
     ["- Two Tbsp sugar ", "- 24.7g (2 Tbsp)  sugar "],
     ["- 2 cups butter ", "- 454.0g (2 cups)  butter "],
@@ -21,6 +20,14 @@ test("converts values to cups", () => {
     ["3 1/4 cup tequila", "728.0g (3.25 cup)  tequila"],
   ];
 
+  for (const testCase of testCases) {
+    const [result, ingredient] = parseIngredientListLine(testCase[0]);
+    expect(result).toEqual(testCase[1]);
+  }
+});
+
+test("2.5 cups flour", () => {
+  const testCases = [["- 2.5 cups flour", "- 312.5g (2.5 cups)  flour"]];
   for (const testCase of testCases) {
     const [result, ingredient] = parseIngredientListLine(testCase[0]);
     expect(result).toEqual(testCase[1]);
@@ -76,18 +83,18 @@ test("handles unicode fractions", () => {
       "1½ cups/180 grams all-purpose flour",
       "187.5g (1.50 cups) /180 grams all-purpose flour",
     ],
-    ["½ teaspoon baking soda", " 2.3g (0.50 teaspoon)  baking soda"],
-    ["½ teaspoon kosher salt", " 3.0g (0.50 teaspoon)  kosher salt"],
+    ["½ teaspoon baking soda", "2.3g (0.50 teaspoon)  baking soda"],
+    ["½ teaspoon kosher salt", "3.0g (0.50 teaspoon)  kosher salt"],
     [
       "10 tablespoons/140 grams unsalted butter (1¼ sticks), at room temperature",
       "141.9g (10 tablespoons) /140 grams unsalted butter (1 1/4 sticks), at room temperature",
     ],
     [
       "¾ cup/150 grams granulated sugar, ",
-      " 148.5g (0.75 cup) /150 grams granulated sugar, ",
+      "148.5g (0.75 cup) /150 grams granulated sugar, ",
     ],
     ["1 large egg", "1 large egg"],
-    ["½ teaspoon vanilla extract", " 2.2g (0.50 teaspoon)  vanilla extract"],
+    ["½ teaspoon vanilla extract", "2.2g (0.50 teaspoon)  vanilla extract"],
     ["1 tablespoon ground cinnamon", "7.8g (1 tablespoon)  ground cinnamon"],
   ];
 
@@ -197,19 +204,19 @@ test("chicken salad ingredients", () => {
     "    1/4 cup chopped sweet onion, optional\n" +
     "\n" +
     "";
-  const expectedIngredientList =
+  const expectedIngredients =
     "110.0g (0.50 cup)  mayonnaise\n" +
-    "    28.7g (2 tablespoons)  sour cream\n" +
-    "    15.5g (1 tablespoon)  lemon juice\n" +
-    "    0.8g (0.13 teaspoon)  salt\n" +
-    "    0.3g (0.13 teaspoon)  pepper\n" +
-    "    595.2g (4 cups)  shredded rotisserie chicken\n" +
-    "    115.0g (1.25 cups)  seedless red grapes, halved\n" +
-    "    56.0g (0.50 cup)  chopped pecans\n" +
-    "    1/2 cup chopped celery\n" +
-    "    28.8g (0.25 cup)  chopped sweet onion, optional";
+    "28.7g (2 tablespoons)  sour cream\n" +
+    "15.5g (1 tablespoon)  lemon juice\n" +
+    "0.8g (0.13 teaspoon)  salt\n" +
+    "0.3g (0.13 teaspoon)  pepper\n" +
+    "595.2g (4 cups)  shredded rotisserie chicken\n" +
+    "115.0g (1.25 cups)  seedless red grapes, halved\n" +
+    "56.0g (0.50 cup)  chopped pecans\n" +
+    "1/2 cup chopped celery\n" +
+    "28.8g (0.25 cup)  chopped sweet onion, optional";
   const result = convertRecipe(ingredientList, "");
-  expect(result.indexOf(expectedIngredientList)).toBeGreaterThan(0);
+  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
 });
 
 test("Brings ingredient amounts from list to prep steps", () => {
@@ -226,8 +233,8 @@ test("Brings ingredient amounts from list to prep steps", () => {
   const expectedIngredients =
     "187.5g (1.50 cups) /180 grams all-purpose flour\n" +
     "3.0g (1 teaspoon)  cream of tartar\n" +
-    " 2.3g (0.50 teaspoon)  baking soda\n" +
-    " 3.0g (0.50 teaspoon)  kosher salt";
+    "2.3g (0.50 teaspoon)  baking soda\n" +
+    "3.0g (0.50 teaspoon)  kosher salt";
   const expectedRecipe =
     "> Step 1 \n" +
     ">  Heat the oven to 375 degrees \n" +
@@ -261,13 +268,13 @@ test("ingredients moved over and skip 'and'", () => {
   const expectedIngredients =
     "187.5g (1.50 cups) /180 grams all-purpose flour\n" +
     "3.0g (1 teaspoon)  cream of tartar\n" +
-    " 2.3g (0.50 teaspoon)  baking soda\n" +
-    " 3.0g (0.50 teaspoon)  kosher salt\n" +
+    "2.3g (0.50 teaspoon)  baking soda\n" +
+    "3.0g (0.50 teaspoon)  kosher salt\n" +
     "141.9g (10 tablespoons) /140 grams unsalted butter (1 1/4 sticks), at room temperature\n" +
-    " 148.5g (0.75 cup) /150 grams granulated sugar, plus 2 tablespoons\n" +
+    "148.5g (0.75 cup) /150 grams granulated sugar, plus 2 tablespoons\n" +
     "1 large egg\n" +
-    " 2.2g (0.50 teaspoon)  vanilla extract\n" +
-    "7.8g (1 tablespoon)  ground cinnamon";
+    "2.2g (0.50 teaspoon)  vanilla extract\n" +
+    "7.8g (1 tablespoon)  ground cinnamon\n";
   const expectedRecipe =
     "> Step 1 \n" +
     ">  Heat the oven to 375 degrees \n" +
