@@ -46,7 +46,7 @@ export function getAllVolumeNameStrings() {
 const cupMeasure = new UnitMeasure(["cup"], 1.0, null);
 const teaspoonMeasure = new UnitMeasure(["tsp", "teaspoon"], 0.0208333, null);
 const tablespoonMeasure = new UnitMeasure(
-  ["tbsp", "tablespoon"],
+  ["tbsp", "tablespoon", "tb"],
   0.062499920209125003,
   null
 );

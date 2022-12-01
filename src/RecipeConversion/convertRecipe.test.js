@@ -241,6 +241,18 @@ test("b oil bug", () => {
   expect(result.indexOf(expectedRecipeSnippet)).toBeGreaterThan(0);
 });
 
+// test("carne asada", () => {
+//   const ingredientList =
+//     "2-3 lbs skirt or flank steak (roughly trimmed)\n1/4 cup regular strength soy sauce\n6 cloves garlic (minced)\n3 TB freshly squeezed lime juice\n2 TB olive or canola oil\n1 TB sugar\n2 tsp ground cumin\n2 tsp onion powder\n2 tsp ancho chili powder\n2 kiwi fruits\n\n";
+//   const prepSteps =
+//     "Seasonings: In a 9x13 pan or large dish, add the soy sauce, garlic, lime juice, oil, sugar, cumin, onion powder, and chili powder. Use hand whisk to incorporate well. Set aside.";
+//   const expectedIngredients = "";
+//   const expectedRecipe = "";
+//   const result = convertRecipe(ingredientList, prepSteps);
+//   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+//   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+// });
+
 // Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
 // Todo: test for current bug caused by "Gather all the ingredients for the marinade: canola oil, sake, soy sauce, water, and sugar". The "And ... sugar" get put on their own lines
 // Todo: "Keeps measurement with ingredient in recipe" test should change to not have the line with simply "and the"

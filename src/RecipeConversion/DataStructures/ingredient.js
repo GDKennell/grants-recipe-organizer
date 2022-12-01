@@ -71,10 +71,14 @@ const Walnuts = new Ingredient(["Walnuts"], 120.0);
 const Cinnamon = new Ingredient(["Cinnamon"], 124.8);
 const Ginger = new Ingredient(["Ginger"], 83.2);
 const Nutmeg = new Ingredient(["Nutmeg"], 112.0);
+const Cumin = new Ingredient(
+  ["cumin", "ground cumin", "ground cumin seed"],
+  96
+);
 const Cloves = new Ingredient(["Cloves"], 104.0); // ground
 const Onion_salt = new Ingredient(["Onion salt"], 225.6);
 const Paprika = new Ingredient(["Paprika"], 108.8);
-const Chili_powder = new Ingredient(["Chili powder"], 1.0);
+const Chili_powder = new Ingredient(["Chili powder"], 128.0);
 const Vanilla_Extract = new Ingredient(["Vanilla Extract"], 208.0);
 const Vinegar = new Ingredient(["Vinegar", "white vinegar"], 238.0); // Distilled white
 const Vodka = new Ingredient(
@@ -94,6 +98,7 @@ var allIngredients = [
   Brown_sugar,
   Evaporated_milk,
   Yeast,
+  Cumin,
   Water,
   Poppy_seeds,
   Sesame_seeds,
@@ -136,10 +141,13 @@ const shortIngredients = [
   "mayonnaise 220.0",
   "sour cream 230.0",
   "lemon juice 248.0",
+  "lime juice 248.0",
   "pepper 110.4",
+  "garlic 136.0",
   "chicken 148.8",
   "grapes 92.0",
   "pecans 112.0",
+  "onion powder 110.4",
   "celery 120.0 ",
   "onion 115.2",
   "sake 232.8",
