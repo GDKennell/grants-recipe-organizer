@@ -136,7 +136,7 @@ export function wordBefore(str, startIndex) {
 }
 
 function isSimpleWord(word) {
-  return word.length == 0 || word == "and" || word == ",";
+  return word.length == 0 || word == "and" || word == "," || word == "the";
 }
 
 export function isSimpleLine(lineIn) {
@@ -150,7 +150,7 @@ export function isSimpleLine(lineIn) {
   line = removeAllWhitespace(line);
   line = removeAllPunctuation(line);
 
-  return line.length < 6;
+  return true;
 }
 
 export function stringContains(haystack, needle) {

@@ -181,7 +181,6 @@ test("Keeps measurement with ingredient in recipe", () => {
     "> In a small bowl \n" +
     ">  - -  combine the remaining \n" +
     ">  - 2 tablespoons sugar\n" +
-    ">  and the \n" +
     ">  - cinnamon\n" +
     ">   Roll the dough into golf-ball-size balls \n" +
     ">  - -  roll each one in the cinnamon-sugar mixture";
@@ -452,8 +451,6 @@ test("recipe ingredients with 'comma and ' last one", () => {
 //   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 // });
 
-// Todo: test for current bug caused by "Gather all the ingredients for the marinade: canola oil, sake, soy sauce, water, and sugar". The "And ... sugar" get put on their own lines
-// Todo: "Keeps measurement with ingredient in recipe" test should change to not have the line with simply "and the"
 // Todo: "new line before ingredient" test shouldn't have new lines inside the final result. Same in "b oil bug"
 // Todo: clean up empty space at start of new lines like in "puts ingredients on new lines" test
 // Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
