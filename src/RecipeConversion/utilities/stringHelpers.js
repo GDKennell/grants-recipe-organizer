@@ -74,6 +74,15 @@ function isWhitespace(character) {
   return stringContains(whitespaceChars, character);
 }
 
+export function isLineAllWhitespace(line) {
+  for (const char of line) {
+    if (!isWhitespace(char)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export function wordBefore(str, startIndex) {
   var index = startIndex - 1;
   // Skip initial spaces

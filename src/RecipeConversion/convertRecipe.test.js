@@ -166,12 +166,13 @@ test("ingredients moved over and skip 'and'", () => {
 test("weird line breaks", () => {
   const ingredientList = "";
   const prepSteps =
-    "Step 1: Make Your Sauce\n\nStart by mixing the first five ingredients together for a creamy sauce. The sour cream and lemon juice add a tangy kick to this chunky chicken salad. Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
+    "Step 1: Make Your Sauce\n\nStart by mixing the first five ingredients together for a creamy sauce. The sour cream and lemon juice add a tangy kick to this chunky chicken salad. Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.\n\nStep 2 \n Do another thing \n  \n \n Step 3\n Profit";
   const expectedRecipe =
-    "Step 1: Make Your Sauce \n  \n Start by mixing the first five ingredients together for a creamy sauce \n  The \n - sour cream\n - lemon juice\n add a tangy kick to this chunky \n - chicken\n salad \n  Whisk together the \n - mayonnaise\n - sour cream\n - lemon juice\n - salt\n - pepper\n until fully combined \n - -  tasting as you go \n - -  set aside";
+    "Step 1: Make Your Sauce \n  \n>  Start by mixing the first five ingredients together for a creamy sauce \n>   The \n>  - sour cream\n>  - lemon juice\n>  add a tangy kick to this chunky \n>  - chicken\n>  salad \n>   Whisk together the \n>  - mayonnaise\n>  - sour cream\n>  - lemon juice\n>  - salt\n>  - pepper\n>  until fully combined \n>  - -  tasting as you go \n>  - -  set aside \n  \n  \n>  Step 2  \n>   Do another thing  \n    \n   \n>   Step 3 \n>   Profit'";
 
   const result = convertRecipe(ingredientList, prepSteps);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+  expect(result).toEqual("");
+  // expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("cream vs sour cream", () => {

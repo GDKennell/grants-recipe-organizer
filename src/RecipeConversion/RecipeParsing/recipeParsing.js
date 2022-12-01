@@ -9,6 +9,7 @@ import { findVolumeStringBefore } from "./volumeParsing";
 
 import {
   insertNewLinesAround,
+  isLineAllWhitespace,
   stringContains,
   strInsert,
   strRemoveRange,
@@ -28,6 +29,7 @@ export function parseRecipe(recipeStringIn, measuredIngredients) {
   recipe = removeSimpleLines(recipe);
   recipe = removeRedundantWords(recipe);
   recipe = moveCommaListsToBulletOnes(recipe);
+  recipe = insertMultiLineStepMarkers(recipe);
   return recipe;
 }
 
@@ -152,4 +154,17 @@ function removeRedundantWords(recipeStringIn) {
 
 function moveCommaListsToBulletOnes(recipeStringIn) {
   return recipeStringIn.replaceAll(",", "\n - - ");
+}
+
+function insertMultiLineStepMarkers(recipeStringIn) {
+  const lines = recipeStringIn.split("\n");
+  var finalLines = [];
+  for (const line of lines) {
+    if (!isLineAllWhitespace(line)) {
+      finalLines.push("> " + line);
+    } else {
+      finalLines.push(line);
+    }
+  }
+  return finalLines.join("\n");
 }
