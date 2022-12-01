@@ -27,13 +27,28 @@ export function removeTrailingWhitespace(string) {
   return string.substring(0, lastIndex + 1);
 }
 
+function isWordSeparator(character) {
+  return isWhitespace(character) || isPunctuation(character);
+}
+export function strIndexOfWord(string, word, startIndex) {
+  var index = string.indexOf(word, startIndex);
+  while (index != -1 && index > 0 && !isWordSeparator(string[index - 1])) {
+    index = string.indexOf(word, index + word.length);
+  }
+  return index;
+}
+
 export function insertNewLinesAround(
   recipeString,
   ingredientString,
   startIndex
 ) {
   const lineStarter = " - ";
-  const ingredientStart = recipeString.indexOf(ingredientString, startIndex);
+  const ingredientStart = strIndexOfWord(
+    recipeString,
+    ingredientString,
+    startIndex
+  );
   var newRecipe = strInsert(
     recipeString,
     "\n" + NEW_LINE_MARKER + lineStarter,
@@ -47,6 +62,11 @@ export function insertNewLinesAround(
     1;
   newRecipe = strInsert(newRecipe, "\n" + NEW_LINE_MARKER, ingredientEnd);
   return [newRecipe, ingredientEnd];
+}
+
+function isPunctuation(character) {
+  const punctuationChars = ".,/()!?";
+  return stringContains(punctuationChars, character);
 }
 
 function isWhitespace(character) {

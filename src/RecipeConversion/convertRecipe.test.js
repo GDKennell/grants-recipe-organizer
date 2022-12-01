@@ -206,4 +206,16 @@ test("skip the next and thens", () => {
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
+test("b oil bug", () => {
+  const ingredientList =
+    "2-2½ lb pork belly block\n1 Green Onion\n1 knob ginger\n 1 Tbsp canola oil\n1 cup sake\n1 cup soy sauce\n2 cups water\n2/3 cup sugar\n\n";
+  const prepSteps =
+    "Bring the liquid to a boil over medium heat.\nHeat the oil in";
+
+  const expectedRecipeSnippet = "Bring the liquid to a boil";
+  const result = convertRecipe(ingredientList, prepSteps);
+
+  expect(result.indexOf(expectedRecipeSnippet)).toBeGreaterThan(0);
+});
+
 // Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
