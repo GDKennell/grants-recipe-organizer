@@ -136,10 +136,12 @@ test("puts ingredients on new lines", () => {
     ">  until fluffy \n" +
     ">  - -  about 2 minutes \n" +
     ">  - -  scraping down the sides as necessary \n" +
-    ">   Beat in the egg until creamy \n" +
+    ">   Beat in the \n" +
+    ">  - egg\n" +
+    ">  until creamy \n" + // Todo: want this indented
     ">  - -  and add the \n" +
     ">  - vanilla\n" +
-    " \n" + // TODO: fix this
+    " \n" + // Todo: fix thi
     ">  - -  again scraping down the sides \n" +
     ">   Add the \n" +
     ">  - flour\n" +
@@ -580,3 +582,4 @@ test("countable eggs", () => {
 // Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
 // Todo: Test "puts ingredients on new lines" should pull out the "egg" and "vanilla" ingredients
 // Todo: fix extra new line after vanilla in "puts ingredients on new lines" test
+// Todo: treat mid-line parts as commas (like - - ). e.g. "Beat in the egg until creamy" ; egg goes on a new line as an ingredient. Want "until creamy" marked as " - - " since it's mid way through an original line
