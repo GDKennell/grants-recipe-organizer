@@ -360,9 +360,7 @@ test("new line before ingredient", () => {
     "sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
   const expectedRecipe =
     "> Whisk together the  \n" +
-    " \n" +
     ">  - mayonnaise\n" +
-    " \n" +
     ">  - sour cream\n" +
     ">  - lemon juice\n" +
     ">  - salt\n" +
