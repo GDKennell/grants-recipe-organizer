@@ -12,6 +12,32 @@ export function strRemoveRange(baseString, startIndex, endIndex) {
   return baseString.substring(0, startIndex) + baseString.substring(endIndex);
 }
 
+const whitespaceChars = " \n\r\t";
+function isWhitespace(character) {
+  return stringContains(whitespaceChars, character);
+}
+
+export function removeAllWhitespace(string) {
+  var result = string;
+  for (const wChar of whitespaceChars) {
+    result = result.replaceAll(wChar, "");
+  }
+  return result;
+}
+
+const punctuationChars = ".,/()!?";
+function isPunctuation(character) {
+  return stringContains(punctuationChars, character);
+}
+
+export function removeAllPunctuation(string) {
+  var result = string;
+  for (const wChar of punctuationChars) {
+    result = result.replaceAll(wChar, "");
+  }
+  return result;
+}
+
 export function removeNulls(arr) {
   if (arr == undefined) {
     return undefined;
@@ -68,16 +94,6 @@ export function insertNewLinesAround(
   return [newRecipe, ingredientEnd];
 }
 
-function isPunctuation(character) {
-  const punctuationChars = ".,/()!?";
-  return stringContains(punctuationChars, character);
-}
-
-function isWhitespace(character) {
-  const whitespaceChars = " \n\r\t";
-  return stringContains(whitespaceChars, character);
-}
-
 export function isLineAllWhitespace(line) {
   for (const char of line) {
     if (!isWhitespace(char)) {
@@ -114,7 +130,11 @@ export function isSimpleLine(lineIn) {
       return false;
     }
   }
-  return lineIn.length < 6;
+  var line = lineIn;
+  line = removeAllWhitespace(line);
+  line = removeAllPunctuation(line);
+
+  return line.length < 6;
 }
 
 export function stringContains(haystack, needle) {

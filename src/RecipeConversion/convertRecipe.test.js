@@ -115,7 +115,20 @@ test("puts ingredients on new lines", () => {
 
   const expected =
     "> In the bowl of an electric mixer \n" +
-    ">  - -  beat together the \n>  - butter\n>  and  \n>  - 0.75 cup sugar\n>  until fluffy \n>  - -  about 2 minutes \n>  - -  scraping down the sides as necessary \n>   Beat in the egg until creamy \n>  - -  and add the vanilla \n>  - -  again scraping down the sides \n>   Add the \n>  - flour\n>  mixture to the \n>  - butter\n>  mixture and beat on low until just combined";
+    ">  - -  beat together the \n" +
+    ">  - butter\n" +
+    ">  - 0.75 cup sugar\n" +
+    ">  until fluffy \n" +
+    ">  - -  about 2 minutes \n" +
+    ">  - -  scraping down the sides as necessary \n" +
+    ">   Beat in the egg until creamy \n" +
+    ">  - -  and add the vanilla \n" +
+    ">  - -  again scraping down the sides \n" +
+    ">   Add the \n" +
+    ">  - flour\n" +
+    ">  mixture to the \n" +
+    ">  - butter\n" +
+    ">  mixture and beat on low until just combined";
   const result = parseRecipe(prepSteps);
   expect(result).toEqual(expected);
 });
@@ -404,6 +417,22 @@ test("b oil bug", () => {
   expect(result.indexOf(expectedRecipeSnippet)).toBeGreaterThan(0);
 });
 
+test("recipe ingredients with 'comma and ' last one", () => {
+  const ingredientList = "";
+  const prepSteps =
+    "Gather all the ingredients for the marinade: canola oil, sake, soy sauce, water, and sugar";
+
+  const expectedRecipe =
+    "Gather all the ingredients for the marinade: \n" +
+    ">  - canola oil\n" +
+    ">  - sake\n" +
+    ">  - soy sauce\n" +
+    ">  - water\n" +
+    ">  - sugar";
+  const result = convertRecipe(ingredientList, prepSteps);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
+
 // test("carne asada", () => {
 //   const ingredientList =
 //     "2-3 lbs skirt or flank steak (roughly trimmed)\n1/4 cup regular strength soy sauce\n6 cloves garlic (minced)\n3 TB freshly squeezed lime juice\n2 TB olive or canola oil\n1 TB sugar\n2 tsp ground cumin\n2 tsp onion powder\n2 tsp ancho chili powder\n2 kiwi fruits\n\n";
@@ -416,8 +445,9 @@ test("b oil bug", () => {
 //   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 // });
 
-// Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
 // Todo: test for current bug caused by "Gather all the ingredients for the marinade: canola oil, sake, soy sauce, water, and sugar". The "And ... sugar" get put on their own lines
 // Todo: "Keeps measurement with ingredient in recipe" test should change to not have the line with simply "and the"
 // Todo: "new line before ingredient" test shouldn't have new lines inside the final result. Same in "b oil bug"
 // Todo: clean up empty space at start of new lines like in "puts ingredients on new lines" test
+// Todo: Test for "2 tablespoons of water" - expect and ignore the "of" between measure and the volume. Important especially in the prep steps
+// Todo: Test "puts ingredients on new lines" should pull out the "egg" and "vanilla" ingredients
