@@ -45,7 +45,10 @@ const Poppy_seeds = new Ingredient(["Poppy seeds"], 140.8);
 const Sesame_seeds = new Ingredient(["Sesame seeds"], 245.0);
 const Salt = new Ingredient(["Salt", "Sea Salt", "seasalt"], 288.0);
 const Yogurt = new Ingredient(["Yogurt"], 245.0);
-const Olive_oil = new Ingredient(["Olive oil", "oil"], 216.0);
+const Olive_oil = new Ingredient(
+  ["Olive oil", "oil", "canola oil", "vegetable oil", "peanut oil"],
+  216.0
+);
 const Five_Spice_mix = new Ingredient(
   ["5 Spice mix", "Five Spice Mix", "Five Spice"],
   120.0
