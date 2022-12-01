@@ -128,6 +128,7 @@ var allIngredients = [
   Cream_Of_Tartar,
 ];
 
+//https://www.aqua-calc.com/calculate/food-volume-to-weight
 const shortIngredients = [
   "mayonnaise 220.0",
   "sour cream 230.0",
@@ -138,6 +139,8 @@ const shortIngredients = [
   "pecans 112.0",
   "celery 120.0 ",
   "onion 115.2",
+  "sake 232.8",
+  "wine 232",
 ];
 
 export function parseShortIngredient(shortIngredient) {
