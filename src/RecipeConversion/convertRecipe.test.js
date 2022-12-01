@@ -76,7 +76,6 @@ test("handles unicode fractions", () => {
       "1½ cups/180 grams all-purpose flour",
       "187.5g (1.50 cups) /180 grams all-purpose flour",
     ],
-    ["1 teaspoon cream of tartar", "5.0g (1 teaspoon)  cream of tartar"],
     ["½ teaspoon baking soda", " 2.3g (0.50 teaspoon)  baking soda"],
     ["½ teaspoon kosher salt", " 3.0g (0.50 teaspoon)  kosher salt"],
     [
@@ -99,6 +98,17 @@ test("handles unicode fractions", () => {
   }
 });
 
+test("cream vs cream of tartar", () => {
+  const testCases = [
+    ["1 teaspoon cream of tartar", "3.0g (1 teaspoon)  cream of tartar"],
+  ];
+
+  for (const testCase of testCases) {
+    //   console.log("testing " + testCase[0]);
+    const [result, ingredient] = parseIngredientListLine(testCase[0]);
+    expect(result).toEqual(testCase[1]);
+  }
+});
 test("puts ingredients on new lines", () => {
   const prepSteps =
     "In the bowl of an electric mixer, beat together the butter and ¾ cup sugar until fluffy, about 2 minutes, scraping down the sides as necessary. Beat in the egg until creamy, and then add the vanilla, again scraping down the sides. Add the flour mixture to the butter mixture and beat on low until just combined.";
