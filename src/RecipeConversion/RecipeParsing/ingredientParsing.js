@@ -1,10 +1,9 @@
-import { containsVolumeMeasurement } from "../DataStructures/volumeMeasures";
+import { containsUnitMeasurement } from "../DataStructures/unitMeasure";
 import {
   findIngredientByName,
   isIngredientWord,
   isIngredientName,
 } from "../DataStructures/ingredient";
-import { removeNulls } from "../utilities/stringHelpers";
 import {
   wordsToNumbers,
   convertFractionsToDecimals,
@@ -39,7 +38,7 @@ export function parseIngredientListLine(lineIn) {
   newLine = convertFractionsToDecimals(newLine);
   newLine = sanitizePunctuation(newLine);
 
-  if (!containsVolumeMeasurement(newLine)) {
+  if (!containsUnitMeasurement(newLine)) {
     return [lineIn, null];
   }
 
@@ -59,7 +58,7 @@ export function parseIngredientListLine(lineIn) {
   //  ------- Conversion & String Building ------------ //
 
   const gramsAmount = ingredient.gramsPerCup * volumeInCups;
-  const oldVolumeMeasurement = newLine.substring(
+  const oldUnitMeasurement = newLine.substring(
     volumeStringStartIndex,
     volumeStringEndIndex
   );
@@ -70,7 +69,7 @@ export function parseIngredientListLine(lineIn) {
     prefix +
     gramsAmount.toFixed(1) +
     "g (" +
-    oldVolumeMeasurement +
+    oldUnitMeasurement +
     ") " +
     suffix;
 
@@ -79,7 +78,7 @@ export function parseIngredientListLine(lineIn) {
   const finalIngredient = new MeasuredIngredient(
     ingredient,
     volumeInCups,
-    oldVolumeMeasurement
+    oldUnitMeasurement
   );
   return [finalString, finalIngredient];
 }

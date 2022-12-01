@@ -6,7 +6,7 @@ import {
 import {
   findVolumeByName,
   getAllVolumeNameStrings,
-} from "../DataStructures/volumeMeasures";
+} from "../DataStructures/unitMeasure";
 
 export function findVolumeStringBefore(
   recipeString,
