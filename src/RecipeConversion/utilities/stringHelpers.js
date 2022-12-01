@@ -8,6 +8,10 @@ export function strInsert(baseString, insertionString, index) {
   );
 }
 
+export function strRemoveRange(baseString, startIndex, endIndex) {
+  return baseString.substring(0, startIndex) + baseString.substring(endIndex);
+}
+
 export function removeNulls(arr) {
   if (arr == undefined) {
     return undefined;

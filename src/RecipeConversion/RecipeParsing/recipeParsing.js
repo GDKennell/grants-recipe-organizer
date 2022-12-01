@@ -11,6 +11,7 @@ import {
   insertNewLinesAround,
   stringContains,
   strInsert,
+  strRemoveRange,
 } from "../utilities/stringHelpers";
 import { convertFractionsToDecimals } from "../utilities/numberConversion";
 
@@ -25,6 +26,8 @@ export function parseRecipe(recipeStringIn, measuredIngredients) {
   recipe = putIngredientsOnOwnLine(recipe);
   recipe = addAndConvertIngredientUnits(recipe, measuredIngredients);
   recipe = removeSimpleLines(recipe);
+  recipe = removeRedundantWords(recipe);
+  recipe = moveCommaListsToBulletOnes(recipe);
   return recipe;
 }
 
@@ -126,4 +129,27 @@ function putIngredientsOnOwnLine(recipeStringIn) {
   // If testWord is start of an ingredient put a new line before it and after it
   //
   return recipe;
+}
+
+function removeRedundantWords(recipeStringIn) {
+  const redundantWords = ["next", "then"];
+  var recipe = recipeStringIn;
+  for (const word of redundantWords) {
+    var index = recipe.toLocaleLowerCase().indexOf(word);
+    while (index != -1) {
+      // Check if it's followed by [whitespace] [comma], if so include that
+      // Remove this from the string
+      var endIndex = index + word.length;
+      while (stringContains(" ,", recipe[endIndex])) {
+        endIndex++;
+      }
+      recipe = strRemoveRange(recipe, index, endIndex);
+      index = recipe.toLocaleLowerCase().indexOf(word);
+    }
+  }
+  return recipe;
+}
+
+function moveCommaListsToBulletOnes(recipeStringIn) {
+  return recipeStringIn.replaceAll(",", "\n - - ");
 }
