@@ -153,6 +153,7 @@ const shortIngredients = [
   "grapes 92.0",
   "pecans 112.0",
   "onion powder 110.4",
+  "corn starch 128.0",
   "celery 120.0 ",
   "onion 115.2",
   "sake 232.8",
@@ -163,6 +164,8 @@ const shortIngredients = [
   "dark chocolate 259.88",
   "egg 0.0",
   "egg white 0.0",
+  "cream cheese 348.0",
+  "cake flour 137.0",
   "egg yolk 0.0",
 ];
 
