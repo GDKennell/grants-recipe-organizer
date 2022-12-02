@@ -539,6 +539,30 @@ test("countable eggs", () => {
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
+test("egg yolks and whites ", () => {
+  const ingredientList =
+    "▢ 6 large eggs (50 g each w/o shell) (10.6 oz, 300 g without shell) ";
+  const prepSteps =
+    "  Please note that it is very important that your ingredients are all measured before starting. Separate the 6 eggs into egg yolks and egg whites. Refrigerate the egg whites.";
+  const expectedIngredients =
+    "▢ 6 large eggs (50 g each w/o shell) (10.6 oz, 300 g without shell) ";
+
+  const expectedRecipe =
+    ">   Please note that it is very important that your ingredients are all measured before starting \n" +
+    ">   Separate the 6 \n" +
+    ">  - 6 eggs\n" +
+    ">  into \n" +
+    ">  - egg yolks\n" +
+    ">  - egg whites\n" +
+    ">   Refrigerate the \n" +
+    ">  - egg whites";
+  const result = convertRecipe(ingredientList, prepSteps);
+  // expect(result).toEqual(expectedIngredients);
+
+  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
+
 // //https://www.justonecookbook.com/souffle-japanese-cheesecake/
 // test("Japanese cheesecake", () => {
 //   const ingredientList =

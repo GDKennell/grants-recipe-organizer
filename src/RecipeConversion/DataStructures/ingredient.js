@@ -162,6 +162,8 @@ const shortIngredients = [
   "vanilla extract 208.0",
   "dark chocolate 259.88",
   "egg 0.0",
+  "egg white 0.0",
+  "egg yolk 0.0",
 ];
 
 export function parseShortIngredient(shortIngredient) {
