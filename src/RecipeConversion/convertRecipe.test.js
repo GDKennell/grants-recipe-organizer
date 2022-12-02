@@ -34,6 +34,16 @@ test("2.5 cups flour", () => {
   }
 });
 
+test("oz weight ", () => {
+  const testCases = [
+    ["▢ 10.6 oz cream cheese", "▢ 300.5g (10.6 oz) cream cheese"],
+  ];
+  for (const testCase of testCases) {
+    const [result, ingredient] = parseIngredientListLine(testCase[0]);
+    expect(result).toEqual(testCase[1]);
+  }
+});
+
 // test("1 ½ tsp baking powder", () => {
 //   const testCases = [["1 ½ tsp baking powder", ""]];
 //   for (const testCase of testCases) {
@@ -487,21 +497,35 @@ test("carne asada", () => {
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
+test("fluid ounces ", () => {
+  const ingredientList = "12 fl oz whole milk\n";
+  const prepSteps = "In a large bowl, add melted butter, eggs, milk,";
+  const expectedIngredients = "366g (12 fl oz) whole milk";
+  const expectedRecipe =
+    " In a large bowl \n>  - -  add \n>  - melted butter\n>  - eggs\n>  - 366g (12 fl oz) milk";
+  const result = convertRecipe(ingredientList, prepSteps);
+  // expect(result).toEqual(expectedIngredients);
+
+  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
+
 test("countable eggs", () => {
   const ingredientList =
-    "5 tbsp unsalted butter melted\n" + "2 large eggs\n" + "12 oz whole milk\n";
+    "5 tbsp unsalted butter melted\n" + //
+    "2 large eggs\n";
   const prepSteps =
     "In a large bowl, add melted butter, eggs, milk, and vanilla extract. Whisk until evenly combined and no egg streaks remain. Add in dry ingredients. Mix until evenly blended.";
   const expectedIngredients =
-    "70.9g (5 tbsp) unsalted butter melted\n" +
-    "2 large eggs\n" +
-    "366g (12 oz) whole milk";
+    "70.9g (5 tbsp) unsalted butter melted\n" + //
+    "2 large eggs\n";
+
   const expectedRecipe =
     "> In a large bowl \n" +
     ">  - -  add \n" +
     ">  - 70.9g (5 tbsp) melted butter\n" +
     ">  - 2 eggs\n" +
-    ">  - 366g (12 oz) milk\n" +
+    ">  - milk\n" +
     ">  - vanilla extract\n" +
     ">   Whisk until evenly combined and no \n" +
     ">  - 2 egg\n" +
@@ -514,6 +538,77 @@ test("countable eggs", () => {
   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
+
+// //https://www.justonecookbook.com/souffle-japanese-cheesecake/
+// test("Japanese cheesecake", () => {
+//   const ingredientList =
+//     "▢ 6 large eggs (50 g each w/o shell) (10.6 oz, 300 g without shell)\n" +
+//     "▢ 10.6 oz cream cheese\n" +
+//     "▢ 4 Tbsp unsalted butter\n" +
+//     "▢ ¾ cup + 4 tsp heavy (whipping) cream (36% or more milkfat) \n" +
+//     "▢ 4½ Tbsp sugar (for cream cheese mixture)\n" +
+//     "▢ ⅔ cup cake flour (10 Tbsp; if you use a measuring cup, fluff your flour with a spoon, sprinkle it into your measuring cup, and use a knife to level it off. Otherwise, you end up with more than 80 g of flour. You can make your own homemade cake flour)\n" +
+//     "▢ ½ lemon (for zest)\n" +
+//     "▢ 2 Tbsp lemon juice (about ½ large lemon)\n" +
+//     "▢ ½ cup sugar (8 Tbsp; for beating egg whites)\n" +
+//     "▢ 2 Tbsp apricot jam (for glaze)\n" +
+//     "▢ 2 tsp hot water (for glaze)\n" +
+//     "\n";
+//   const prepSteps =
+//     "Use a 9-inch (23-cm) cake pan that is 4 inches (10 cm) high. Cut parchment paper to line the bottom and sides of the cake pan. Cut one circle 9 inches (23 cm) in diameter for the bottom and one rectangular strip 4-inches wide by 30-inches long (10 cm by 76 cm) for the sides of the cake pan. Cut two strips of paper 2-inches wide by 30-inches long (5 cm by 76 cm). We will use these as “straps” to lift the baked cake from the pan.\n" +
+//     "\n" +
+//     "Grease the cake pan and parchment paper (for the bottom and the sides) with butter. You don't need to use all of it.\n" +
+//     "\n" +
+//     "Place the two “straps” crisscross on the bottom of the cake pan so they form an “X.” Allow the excess paper to hang over the sides. Then, line the bottom and sides with the prepared parchment paper. The greased side of the paper circle should face up, and the greased side of the rectangular strip should face in toward the center of the pan.\n" +
+//     "\n" +
+//     "Preheat the oven to 350ºF (180ºC). You will be baking at 320ºF (160ºC) but when you open the oven to place the cheesecake you’ll lose some heat, so we’ll start off a bit higher.\n" +
+//     "\n" +
+//     "To prepare a double boiler, set a medium saucepan filled with 2 inches (5 cm) of water over high heat and bring to a simmer. Once simmering, cover and reduce the heat to maintain a steady simmer.\n" +
+//     "\n" +
+//     "Please note that it is very important that your ingredients are all measured before starting. Separate the 6 eggs into egg yolks and egg whites. Refrigerate the egg whites.\n" +
+//     "\n" +
+//     "In a large bowl, add cream cheese, unsalted butter, heavy whipping cream, and granulated sugar. Put the bowl over the saucepan with the simmering water.\n" +
+//     "\n" +
+//     "Using a silicone spatula, mash the cream cheese and butter. Once they are melted, use a whisk to blend everything together. Remove from the heat.\n" +
+//     "\n" +
+//     "While whisking, add the 6 egg yolks into the warm cream cheese mixture, one at a time. Make sure each egg yolk is blended well with the cream cheese mixture before adding the next one.\n" +
+//     "\n" +
+//     "Using a fine-mesh strainer, sift the cake flour into the batter. Whisk and blend together.\n" +
+//     "\n" +
+//     "Then pass the batter through the same fine mesh strainer into a clean large bowl, creating a silky texture for the batter.\n" +
+//     "\n" +
+//     "Zest half of a lemon into the batter. Make sure you only zest the flavorful yellow part and not the bitter white pith. Then squeeze the juice from the lemon half into a small bowl. Measure the lemon juice (2 Tbsp, 30 ml) and add it to the batter. Whisk well to blend and set aside.\n" +
+//     "\n" +
+//     "Put the baking sheet inside the oven and pour in hot water until it is halfway up the sides or 1-inch deep. Close the oven door.\n" +
+//     "\n" +
+//     "Add the cold egg whites into the large clean mixing bowl of a stand mixer. Make sure there is no oil or water in the bowl. If you have space in your refrigerator, I highly recommend keeping the mixing bowl cold until you’re ready to use it. Start whisking on medium speed (speed 4) until the egg whites become opaque, foamy, and bubbly, about 2 minutes. Then slowly add granulated sugar, one-third portion at a time while the mixer runs.\n" +
+//     "\n" +
+//     "Once you’ve added all the sugar, increase the mixer speed to high (speed 8-9) and beat the egg whites until you have a firm peak. When you lift the whisk and turn it upside down, the egg whites still cling to the whisk and hold their shape fairly well, but the tip of the peak folds back on itself.\n" +
+//     "\n" +
+//     "Using a whisk, mix one-third of the egg whites into the cream cheese mixture until incorporated. Then gently fold another one-third into the mixture.\n" +
+//     "\n" +
+//     "Lastly, pour the mixture back into the mixer bowl (with one-third of the egg whites still in it) and fold very gently.\n" +
+//     "\n" +
+//     "Pour the mixture into the cake pan all at once, avoiding air pockets while pouring. Tap the cake pan a few times on the kitchen counter to release any air pockets in the batter.\n" +
+//     "\n" +
+//     "Place the cake pan into the baking sheet with the bain-marie that’s already in the oven. Reduce the oven temperature to 320ºF (160ºC) and bake for 70-75 minutes. Then, reduce the oven temperature to 300ºF (150ºC) and bake for another 10 minutes, or until the top is golden brown and a skewer inserted comes out clean. For a convection oven, reduce the cooking temperature by 25ºF (15ºC).\n" +
+//     "\n" +
+//     "Turn off the oven and leave the oven door slightly ajar for 15-20 minutes with the cake inside. If you take the cake out immediately, the sudden change of temperature could cause the cake to collapse. You want the cake to slowly shrink down to half the height, roughly from 4-inches to 2-inches high. Remove the pan from the oven. Gently pull out the cake from the pan using the two parchment paper straps (with help from another set of hands).\n" +
+//     "\n" +
+//     "Remove the parchment paper around the sides of the cake (leave the bottom paper). Combine the apricot jam and hot water in a small bowl. Brush the apricot mixture over the top of the cheesecake. Let cool to room temperature.\n" +
+//     "\n" +
+//     "You can serve the cake at room temperature (fluffiest!) or chill the cake for 1-2 hours before serving.\n" +
+//     "\n" +
+//     "You can store the cake in the refrigerator for up to 3-4 days or in the freezer for 3-4 weeks. Defrost the cake overnight in the refrigerator. The cold cheesecake is dense, so leave it on the counter until just chilled or at room temperature before serving.\n" +
+//     "\n";
+//   const expectedIngredients = "";
+//   const expectedRecipe = "";
+//   const result = convertRecipe(ingredientList, prepSteps);
+//   // expect(result).toEqual(expectedIngredients);
+
+//   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+//   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+// });
 
 // https://kirbiecravings.com/mochi-brownies/#recipe
 
