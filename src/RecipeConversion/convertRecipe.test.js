@@ -702,3 +702,4 @@ test("egg yolks and whites ", () => {
 // Todo: Test "puts ingredients on new lines" should pull out the "egg" and "vanilla" ingredients
 // Todo: fix extra new line after vanilla in "puts ingredients on new lines" test
 // Todo: treat mid-line parts as commas (like - - ). e.g. "Beat in the egg until creamy" ; egg goes on a new line as an ingredient. Want "until creamy" marked as " - - " since it's mid way through an original line
+// Todo: Handle recipe-specified amounts. Ingredients lists "2 cups sugar", but part of recipe says "Mix in 2 Tbsp" sugar - include (and convert) the 2 Tbsp from the recipe there and don't include the one from ingredient list
