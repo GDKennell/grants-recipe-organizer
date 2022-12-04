@@ -1,37 +1,37 @@
 export class Ingredient {
-  constructor(names, gramsPerCup) {
-    this.names = names;
-    this.gramsPerCup = gramsPerCup;
-  }
+    constructor(names, gramsPerCup) {
+        this.names = names;
+        this.gramsPerCup = gramsPerCup;
+    }
 }
 
 export function isIngredientWord(str) {
-  if (str == undefined || str == "") {
-    return false;
-  }
-  return allIngredientWords.includes(str.toLocaleLowerCase());
+    if (str == undefined || str == "") {
+        return false;
+    }
+    return allIngredientWords.includes(str.toLocaleLowerCase());
 }
 
 export function isIngredientName(strIn) {
-  var str = strIn;
-  if (str[str.length - 1] == " ") {
-    str = str.substring(0, str.length - 1);
-  }
-  return allIngredientNameStrings.includes(str.toLocaleLowerCase());
+    var str = strIn;
+    if (str[str.length - 1] == " ") {
+        str = str.substring(0, str.length - 1);
+    }
+    return allIngredientNameStrings.includes(str.toLocaleLowerCase());
 }
 
 export function findIngredientByName(ingredientName) {
-  return nameToIngredient[ingredientName];
+    return nameToIngredient[ingredientName];
 }
 
 const butter = new Ingredient(
-  ["butter", "unsalted butter", "salted butter", "melted butter"],
-  227.0
+    ["butter", "unsalted butter", "salted butter", "melted butter"],
+    227.0
 );
 
 const Flour = new Ingredient(
-  ["Flour", "All purpose flour", "all-purpose flour"],
-  125.0
+    ["Flour", "All purpose flour", "all-purpose flour"],
+    125.0
 );
 const Parmesan_cheese = new Ingredient(["Parmesan cheese"], 100.0);
 const Honey = new Ingredient(["Honey"], 337.6);
@@ -46,12 +46,12 @@ const Sesame_seeds = new Ingredient(["Sesame seeds"], 245.0);
 const Salt = new Ingredient(["Salt", "Sea Salt", "seasalt"], 288.0);
 const Yogurt = new Ingredient(["Yogurt"], 245.0);
 const Olive_oil = new Ingredient(
-  ["Olive oil", "oil", "canola oil", "vegetable oil", "peanut oil"],
-  216.0
+    ["Olive oil", "oil", "canola oil", "vegetable oil", "peanut oil"],
+    216.0
 );
 const Five_Spice_mix = new Ingredient(
-  ["5 Spice mix", "Five Spice Mix", "Five Spice"],
-  120.0
+    ["5 Spice mix", "Five Spice Mix", "Five Spice"],
+    120.0
 );
 const Soy_Sauce = new Ingredient(["Soy Sauce"], 248.0);
 const Shaoxing_Wine = new Ingredient(["Shaoxing Wine"], 236.0);
@@ -72,8 +72,8 @@ const Cinnamon = new Ingredient(["Cinnamon"], 124.8);
 const Ginger = new Ingredient(["Ginger"], 83.2);
 const Nutmeg = new Ingredient(["Nutmeg"], 112.0);
 const Cumin = new Ingredient(
-  ["cumin", "ground cumin", "ground cumin seed"],
-  96
+    ["cumin", "ground cumin", "ground cumin seed"],
+    96
 );
 const Cloves = new Ingredient(["Cloves"], 104.0); // ground
 const Onion_salt = new Ingredient(["Onion salt"], 225.6);
@@ -82,118 +82,118 @@ const Chili_powder = new Ingredient(["Chili powder"], 128.0);
 const Vanilla_Extract = new Ingredient(["Vanilla Extract"], 208.0);
 const Vinegar = new Ingredient(["Vinegar", "white vinegar"], 238.0); // Distilled white
 const Vodka = new Ingredient(
-  ["Vodka", "rum", "whiskey", "gin", "tequila"],
-  224.0
+    ["Vodka", "rum", "whiskey", "gin", "tequila"],
+    224.0
 );
 const Shortening = new Ingredient(["Shortening"], 205.0);
 const Beer = new Ingredient(["Beer"], 236.0);
 const Cream_Of_Tartar = new Ingredient(["Cream of tartar"], 144.0);
 const Mochiko_Flour = new Ingredient(
-  ["Mochiko", "Mochiko Flour", "sweet rice flour", "glutinous rice flour"],
-  144.0
+    ["Mochiko", "Mochiko Flour", "sweet rice flour", "glutinous rice flour"],
+    144.0
 );
 var allIngredients = [
-  butter,
-  Flour,
-  Parmesan_cheese,
-  Honey,
-  Sugar,
-  Dried_Basil,
-  Brown_sugar,
-  Mochiko_Flour,
-  Evaporated_milk,
-  Yeast,
-  Cumin,
-  Water,
-  Poppy_seeds,
-  Sesame_seeds,
-  Salt,
-  Yogurt,
-  Olive_oil,
-  Five_Spice_mix,
-  Soy_Sauce,
-  Shaoxing_Wine,
-  Garlic_powder,
-  Black_pepper,
-  Baking_powder,
-  Baking_soda,
-  Thyme,
-  Milk,
-  Heavy_cream,
-  Monterey_Jack_cheese,
-  Cottage_cheese,
-  Cajun_seasoning,
-  Oregano,
-  Cornstarch,
-  Walnuts,
-  Cinnamon,
-  Ginger,
-  Nutmeg,
-  Cloves,
-  Onion_salt,
-  Paprika,
-  Chili_powder,
-  Vanilla_Extract,
-  Vinegar,
-  Vodka,
-  Shortening,
-  Beer,
-  Cream_Of_Tartar,
+    butter,
+    Flour,
+    Parmesan_cheese,
+    Honey,
+    Sugar,
+    Dried_Basil,
+    Brown_sugar,
+    Mochiko_Flour,
+    Evaporated_milk,
+    Yeast,
+    Cumin,
+    Water,
+    Poppy_seeds,
+    Sesame_seeds,
+    Salt,
+    Yogurt,
+    Olive_oil,
+    Five_Spice_mix,
+    Soy_Sauce,
+    Shaoxing_Wine,
+    Garlic_powder,
+    Black_pepper,
+    Baking_powder,
+    Baking_soda,
+    Thyme,
+    Milk,
+    Heavy_cream,
+    Monterey_Jack_cheese,
+    Cottage_cheese,
+    Cajun_seasoning,
+    Oregano,
+    Cornstarch,
+    Walnuts,
+    Cinnamon,
+    Ginger,
+    Nutmeg,
+    Cloves,
+    Onion_salt,
+    Paprika,
+    Chili_powder,
+    Vanilla_Extract,
+    Vinegar,
+    Vodka,
+    Shortening,
+    Beer,
+    Cream_Of_Tartar,
 ];
 
 //https://www.aqua-calc.com/calculate/food-volume-to-weight
 const shortIngredients = [
-  "mayonnaise 220.0",
-  "sour cream 230.0",
-  "lemon juice 248.0",
-  "lime juice 248.0",
-  "pepper 110.4",
-  "garlic 136.0",
-  "chicken 148.8",
-  "grapes 92.0",
-  "pecans 112.0",
-  "onion powder 110.4",
-  "corn starch 128.0",
-  "celery 120.0 ",
-  "onion 115.2",
-  "sake 232.8",
-  "wine 232",
-  "cocoa powder 86.0",
-  "vanilla 208.0",
-  "vanilla extract 208.0",
-  "dark chocolate 259.88",
-  "egg 0.0",
-  "egg white 0.0",
-  "cream cheese 348.0",
-  "cake flour 137.0",
-  "egg yolk 0.0",
+    "mayonnaise 220.0",
+    "sour cream 230.0",
+    "lemon juice 248.0",
+    "lime juice 248.0",
+    "pepper 110.4",
+    "garlic 136.0",
+    "chicken 148.8",
+    "grapes 92.0",
+    "pecans 112.0",
+    "onion powder 110.4",
+    "corn starch 128.0",
+    "celery 120.0 ",
+    "onion 115.2",
+    "sake 232.8",
+    "wine 232",
+    "cocoa powder 86.0",
+    "vanilla 208.0",
+    "vanilla extract 208.0",
+    "dark chocolate 259.88",
+    "egg 0.0",
+    "egg white 0.0",
+    "cream cheese 348.0",
+    "cake flour 137.0",
+    "egg yolk 0.0",
 ];
 
 export function parseShortIngredient(shortIngredient) {
-  const words = shortIngredient.split(" ");
-  const gramsPerCupString = words[words.length - 1];
-  const gramsPerCupStringStart = shortIngredient.indexOf(gramsPerCupString);
-  const nameString = shortIngredient.substring(0, gramsPerCupStringStart - 1);
-  return new Ingredient(
-    [nameString, nameString + "s"],
-    parseFloat(gramsPerCupString)
-  );
+    const words = shortIngredient.split(" ");
+    const gramsPerCupString = words[words.length - 1];
+    const gramsPerCupStringStart = shortIngredient.indexOf(gramsPerCupString);
+    const nameString = shortIngredient.substring(0, gramsPerCupStringStart - 1);
+    return new Ingredient(
+        [nameString, nameString + "s"],
+        parseFloat(gramsPerCupString)
+    );
 }
 
 for (const shortIngredient of shortIngredients) {
-  allIngredients.push(parseShortIngredient(shortIngredient));
+    allIngredients.push(parseShortIngredient(shortIngredient));
 }
 
 const allIngredientNameStrings = allIngredients
-  .flatMap((m) => m.names)
-  .map((m) => m.toLocaleLowerCase());
+    .flatMap((m) => m.names)
+    .map((m) => m.toLocaleLowerCase());
 const allIngredientWords = allIngredientNameStrings.flatMap((m) =>
-  m.toLocaleLowerCase().split(" ")
+    m.toLocaleLowerCase().split(" ")
 );
 
 var nameToIngredient = {};
 for (const ingredient of allIngredients) {
-  for (const name of ingredient.names) {
-    nameToIngredient[name.toLocaleLowerCase()] = ingredient;
-  }
+    for (const name of ingredient.names) {
+        nameToIngredient[name.toLocaleLowerCase()] = ingredient;
+    }
 }

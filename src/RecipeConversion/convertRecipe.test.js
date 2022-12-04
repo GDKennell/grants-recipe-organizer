@@ -1,144 +1,142 @@
-import { render, screen } from "@testing-library/react";
 import {
-  convertRecipe,
-  INGREDIENTS_HEADER,
-  RECIPES_HEADER,
+    convertRecipe,
 } from "./convertRecipe";
+import {expect, test} from "@jest/globals";
 import { parseIngredientListLine } from "./RecipeParsing/ingredientParsing";
 import { parseRecipe } from "./RecipeParsing/recipeParsing";
 
 test("converts values to cups", () => {
-  const testCases = [
-    ["- 1 tsp salt", "- 6g (1 tsp) salt"],
-    ["- Two Tbsp sugar ", "- 24.7g (2 Tbsp) sugar "],
-    ["- 2 cups butter ", "- 454g (2 cups) butter "],
-    ["- 1/4 cup water", "- 59.1g (0.25 cup) water"],
-    ["- 1/4 cup vodka ", "- 56g (0.25 cup) vodka "],
-    ["- 2 1/4 cup rum", "- 504g (2.25 cup) rum"],
-    ["- 2 1/4 cups shortening", "- 461.3g (2.25 cups) shortening"],
-    ["3/16 tablespoons Beer", "2.8g (0.19 tablespoons) Beer"],
-    ["3 1/4 cup tequila", "728g (3.25 cup) tequila"],
-  ];
+    const testCases = [
+        ["- 1 tsp salt", "- 6g (1 tsp) salt"],
+        ["- Two Tbsp sugar ", "- 24.7g (2 Tbsp) sugar "],
+        ["- 2 cups butter ", "- 454g (2 cups) butter "],
+        ["- 1/4 cup water", "- 59.1g (0.25 cup) water"],
+        ["- 1/4 cup vodka ", "- 56g (0.25 cup) vodka "],
+        ["- 2 1/4 cup rum", "- 504g (2.25 cup) rum"],
+        ["- 2 1/4 cups shortening", "- 461.3g (2.25 cups) shortening"],
+        ["3/16 tablespoons Beer", "2.8g (0.19 tablespoons) Beer"],
+        ["3 1/4 cup tequila", "728g (3.25 cup) tequila"],
+    ];
 
-  for (const testCase of testCases) {
-    const [result, ingredient] = parseIngredientListLine(testCase[0]);
-    expect(result).toEqual(testCase[1]);
-  }
+    for (const testCase of testCases) {
+        const [result,] = parseIngredientListLine(testCase[0]);
+        expect(result).toEqual(testCase[1]);
+    }
 });
 
 test("2.5 cups flour", () => {
-  const testCases = [["- 2.5 cups flour", "- 312.5g (2.5 cups) flour"]];
-  for (const testCase of testCases) {
-    const [result, ingredient] = parseIngredientListLine(testCase[0]);
-    expect(result).toEqual(testCase[1]);
-  }
+    const testCases = [["- 2.5 cups flour", "- 312.5g (2.5 cups) flour"]];
+    for (const testCase of testCases) {
+        const [result,] = parseIngredientListLine(testCase[0]);
+        expect(result).toEqual(testCase[1]);
+    }
 });
 
 test("oz weight ", () => {
-  const testCases = [
-    ["▢ 10.6 oz cream cheese", "▢ 300.5g (10.6 oz) cream cheese"],
-  ];
-  for (const testCase of testCases) {
-    const [result, ingredient] = parseIngredientListLine(testCase[0]);
-    expect(result).toEqual(testCase[1]);
-  }
+    const testCases = [
+        ["▢ 10.6 oz cream cheese", "▢ 300.5g (10.6 oz) cream cheese"],
+    ];
+    for (const testCase of testCases) {
+        const [result,] = parseIngredientListLine(testCase[0]);
+        expect(result).toEqual(testCase[1]);
+    }
 });
 
 // test("1 ½ tsp baking powder", () => {
 //   const testCases = [["1 ½ tsp baking powder", ""]];
 //   for (const testCase of testCases) {
-//     const [result, ingredient] = parseIngredientListLine(testCase[0]);
+//     const [result,] = parseIngredientListLine(testCase[0]);
 //     expect(result).toEqual(testCase[1]);
 //   }
 // });
 
 test("handles modifiers to ingredients and extraneous notes", () => {
-  const testCases = [
-    [
-      "2 1/2 cups (12 1/2 ounces) unbleached all-purpose flour",
-      "312.5g (2.50 cups) (12 1/2 ounces) unbleached all-purpose flour",
-    ],
-    ["1 teaspoon table salt", "6g (1 teaspoon) table salt"],
-    ["2 tablespoons sugar", "24.7g (2 tablespoons) sugar"],
-    [
-      "12 tablespoons (1 1/2 sticks) cold unsalted butter, cut into 1/4-inch slices",
-      "170.2g (12 tablespoons) (1.50 sticks) cold unsalted butter, cut into 1/4-inch slices",
-    ],
+    const testCases = [
+        [
+            "2 1/2 cups (12 1/2 ounces) unbleached all-purpose flour",
+            "312.5g (2.50 cups) (12 1/2 ounces) unbleached all-purpose flour",
+        ],
+        ["1 teaspoon table salt", "6g (1 teaspoon) table salt"],
+        ["2 tablespoons sugar", "24.7g (2 tablespoons) sugar"],
+        [
+            "12 tablespoons (1 1/2 sticks) cold unsalted butter, cut into 1/4-inch slices",
+            "170.2g (12 tablespoons) (1.50 sticks) cold unsalted butter, cut into 1/4-inch slices",
+        ],
 
-    ["1/4 cup cold vodka", "56g (0.25 cup) cold vodka"],
-    ["1/4 cup  cold water", "59.1g (0.25 cup)  cold water"],
-  ];
+        ["1/4 cup cold vodka", "56g (0.25 cup) cold vodka"],
+        ["1/4 cup  cold water", "59.1g (0.25 cup)  cold water"],
+    ];
 
-  for (const testCase of testCases) {
+    for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const [result, ingredient] = parseIngredientListLine(testCase[0]);
-    expect(result).toEqual(testCase[1]);
-  }
+        const [result,] = parseIngredientListLine(testCase[0]);
+        expect(result).toEqual(testCase[1]);
+    }
 });
 
 test("Half cup cold shortening", () => {
-  const testCases = [
-    [
-      "1/2 cup cold vegetable shortening, cut into small bits",
-      "102.5g (0.50 cup) cold vegetable shortening, cut into small bits",
-    ],
-  ];
+    const testCases = [
+        [
+            "1/2 cup cold vegetable shortening, cut into small bits",
+            "102.5g (0.50 cup) cold vegetable shortening, cut into small bits",
+        ],
+    ];
 
-  for (const testCase of testCases) {
+    for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const [result, ingredient] = parseIngredientListLine(testCase[0]);
-    expect(result).toEqual(testCase[1]);
-  }
+        const [result,] = parseIngredientListLine(testCase[0]);
+        expect(result).toEqual(testCase[1]);
+    }
 });
 
 test("cold water = water", () => {
-  const [result, ingredient] = parseIngredientListLine("1/4 cup  cold water");
-  expect(result).toEqual("59.1g (0.25 cup)  cold water");
+    const [result,] = parseIngredientListLine("1/4 cup  cold water");
+    expect(result).toEqual("59.1g (0.25 cup)  cold water");
 });
 test("handles unicode fractions", () => {
-  const testCases = [
-    [
-      "1½ cups/180 grams all-purpose flour",
-      "187.5g (1.50 cups)/180 grams all-purpose flour",
-    ],
-    ["½ teaspoon baking soda", "2.3g (0.50 teaspoon) baking soda"],
-    ["½ teaspoon kosher salt", "3g (0.50 teaspoon) kosher salt"],
-    [
-      "10 tablespoons/140 grams unsalted butter (1¼ sticks), at room temperature",
-      "141.9g (10 tablespoons)/140 grams unsalted butter (1 1/4 sticks), at room temperature",
-    ],
-    [
-      "¾ cup/150 grams granulated sugar, ",
-      "148.5g (0.75 cup)/150 grams granulated sugar, ",
-    ],
-    ["1 large egg", "1 large egg"],
-    ["½ teaspoon vanilla extract", "2.2g (0.50 teaspoon) vanilla extract"],
-    ["1 tablespoon ground cinnamon", "7.8g (1 tablespoon) ground cinnamon"],
-  ];
+    const testCases = [
+        [
+            "1½ cups/180 grams all-purpose flour",
+            "187.5g (1.50 cups)/180 grams all-purpose flour",
+        ],
+        ["½ teaspoon baking soda", "2.3g (0.50 teaspoon) baking soda"],
+        ["½ teaspoon kosher salt", "3g (0.50 teaspoon) kosher salt"],
+        [
+            "10 tablespoons/140 grams unsalted butter (1¼ sticks), at room temperature",
+            "141.9g (10 tablespoons)/140 grams unsalted butter (1 1/4 sticks), at room temperature",
+        ],
+        [
+            "¾ cup/150 grams granulated sugar, ",
+            "148.5g (0.75 cup)/150 grams granulated sugar, ",
+        ],
+        ["1 large egg", "1 large egg"],
+        ["½ teaspoon vanilla extract", "2.2g (0.50 teaspoon) vanilla extract"],
+        ["1 tablespoon ground cinnamon", "7.8g (1 tablespoon) ground cinnamon"],
+    ];
 
-  for (const testCase of testCases) {
+    for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const [result, ingredient] = parseIngredientListLine(testCase[0]);
-    expect(result).toEqual(testCase[1]);
-  }
+        const [result,] = parseIngredientListLine(testCase[0]);
+        expect(result).toEqual(testCase[1]);
+    }
 });
 
 test("cream vs cream of tartar", () => {
-  const testCases = [
-    ["1 teaspoon cream of tartar", "3g (1 teaspoon) cream of tartar"],
-  ];
+    const testCases = [
+        ["1 teaspoon cream of tartar", "3g (1 teaspoon) cream of tartar"],
+    ];
 
-  for (const testCase of testCases) {
+    for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const [result, ingredient] = parseIngredientListLine(testCase[0]);
-    expect(result).toEqual(testCase[1]);
-  }
+        const [result,] = parseIngredientListLine(testCase[0]);
+        expect(result).toEqual(testCase[1]);
+    }
 });
 test("puts ingredients on new lines", () => {
-  const prepSteps =
+    const prepSteps =
     "In the bowl of an electric mixer, beat together the butter and ¾ cup sugar until fluffy, about 2 minutes, scraping down the sides as necessary. Beat in the egg until creamy, and then add the vanilla, again scraping down the sides. Add the flour mixture to the butter mixture and beat on low until just combined.";
 
-  const expected =
+    const expected =
     "> In the bowl of an electric mixer \n" +
     ">  - -  beat together the \n" +
     ">  - butter\n" +
@@ -158,18 +156,18 @@ test("puts ingredients on new lines", () => {
     ">  mixture to the \n" +
     ">  - butter\n" +
     ">  mixture and beat on low until just combined";
-  const result = parseRecipe(prepSteps);
-  expect(result).toEqual(expected);
+    const result = parseRecipe(prepSteps);
+    expect(result).toEqual(expected);
 });
 
 test("looks for longer ingredient if present", () => {
-  const prepSteps =
+    const prepSteps =
     "Step 1\n" +
     "Heat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt.\n" +
     "\n" +
     "";
 
-  const expected =
+    const expected =
     "> Step 1 \n" +
     ">  Heat the oven to 375 degrees \n" +
     ">   In a medium bowl \n" +
@@ -178,41 +176,41 @@ test("looks for longer ingredient if present", () => {
     ">  - cream of tartar\n" +
     ">  - baking soda\n" +
     ">  - salt";
-  const result = parseRecipe(prepSteps);
-  expect(result).toEqual(expected);
+    const result = parseRecipe(prepSteps);
+    expect(result).toEqual(expected);
 });
 
 test("salt stuff I guess", () => {
-  const prepSteps =
+    const prepSteps =
     "In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt.";
-  const expected =
+    const expected =
     "> In a medium bowl \n" +
     ">  - -  whisk together the \n" +
     ">  - flour\n" +
     ">  - cream of tartar\n" +
     ">  - baking soda\n" +
     ">  - salt";
-  const result = parseRecipe(prepSteps);
-  expect(result).toEqual(expected);
+    const result = parseRecipe(prepSteps);
+    expect(result).toEqual(expected);
 });
 
 test("Keeps measurement with ingredient in recipe", () => {
-  const prepSteps =
+    const prepSteps =
     "In a small bowl, combine the remaining 2 tablespoons sugar and the cinnamon. Roll the dough into golf-ball-size balls, then roll each one in the cinnamon-sugar mixture";
-  const expected =
+    const expected =
     "> In a small bowl \n" +
     ">  - -  combine the remaining \n" +
     ">  - 2 tablespoons sugar\n" +
     ">  - cinnamon\n" +
     ">   Roll the dough into golf-ball-size balls \n" +
     ">  - -  roll each one in the cinnamon-sugar mixture";
-  const result = parseRecipe(prepSteps);
-  expect(result).toEqual(expected);
+    const result = parseRecipe(prepSteps);
+    expect(result).toEqual(expected);
 });
 
 test("chicken salad ingredients", () => {
-  //https://www.tasteofhome.com/article/easy-chicken-salad/
-  const ingredientList =
+    //https://www.tasteofhome.com/article/easy-chicken-salad/
+    const ingredientList =
     "1/2 cup mayonnaise\n" +
     "    2 tablespoons sour cream\n" +
     "    1 tablespoon lemon juice\n" +
@@ -225,7 +223,7 @@ test("chicken salad ingredients", () => {
     "    1/4 cup chopped sweet onion, optional\n" +
     "\n" +
     "";
-  const expectedIngredients =
+    const expectedIngredients =
     "110g (0.50 cup) mayonnaise\n" +
     "28.7g (2 tablespoons) sour cream\n" +
     "15.5g (1 tablespoon) lemon juice\n" +
@@ -236,28 +234,28 @@ test("chicken salad ingredients", () => {
     "56g (0.50 cup) chopped pecans\n" +
     "1/2 cup chopped celery\n" +
     "28.8g (0.25 cup) chopped sweet onion, optional";
-  const result = convertRecipe(ingredientList, "");
-  // expect(result).toEqual(expectedIngredients);
-  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+    const result = convertRecipe(ingredientList, "");
+    // expect(result).toEqual(expectedIngredients);
+    expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
 });
 
 test("Brings ingredient amounts from list to prep steps", () => {
-  const ingredientList =
+    const ingredientList =
     "1½ cups/180 grams all-purpose flour\n" +
     "1 teaspoon cream of tartar\n" +
     "½ teaspoon baking soda\n" +
     "½ teaspoon kosher salt\n" +
     "\n" +
     "";
-  const prepSteps =
+    const prepSteps =
     "Step 1\n" +
     "Heat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt";
-  const expectedIngredients =
+    const expectedIngredients =
     "187.5g (1.50 cups)/180 grams all-purpose flour\n" +
     "3g (1 teaspoon) cream of tartar\n" +
     "2.3g (0.50 teaspoon) baking soda\n" +
     "3g (0.50 teaspoon) kosher salt";
-  const expectedRecipe =
+    const expectedRecipe =
     "> Step 1 \n" +
     ">  Heat the oven to 375 degrees \n" +
     ">   In a medium bowl \n" +
@@ -266,13 +264,13 @@ test("Brings ingredient amounts from list to prep steps", () => {
     ">  - 3g (1 teaspoon) cream of tartar\n" +
     ">  - 2.3g (0.50 teaspoon) baking soda\n" +
     ">  - 3g (0.50 teaspoon) salt";
-  const result = convertRecipe(ingredientList, prepSteps);
-  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    const result = convertRecipe(ingredientList, prepSteps);
+    expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("ingredients moved over and skip 'and'", () => {
-  const ingredientList =
+    const ingredientList =
     "1½ cups/180 grams all-purpose flour\n" +
     "1 teaspoon cream of tartar\n" +
     "½ teaspoon baking soda\n" +
@@ -284,10 +282,10 @@ test("ingredients moved over and skip 'and'", () => {
     "1 tablespoon ground cinnamon\n" +
     "\n" +
     "";
-  const prepSteps =
+    const prepSteps =
     "Step 1\n" +
     "Heat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt";
-  const expectedIngredients =
+    const expectedIngredients =
     "187.5g (1.50 cups)/180 grams all-purpose flour\n" +
     "3g (1 teaspoon) cream of tartar\n" +
     "2.3g (0.50 teaspoon) baking soda\n" +
@@ -297,7 +295,7 @@ test("ingredients moved over and skip 'and'", () => {
     "1 large egg\n" +
     "2.2g (0.50 teaspoon) vanilla extract\n" +
     "7.8g (1 tablespoon) ground cinnamon\n";
-  const expectedRecipe =
+    const expectedRecipe =
     "> Step 1 \n" +
     ">  Heat the oven to 375 degrees \n" +
     ">   In a medium bowl \n" +
@@ -306,15 +304,15 @@ test("ingredients moved over and skip 'and'", () => {
     ">  - 3g (1 teaspoon) cream of tartar\n" +
     ">  - 2.3g (0.50 teaspoon) baking soda\n" +
     ">  - 3g (0.50 teaspoon) salt";
-  const result = convertRecipe(ingredientList, prepSteps);
-  // expect(result).toEqual(expectedIngredients);
-  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    const result = convertRecipe(ingredientList, prepSteps);
+    // expect(result).toEqual(expectedIngredients);
+    expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("weird line breaks", () => {
-  const ingredientList = "";
-  const prepSteps =
+    const ingredientList = "";
+    const prepSteps =
     "Step 1: Make Your Sauce\n" +
     "\n" +
     "Start by mixing the first five ingredients together for a creamy sauce. The sour cream and lemon juice add a tangy kick to this chunky chicken salad. Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.\n" +
@@ -325,7 +323,7 @@ test("weird line breaks", () => {
     " \n" +
     " Step 3\n" +
     " Profit";
-  const expectedRecipe =
+    const expectedRecipe =
     "> Step 1: Make Your Sauce \n" +
     "  \n" +
     ">  Start by mixing the first five ingredients together for a creamy sauce \n" +
@@ -353,16 +351,16 @@ test("weird line breaks", () => {
     ">   Step 3 \n" +
     ">   Profit";
 
-  const result = convertRecipe(ingredientList, prepSteps);
-  // expect(result).toEqual("");
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    const result = convertRecipe(ingredientList, prepSteps);
+    // expect(result).toEqual("");
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("cream vs sour cream", () => {
-  const ingredientList = "";
-  const prepSteps =
+    const ingredientList = "";
+    const prepSteps =
     "Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
-  const expectedRecipe =
+    const expectedRecipe =
     "> Whisk together the \n" +
     ">  - mayonnaise\n" +
     ">  - sour cream\n" +
@@ -372,17 +370,17 @@ test("cream vs sour cream", () => {
     ">  until fully combined \n" +
     ">  - -  tasting as you go \n" +
     ">  - -  set aside";
-  const result = convertRecipe(ingredientList, prepSteps);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    const result = convertRecipe(ingredientList, prepSteps);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("new line before ingredient", () => {
-  const ingredientList = "";
-  const prepSteps =
+    const ingredientList = "";
+    const prepSteps =
     "Whisk together the \n" +
     "mayonnaise, \n" +
     "sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.";
-  const expectedRecipe =
+    const expectedRecipe =
     "> Whisk together the  \n" +
     ">  - mayonnaise\n" +
     ">  - sour cream\n" +
@@ -392,14 +390,14 @@ test("new line before ingredient", () => {
     ">  until fully combined \n" +
     ">  - -  tasting as you go \n" +
     ">  - -  set aside";
-  const result = convertRecipe(ingredientList, prepSteps);
-  // expect(result).toEqual("");
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    const result = convertRecipe(ingredientList, prepSteps);
+    // expect(result).toEqual("");
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("skip the next and thens", () => {
-  const ingredientList = "";
-  const prepSteps =
+    const ingredientList = "";
+    const prepSteps =
     "\n" +
     "Next, tightly wrap the twine around the spot you just tied another 2 or 3 times to secure the starting point of the roll. Then, pull the twine to the opposite end of the pork belly roll. Tightly wrap the twine around that end 2 to 3 times to secure it.\n" +
     "\n" +
@@ -407,7 +405,7 @@ test("skip the next and thens", () => {
     "\n" +
     "";
 
-  const expectedRecipe =
+    const expectedRecipe =
     ">  tightly wrap the twine around the spot you just tied another 2 or 3 times to secure the starting point of the roll \n" +
     ">   pull the twine to the opposite end of the pork belly roll \n" +
     ">   Tightly wrap the twine around that end 2 to 3 times to secure it \n" +
@@ -416,12 +414,12 @@ test("skip the next and thens", () => {
     ">  start wrapping the twine around the roll back toward the starting point \n" +
     ">   Space each wrap ⅓ inch (1 cm) apart \n" +
     ">   Make sure you wrap the roll as tightly as possible";
-  const result = convertRecipe(ingredientList, prepSteps);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    const result = convertRecipe(ingredientList, prepSteps);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("b oil bug", () => {
-  const ingredientList =
+    const ingredientList =
     "2-2½ lb pork belly block\n" +
     "1 Green Onion\n" +
     "1 knob ginger\n" +
@@ -432,41 +430,41 @@ test("b oil bug", () => {
     "2/3 cup sugar\n" +
     "\n" +
     "";
-  const prepSteps =
+    const prepSteps =
     "> Bring the liquid to a boil over medium heat \n" +
     "  \n" +
     ">  Heat the \n" +
     ">  - 13.5g (1 Tbsp) oil\n" +
     ">  in";
 
-  const expectedRecipeSnippet = "Bring the liquid to a boil";
-  const result = convertRecipe(ingredientList, prepSteps);
+    const expectedRecipeSnippet = "Bring the liquid to a boil";
+    const result = convertRecipe(ingredientList, prepSteps);
 
-  expect(result.indexOf(expectedRecipeSnippet)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedRecipeSnippet)).toBeGreaterThan(0);
 });
 
 test("recipe ingredients with 'comma and ' last one", () => {
-  const ingredientList = "";
-  const prepSteps =
+    const ingredientList = "";
+    const prepSteps =
     "Gather all the ingredients for the marinade: canola oil, sake, soy sauce, water, and sugar";
 
-  const expectedRecipe =
+    const expectedRecipe =
     "Gather all the ingredients for the marinade: \n" +
     ">  - canola oil\n" +
     ">  - sake\n" +
     ">  - soy sauce\n" +
     ">  - water\n" +
     ">  - sugar";
-  const result = convertRecipe(ingredientList, prepSteps);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    const result = convertRecipe(ingredientList, prepSteps);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("carne asada", () => {
-  const ingredientList =
+    const ingredientList =
     "2-3 lbs skirt or flank steak (roughly trimmed)\n1/4 cup regular strength soy sauce\n6 cloves garlic (minced)\n3 TB freshly squeezed lime juice\n2 TB olive or canola oil\n1 TB sugar\n2 tsp ground cumin\n2 tsp onion powder\n2 tsp ancho chili powder\n2 kiwi fruits\n\n";
-  const prepSteps =
+    const prepSteps =
     "Seasonings: In a 9x13 pan or large dish, add the soy sauce, garlic, lime juice, oil, sugar, cumin, onion powder, and chili powder. Use hand whisk to incorporate well. Set aside.";
-  const expectedIngredients =
+    const expectedIngredients =
     "2-3 lbs skirt or flank steak (roughly trimmed)\n" +
     "62g (0.25 cup) regular strength soy sauce\n" +
     "6 cloves garlic (minced)\n" +
@@ -477,7 +475,7 @@ test("carne asada", () => {
     "4.6g (2 tsp) onion powder\n" +
     "5.3g (2 tsp) ancho chili powder\n" +
     "2 kiwi fruits";
-  const expectedRecipe =
+    const expectedRecipe =
     "> Seasonings: In a 9x13 pan or large dish \n" +
     ">  - -  add the \n" +
     ">  - 62g (0.25 cup) soy sauce\n" +
@@ -490,37 +488,37 @@ test("carne asada", () => {
     ">  - 5.3g (2 tsp) chili powder\n" +
     ">   Use hand whisk to incorporate well \n" +
     ">   Set aside";
-  const result = convertRecipe(ingredientList, prepSteps);
-  // expect(result).toEqual(expectedIngredients);
+    const result = convertRecipe(ingredientList, prepSteps);
+    // expect(result).toEqual(expectedIngredients);
 
-  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("fluid ounces ", () => {
-  const ingredientList = "12 fl oz whole milk\n";
-  const prepSteps = "In a large bowl, add melted butter, eggs, milk,";
-  const expectedIngredients = "366g (12 fl oz) whole milk";
-  const expectedRecipe =
+    const ingredientList = "12 fl oz whole milk\n";
+    const prepSteps = "In a large bowl, add melted butter, eggs, milk,";
+    const expectedIngredients = "366g (12 fl oz) whole milk";
+    const expectedRecipe =
     " In a large bowl \n>  - -  add \n>  - melted butter\n>  - eggs\n>  - 366g (12 fl oz) milk";
-  const result = convertRecipe(ingredientList, prepSteps);
-  // expect(result).toEqual(expectedIngredients);
+    const result = convertRecipe(ingredientList, prepSteps);
+    // expect(result).toEqual(expectedIngredients);
 
-  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("countable eggs", () => {
-  const ingredientList =
+    const ingredientList =
     "5 tbsp unsalted butter melted\n" + //
     "2 large eggs\n";
-  const prepSteps =
+    const prepSteps =
     "In a large bowl, add melted butter, eggs, milk, and vanilla extract. Whisk until evenly combined and no egg streaks remain. Add in dry ingredients. Mix until evenly blended.";
-  const expectedIngredients =
+    const expectedIngredients =
     "70.9g (5 tbsp) unsalted butter melted\n" + //
     "2 large eggs\n";
 
-  const expectedRecipe =
+    const expectedRecipe =
     "> In a large bowl \n" +
     ">  - -  add \n" +
     ">  - 70.9g (5 tbsp) melted butter\n" +
@@ -532,22 +530,22 @@ test("countable eggs", () => {
     ">  streaks remain \n" +
     ">   Add in dry ingredients \n" +
     ">   Mix until evenly blended";
-  const result = convertRecipe(ingredientList, prepSteps);
-  // expect(result).toEqual(expectedIngredients);
+    const result = convertRecipe(ingredientList, prepSteps);
+    // expect(result).toEqual(expectedIngredients);
 
-  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 test("egg yolks and whites ", () => {
-  const ingredientList =
+    const ingredientList =
     "▢ 6 large eggs (50 g each w/o shell) (10.6 oz, 300 g without shell) ";
-  const prepSteps =
+    const prepSteps =
     "  Please note that it is very important that your ingredients are all measured before starting. Separate the 6 eggs into egg yolks and egg whites. Refrigerate the egg whites.";
-  const expectedIngredients =
+    const expectedIngredients =
     "▢ 6 large eggs (50 g each w/o shell) (10.6 oz, 300 g without shell) ";
 
-  const expectedRecipe =
+    const expectedRecipe =
     ">   Please note that it is very important that your ingredients are all measured before starting \n" +
     ">   Separate the 6 \n" +
     ">  - 6 eggs\n" +
@@ -556,11 +554,11 @@ test("egg yolks and whites ", () => {
     ">  - egg whites\n" +
     ">   Refrigerate the \n" +
     ">  - egg whites";
-  const result = convertRecipe(ingredientList, prepSteps);
-  // expect(result).toEqual(expectedIngredients);
+    const result = convertRecipe(ingredientList, prepSteps);
+    // expect(result).toEqual(expectedIngredients);
 
-  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
-  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+    expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
 // //https://www.justonecookbook.com/souffle-japanese-cheesecake/
