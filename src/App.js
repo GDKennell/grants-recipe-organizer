@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import "./App.css";
 import { convertRecipe } from "./RecipeConversion/convertRecipe";
@@ -24,6 +25,7 @@ function App() {
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
+        console.log(analytics != null);
     }, []);
 
     const [outputText, setOutputText] = useState("");

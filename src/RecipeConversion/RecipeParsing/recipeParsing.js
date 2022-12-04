@@ -67,7 +67,6 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients) {
 
 function putIngredientsOnOwnLine(recipeStringIn) {
     var recipe = recipeStringIn;
-    var words = recipe.split(" ");
     // check each word if it's start of an ingredient
     var [ingredientName, ingredientEndIndex] = findIngredientName(recipe, 0);
 
