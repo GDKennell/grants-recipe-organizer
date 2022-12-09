@@ -1,4 +1,4 @@
-import {findIngredientName} from './ingredientParsing';
+import {findIngredientName, parseIngredientListLine} from './ingredientParsing';
 import {removeSimpleLines} from './recipePostProcessing';
 
 import {findVolumeStringBefore} from './volumeParsing';
@@ -11,6 +11,11 @@ import {
   strRemoveRange,
 } from '../utilities/stringHelpers';
 import {convertFractionsToDecimals} from '../utilities/numberConversion';
+
+
+export function parseIngredientListLineWrapper(lineIn, ingredientManager) {
+  return parseIngredientListLine(lineIn, ingredientManager);
+}
 
 export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManager) {
   let recipe = recipeStringIn.replaceAll('.', '\n');
@@ -65,7 +70,7 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingre
   return finalString;
 }
 
-function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
+export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
   let recipe = recipeStringIn;
   // check each word if it's start of an ingredient
   let [ingredientName, ingredientEndIndex] = findIngredientName(recipe, 0, ingredientManager);

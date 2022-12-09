@@ -87,6 +87,5 @@ export const globalIngredientManager = {
   },
 };
 
-// export default ingredientManagerSingleton;
 
 // ingredientManager
