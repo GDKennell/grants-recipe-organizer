@@ -12,7 +12,7 @@ import {
 } from '../utilities/stringHelpers';
 import {convertFractionsToDecimals} from '../utilities/numberConversion';
 
-export function parseRecipe(recipeStringIn, measuredIngredients) {
+export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManager) {
   let recipe = recipeStringIn.replaceAll('.', '\n');
   recipe = recipe.replaceAll(',', ' ,');
   recipe = recipe.replaceAll('\n', ' \n ');
@@ -20,8 +20,8 @@ export function parseRecipe(recipeStringIn, measuredIngredients) {
 
   // Todo: pre-process removing all double spaces (should only be single spaces)
 
-  recipe = putIngredientsOnOwnLine(recipe);
-  recipe = addAndConvertIngredientUnits(recipe, measuredIngredients);
+  recipe = putIngredientsOnOwnLine(recipe, ingredientManager);
+  recipe = addAndConvertIngredientUnits(recipe, measuredIngredients, ingredientManager);
   recipe = removeSimpleLines(recipe);
   recipe = removeRedundantWords(recipe);
   recipe = moveCommaListsToBulletOnes(recipe);
@@ -29,7 +29,7 @@ export function parseRecipe(recipeStringIn, measuredIngredients) {
   return recipe;
 }
 
-function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients) {
+function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingredientManager) {
   if (measuredIngredients == undefined) {
     return recipeStringIn;
   }
@@ -43,7 +43,7 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients) {
   const lines = recipeStringIn.split('\n');
   let finalString = '';
   for (const line of lines) {
-    const [ingredientName] = findIngredientName(line, 0);
+    const [ingredientName] = findIngredientName(line, 0, ingredientManager);
     if (ingredientName == '') {
       finalString += line + '\n';
       continue;
@@ -65,10 +65,10 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients) {
   return finalString;
 }
 
-function putIngredientsOnOwnLine(recipeStringIn) {
+function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
   let recipe = recipeStringIn;
   // check each word if it's start of an ingredient
-  let [ingredientName, ingredientEndIndex] = findIngredientName(recipe, 0);
+  let [ingredientName, ingredientEndIndex] = findIngredientName(recipe, 0, ingredientManager);
 
   // TODO: handle case where false positive of ingredient word and need to backtrack to the next word
   // e.g. we have ingredients "unbleached flour" and "milk"
@@ -92,7 +92,7 @@ function putIngredientsOnOwnLine(recipeStringIn) {
     );
     [ingredientName, ingredientEndIndex] = findIngredientName(
         recipe,
-        ingredientEndIndex,
+        ingredientEndIndex, ingredientManager,
     );
   }
 

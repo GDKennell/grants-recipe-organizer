@@ -7,7 +7,7 @@ import {initializeApp} from 'firebase/app';
 import {getFirestore} from 'firebase/firestore';
 
 import {getAnalytics} from 'firebase/analytics';
-import {writeToDb} from './RecipeConversion/DataStructures/ingredient';
+import ingredientManagerSingleton, {writeToDb} from './RecipeConversion/DataStructures/ingredient';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,6 +37,8 @@ function App() {
 
 
     writeToDb(db);
+
+    console.log(ingredientManagerSingleton != null);
   }, []);
 
   const [outputText, setOutputText] = useState('');
@@ -62,7 +64,7 @@ function App() {
   };
 
   useEffect(() => {
-    const newValue = convertRecipe(ingredientListText, recipeText);
+    const newValue = convertRecipe(ingredientListText, recipeText, ingredientManagerSingleton);
     setOutputText(newValue);
   }, [ingredientListText, recipeText]);
 

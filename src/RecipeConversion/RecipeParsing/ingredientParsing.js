@@ -1,9 +1,5 @@
 import {containsUnitMeasurement} from '../DataStructures/unitMeasure';
-import {
-  findIngredientByName,
-  isIngredientWord,
-  isIngredientName,
-} from '../DataStructures/ingredient';
+
 import {
   wordsToNumbers,
   convertFractionsToDecimals,
@@ -17,12 +13,12 @@ import {
   sanitizePunctuation,
 } from '../utilities/stringHelpers';
 
-export function parseIngredientList(ingredientListStringIn) {
+export function parseIngredientList(ingredientListStringIn, ingredientManager) {
   const lines = ingredientListStringIn.split('\n');
   const newLines = [];
   const measuredIngredients = [];
   for (const line of lines) {
-    const [newLine, measuredIngredient] = parseIngredientListLine(line);
+    const [newLine, measuredIngredient] = parseIngredientListLine(line, ingredientManager);
     newLines.push(newLine);
     if (measuredIngredient != null) {
       measuredIngredients.push(measuredIngredient);
@@ -35,7 +31,7 @@ export function parseIngredientList(ingredientListStringIn) {
 /**
  * @param {string} lineIn
  */
-export function parseIngredientListLine(lineIn) {
+export function parseIngredientListLine(lineIn, ingredientManager) {
   //  ------- Pre Processing ------------ //
   let newLine = wordsToNumbers(lineIn);
   newLine = convertFractionsToDecimals(newLine);
@@ -59,12 +55,12 @@ export function parseIngredientListLine(lineIn) {
 
   const [ingredientName] = findIngredientName(
       newLine,
-      unitStringStartIndex,
+      unitStringStartIndex, ingredientManager,
   );
   if (ingredientName == '') {
     return [postProcessIngredientLine(lineIn), null];
   }
-  const ingredient = findIngredientByName(ingredientName);
+  const ingredient = ingredientManager.findIngredientByName(ingredientName);
 
   //  ------- Conversion & String Building ------------ //
 
@@ -96,7 +92,7 @@ function postProcessIngredientLine(line) {
   return finalString;
 }
 
-export function findIngredientName(lineIn, startIndex) {
+export function findIngredientName(lineIn, startIndex, ingredientManager) {
   const words = lineIn
       .toLocaleLowerCase()
       .substring(startIndex + 1)
@@ -114,8 +110,8 @@ export function findIngredientName(lineIn, startIndex) {
     let word = startWord;
     let innerIndex = startWordIndex + 1;
 
-    while (isIngredientWord(word)) {
-      if (isIngredientName(testString)) {
+    while (ingredientManager.isIngredientWord(word)) {
+      if (ingredientManager.isIngredientName(testString)) {
         ingredientFound = testString;
       }
       if (innerIndex >= words.length) {
