@@ -1,3 +1,6 @@
+import {collection, addDoc, getDocs} from 'firebase/firestore';
+
+
 export class Ingredient {
   constructor(names, gramsPerCup) {
     this.names = names;
@@ -195,5 +198,44 @@ const nameToIngredient = {};
 for (const ingredient of allIngredients) {
   for (const name of ingredient.names) {
     nameToIngredient[name.toLocaleLowerCase()] = ingredient;
+  }
+}
+
+async function storeIngredientToDb(ingredient, db) {
+  try {
+    await addDoc(collection(db, 'ingredients'), {
+      names: ingredient.names,
+      gramsPerCupt: ingredient.gramsPerCup,
+    });
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+}
+
+export async function writeToDb(db) {
+  const allDbNames = [];
+  let numDocs = 0;
+  console.log('here we go');
+  try {
+    const querySnapshot = await getDocs(collection(db, 'ingredients'));
+    querySnapshot.forEach((doc) => {
+      if (doc.data().names != undefined ) {
+        numDocs ++;
+        doc.data().names.forEach((name) => {
+          allDbNames.push(name);
+        });
+      } else {
+        console.log(`Got a bad doc with id ${doc.data().id}`);
+      }
+    });
+    console.log(allDbNames);
+    console.log(`have ${numDocs } docs`);
+    allIngredients.forEach((ingredient) => {
+      if (!allDbNames.includes(ingredient.names[0])) {
+        storeIngredientToDb(ingredient, db);
+      }
+    });
+  } catch (e) {
+    console.error('Error reading documents: ', e);
   }
 }

@@ -5,24 +5,12 @@ import {convertRecipe} from './RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
 import {initializeApp} from 'firebase/app';
 import {getFirestore} from 'firebase/firestore';
-import {collection, addDoc} from 'firebase/firestore';
 
 import {getAnalytics} from 'firebase/analytics';
+import {writeToDb} from './RecipeConversion/DataStructures/ingredient';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-async function writeToDb(db) {
-  try {
-    const docRef = await addDoc(collection(db, 'ingredients'), {
-      someParameter: 'codeIngredient',
-      anotherParameter: 'Lovelace',
-      born: 1815,
-    });
-    console.log('Document written with ID: ', docRef.id);
-  } catch (e) {
-    console.error('Error adding document: ', e);
-  }
-}
 
 function App() {
   useEffect(() => {
