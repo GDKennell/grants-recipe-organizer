@@ -50,48 +50,42 @@ export async function writeToDb(db) {
   }
 }
 
+const ingredients = allHardCodedIngredients;
+const allIngredientNameStrings =ingredients
+    .flatMap((m) => m.names)
+    .map((m) => m.toLocaleLowerCase());
 
-export default class IngredientManager {
-  constructor() {
-    this.ingredients = allHardCodedIngredients;
-    this. allIngredientNameStrings = this.ingredients
-        .flatMap((m) => m.names)
-        .map((m) => m.toLocaleLowerCase());
-    this.allIngredientWords = this.allIngredientNameStrings.flatMap((m) =>
-      m.toLocaleLowerCase().split(' '),
-    );
+const allIngredientWords = allIngredientNameStrings.flatMap((m) =>
+  m.toLocaleLowerCase().split(' '),
+);
 
-    this.nameToIngredient = {};
-    for (const ingredient of allHardCodedIngredients) {
-      for (const name of ingredient.names) {
-        this.nameToIngredient[name.toLocaleLowerCase()] = ingredient;
-      }
-    }
+const nameToIngredient = {};
+for (const ingredient of allHardCodedIngredients) {
+  for (const name of ingredient.names) {
+    nameToIngredient[name.toLocaleLowerCase()] = ingredient;
   }
+}
 
-
-  isIngredientWord(str) {
+export const globalIngredientManager = {
+  isIngredientWord: function(str) {
     if (str == undefined || str == '') {
       return false;
     }
-    return this.allIngredientWords.includes(str.toLocaleLowerCase());
-  }
+    return allIngredientWords.includes(str.toLocaleLowerCase());
+  },
 
-  isIngredientName(strIn) {
+  isIngredientName: function(strIn) {
     let str = strIn;
     if (str[str.length - 1] == ' ') {
       str = str.substring(0, str.length - 1);
     }
-    return this.allIngredientNameStrings.includes(str.toLocaleLowerCase());
-  }
+    return allIngredientNameStrings.includes(str.toLocaleLowerCase());
+  },
 
-  findIngredientByName(ingredientName) {
-    return this.nameToIngredient[ingredientName];
-  }
-}
-
-const ingredientManagerSingleton = new IngredientManager();
-Object.freeze(ingredientManagerSingleton);
+  findIngredientByName: function(ingredientName) {
+    return nameToIngredient[ingredientName];
+  },
+};
 
 // export default ingredientManagerSingleton;
 
