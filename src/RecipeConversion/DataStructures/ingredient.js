@@ -1,4 +1,4 @@
-import {collection, addDoc, getDocs} from 'firebase/firestore';
+import {collection, addDoc, getDocs, deleteDoc, doc} from 'firebase/firestore';
 
 
 export class Ingredient {
@@ -211,7 +211,9 @@ async function storeIngredientToDb(ingredient, db) {
     console.error('Error adding document: ', e);
   }
 }
-
+async function deleteIngredient(db, id) {
+  await deleteDoc(doc(db, 'ingredients', id));
+}
 export async function writeToDb(db) {
   const allDbNames = [];
   let numDocs = 0;
@@ -225,7 +227,8 @@ export async function writeToDb(db) {
           allDbNames.push(name);
         });
       } else {
-        console.log(`Got a bad doc with id ${doc.data().id}`);
+        console.log(`Got a bad doc with id ${doc.id}`);
+        deleteIngredient(db, doc.id);
       }
     });
     console.log(allDbNames);
