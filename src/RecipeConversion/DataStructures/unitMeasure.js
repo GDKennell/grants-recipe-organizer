@@ -1,131 +1,131 @@
-import { stringContainsWord } from "../utilities/stringHelpers";
+import {stringContainsWord} from '../utilities/stringHelpers';
 
 export class UnitMeasure {
-    /**
+  /**
    * @param {string[]} names
    * @param {number} ratioToCup
    *
    */
-    constructor(names, ratioToCup, ratioToGram) {
-        this.names = names;
-        this.ratioToCup = ratioToCup;
-        this.ratioToGram = ratioToGram;
-    }
+  constructor(names, ratioToCup, ratioToGram) {
+    this.names = names;
+    this.ratioToCup = ratioToCup;
+    this.ratioToGram = ratioToGram;
+  }
 
-    isVolumeMeasure() {
-        return this.ratioToCup != null;
-    }
+  isVolumeMeasure() {
+    return this.ratioToCup != null;
+  }
 
-    isWeightMeasure() {
-        return this.ratioToGram != null;
-    }
+  isWeightMeasure() {
+    return this.ratioToGram != null;
+  }
 
-    isUnitMeasure() {
-        return !this.isVolumeMeasure() && !this.isWeightMeasure();
-    }
+  isUnitMeasure() {
+    return !this.isVolumeMeasure() && !this.isWeightMeasure();
+  }
 }
 
-const cupMeasure = new UnitMeasure(["cup"], 1.0, null);
-const teaspoonMeasure = new UnitMeasure(["tsp", "teaspoon"], 0.0208333, null);
+const cupMeasure = new UnitMeasure(['cup'], 1.0, null);
+const teaspoonMeasure = new UnitMeasure(['tsp', 'teaspoon'], 0.0208333, null);
 const tablespoonMeasure = new UnitMeasure(
-    ["tbsp", "tablespoon", "tb"],
+    ['tbsp', 'tablespoon', 'tb'],
     0.062499920209125003,
-    null
+    null,
 );
-const pintMeasure = new UnitMeasure(["pint", "pt"], 2.0, null);
+const pintMeasure = new UnitMeasure(['pint', 'pt'], 2.0, null);
 const fluidOunceMeasure = new UnitMeasure(
-    ["fl. oz.", "fl oz", "fluid ounce"],
+    ['fl. oz.', 'fl oz', 'fluid ounce'],
     0.125,
-    null
+    null,
 );
 
-const gramMeasure = new UnitMeasure(["g", "gram"], null, 1.0);
-const poundMeasure = new UnitMeasure(["lb", "pound"], null, 453.5924);
-const kiloMeasure = new UnitMeasure(["kg", "kilo", "kilogram"], null, 1000.0);
-const ounceMeasure = new UnitMeasure(["oz", "ounce"], null, 28.3495);
+const gramMeasure = new UnitMeasure(['g', 'gram'], null, 1.0);
+const poundMeasure = new UnitMeasure(['lb', 'pound'], null, 453.5924);
+const kiloMeasure = new UnitMeasure(['kg', 'kilo', 'kilogram'], null, 1000.0);
+const ounceMeasure = new UnitMeasure(['oz', 'ounce'], null, 28.3495);
 const allUnitMeasurements = [
-    cupMeasure,
-    teaspoonMeasure,
-    tablespoonMeasure,
-    pintMeasure,
-    fluidOunceMeasure,
-    gramMeasure,
-    poundMeasure,
-    kiloMeasure,
-    ounceMeasure,
+  cupMeasure,
+  teaspoonMeasure,
+  tablespoonMeasure,
+  pintMeasure,
+  fluidOunceMeasure,
+  gramMeasure,
+  poundMeasure,
+  kiloMeasure,
+  ounceMeasure,
 ];
 
 const allVolumeMeasurements = [
-    cupMeasure,
-    teaspoonMeasure,
-    tablespoonMeasure,
-    pintMeasure,
-    fluidOunceMeasure,
+  cupMeasure,
+  teaspoonMeasure,
+  tablespoonMeasure,
+  pintMeasure,
+  fluidOunceMeasure,
 ];
 
-var allUnitMeasureNameStrings = allUnitMeasurements.flatMap((m) => m.names);
+let allUnitMeasureNameStrings = allUnitMeasurements.flatMap((m) => m.names);
 allUnitMeasureNameStrings = allUnitMeasureNameStrings.flatMap((str) => [
-    str,
-    str + "s",
+  str,
+  str + 's',
 ]);
 
 const allWeightMeasurements = [
-    gramMeasure,
-    poundMeasure,
-    kiloMeasure,
-    ounceMeasure,
+  gramMeasure,
+  poundMeasure,
+  kiloMeasure,
+  ounceMeasure,
 ];
 
-var allVolumeNameStrings = allVolumeMeasurements.flatMap((m) => m.names);
-allVolumeNameStrings = allVolumeNameStrings.flatMap((str) => [str, str + "s"]);
+let allVolumeNameStrings = allVolumeMeasurements.flatMap((m) => m.names);
+allVolumeNameStrings = allVolumeNameStrings.flatMap((str) => [str, str + 's']);
 
-var nameToVolume = {};
+const nameToVolume = {};
 for (const volume of allVolumeMeasurements) {
-    for (const name of volume.names) {
-        nameToVolume[name] = volume;
-        nameToVolume[name + "s"] = volume;
-    }
+  for (const name of volume.names) {
+    nameToVolume[name] = volume;
+    nameToVolume[name + 's'] = volume;
+  }
 }
 
-var allWeightNameStrings = allWeightMeasurements.flatMap((m) => m.names);
-allWeightNameStrings = allWeightNameStrings.flatMap((str) => [str, str + "s"]);
+let allWeightNameStrings = allWeightMeasurements.flatMap((m) => m.names);
+allWeightNameStrings = allWeightNameStrings.flatMap((str) => [str, str + 's']);
 
-var nameToWeight = {};
+const nameToWeight = {};
 for (const weight of allWeightMeasurements) {
-    for (const name of weight.names) {
-        nameToWeight[name] = weight;
-        nameToWeight[name + "s"] = weight;
-    }
+  for (const name of weight.names) {
+    nameToWeight[name] = weight;
+    nameToWeight[name + 's'] = weight;
+  }
 }
 
 export function containsUnitMeasurement(line) {
-    const lowerLine = line.toLocaleLowerCase();
-    for (const str of allUnitMeasureNameStrings) {
-        if (stringContainsWord(lowerLine, str)) {
-            return true;
-        }
+  const lowerLine = line.toLocaleLowerCase();
+  for (const str of allUnitMeasureNameStrings) {
+    if (stringContainsWord(lowerLine, str)) {
+      return true;
     }
-    const words = line.split(" ");
-    for (const word of words) {
-        if (!isNaN(parseFloat(word))) {
-            return true;
-        }
+  }
+  const words = line.split(' ');
+  for (const word of words) {
+    if (!isNaN(parseFloat(word))) {
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
 export function findVolumeByName(name) {
-    return nameToVolume[name.toLocaleLowerCase()];
+  return nameToVolume[name.toLocaleLowerCase()];
 }
 
 export function getAllVolumeNameStrings() {
-    return allVolumeNameStrings;
+  return allVolumeNameStrings;
 }
 
 export function findWeightByName(name) {
-    return nameToWeight[name.toLocaleLowerCase()];
+  return nameToWeight[name.toLocaleLowerCase()];
 }
 
 export function getAllWeightNameStrings() {
-    return allWeightNameStrings;
+  return allWeightNameStrings;
 }
