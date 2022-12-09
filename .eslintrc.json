@@ -14,14 +14,14 @@
         "ecmaVersion":"latest",
         "sourceType":"module"
     },
-    "linebreak-style":[
-        "error",
-        "unix"
-    ],
+
     "plugins":[
         "react"
     ],
     "rules":{
-        "require-jsdoc":"off",
+        "require-jsdoc":"off",  "linebreak-style":[
+            "error",
+            "unix"
+        ]
     }
 }
