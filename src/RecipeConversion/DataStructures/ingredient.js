@@ -7,12 +7,16 @@ export function Ingredient(names, gramsPerCup) {
   this.gramsPerCup = gramsPerCup;
 }
 
+function ingredientFromDoc(doc) {
+  return new Ingredient(doc.data().names, doc.data().gramsPerCup);
+}
+
 
 async function storeIngredientToDb(ingredient, db) {
   try {
     await addDoc(collection(db, 'ingredients'), {
       names: ingredient.names,
-      gramsPerCupt: ingredient.gramsPerCup,
+      gramsPerCup: ingredient.gramsPerCup,
     });
   } catch (e) {
     console.error('Error adding document: ', e);
@@ -28,7 +32,7 @@ export async function writeToDb(db) {
   try {
     const querySnapshot = await getDocs(collection(db, 'ingredients'));
     querySnapshot.forEach((doc) => {
-      if (doc.data().names != undefined ) {
+      if (doc.data().gramsPerCup != undefined ) {
         numDocs ++;
         doc.data().names.forEach((name) => {
           allDbNames.push(name);
@@ -50,21 +54,28 @@ export async function writeToDb(db) {
   }
 }
 
-const ingredients = allHardCodedIngredients;
-const allIngredientNameStrings =ingredients
-    .flatMap((m) => m.names)
-    .map((m) => m.toLocaleLowerCase());
+let ingredients = allHardCodedIngredients;
+let allIngredientNameStrings;
+let allIngredientWords;
+let nameToIngredient = {};
 
-const allIngredientWords = allIngredientNameStrings.flatMap((m) =>
-  m.toLocaleLowerCase().split(' '),
-);
+function updateIngredientsMetadata() {
+  allIngredientNameStrings =ingredients
+      .flatMap((m) => m.names)
+      .map((m) => m.toLocaleLowerCase());
 
-const nameToIngredient = {};
-for (const ingredient of allHardCodedIngredients) {
-  for (const name of ingredient.names) {
-    nameToIngredient[name.toLocaleLowerCase()] = ingredient;
+  allIngredientWords = allIngredientNameStrings.flatMap((m) =>
+    m.toLocaleLowerCase().split(' '),
+  );
+
+  nameToIngredient = {};
+  for (const ingredient of allHardCodedIngredients) {
+    for (const name of ingredient.names) {
+      nameToIngredient[name.toLocaleLowerCase()] = ingredient;
+    }
   }
 }
+updateIngredientsMetadata();
 
 export const globalIngredientManager = {
   isIngredientWord: function(str) {
@@ -84,6 +95,18 @@ export const globalIngredientManager = {
 
   findIngredientByName: function(ingredientName) {
     return nameToIngredient[ingredientName];
+  },
+
+  fetchIngredientsFromDb: async function(db) {
+    // TODO: don't overwrite list if DB fetch fails
+    ingredients = [];
+    const querySnapshot = await getDocs(collection(db, 'ingredients'));
+    querySnapshot.forEach((doc) => {
+      if (doc.data().names != undefined ) {
+        ingredients.push(ingredientFromDoc(doc));
+      }
+    });
+    updateIngredientsMetadata();
   },
 };
 
