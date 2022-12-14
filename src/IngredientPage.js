@@ -7,6 +7,8 @@ import {getFirestore} from 'firebase/firestore';
 
 import {getAnalytics} from 'firebase/analytics';
 import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
+import Table from './Table';
+
 
 function IngredientPage() {
   useEffect(() => {
@@ -36,31 +38,20 @@ function IngredientPage() {
   }, []);
 
 
-  function getTable() {
-    console.log(`Got ${globalIngredientManager.getAllIngredients().length} ingredients`);
-    const ingredients = globalIngredientManager.getAllIngredients().sort( (left, right) => {
-      const l = left.names[0].toLocaleLowerCase();
-      const r = right.names[0].toLocaleLowerCase();
-      return l.localeCompare(r);
-    });
-    return ingredients.map((ingredient) => {
-      const names = ingredient.names.join(', ');
-      return <div key={names + ingredient.gramsPerCup}> {names} | {ingredient.gramsPerCup}</div>;
-    });
-  };
+  console.log(`Got ${globalIngredientManager.getAllIngredients().length} ingredients`);
+
+  const ingredients = globalIngredientManager.getAllIngredients().sort( (left, right) => {
+    const l = left.names[0].toLocaleLowerCase();
+    const r = right.names[0].toLocaleLowerCase();
+    return l.localeCompare(r);
+  });
 
   return (
     <div>
-
       <h1>IngredientPage Page</h1>
 
       <div> Ingredient | Grams per cup </div>
-      <>
-        {
-          getTable()
-        }
-      </>
-
+      <Table data={ingredients} />
     </div>
   );
 };

@@ -21,7 +21,7 @@
     "rules":{
         "require-jsdoc":"off",  "linebreak-style":[
             "error",
-            "windows"
+            "unix"
         ], "max-len" : "off","valid-jsdoc":"off","camelcase":"off"
     }
 }
