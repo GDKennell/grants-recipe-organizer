@@ -78,6 +78,10 @@ function updateIngredientsMetadata() {
 updateIngredientsMetadata();
 
 export const globalIngredientManager = {
+  getAllIngredients: function() {
+    return ingredients;
+  },
+
   isIngredientWord: function(str) {
     if (str == undefined || str == '') {
       return false;
@@ -106,6 +110,7 @@ export const globalIngredientManager = {
         ingredients.push(ingredientFromDoc(doc));
       }
     });
+
     updateIngredientsMetadata();
   },
 };
