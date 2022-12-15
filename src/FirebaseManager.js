@@ -49,6 +49,7 @@ export const globalFirebaseManager = {
     globalUser = user;
     globalCredential = credential;
     globalToken = token;
+    globalIngredientManager.fetchUserScopedIngredients(globalDb, globalUser.uid);
   },
   getAuthDetails: function() {
     return [globalUser, globalCredential, globalToken];

@@ -84,6 +84,25 @@ function updateIngredientsMetadata() {
 }
 updateIngredientsMetadata();
 
+function isValidIngredientDoc(doc ) {
+  if (doc.data().names == undefined || doc.data().names.length == 0) {
+    return false;
+  }
+  if (isNaN(doc.data().gramsPerCup) ) {
+    return false;
+  }
+  return true;
+}
+
+function isDocPreExistingIngredient(doc) {
+  for (const name of doc.data().names) {
+    if (globalIngredientManager.isIngredientName(name)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export const globalIngredientManager = {
   getAllIngredients: function() {
     return ingredients;
@@ -120,7 +139,7 @@ export const globalIngredientManager = {
       querySnapshot.forEach((doc) => {
         dbFetched = true;
         const namesKey = doc.data().names ? doc.data().names.join('---') : null;
-        if (doc.data().names != undefined && !allNames.includes(namesKey) && !isNaN(doc.data().gramsPerCup)) {
+        if (!allNames.includes(namesKey) && isValidIngredientDoc(doc)) {
           localIngredients.push(ingredientFromDoc(doc));
           allNames.push(namesKey);
         } else {
@@ -140,6 +159,30 @@ export const globalIngredientManager = {
 
     updateIngredientsMetadata();
   },
+
+  fetchUserScopedIngredients: async function(db, userId) {
+    const querySnapshot = await getDocs(collection(db, 'users', userId, 'PrivateIngredients' ));
+    let numNew = 0;
+    try {
+      querySnapshot.forEach((doc) => {
+        if (isValidIngredientDoc(doc) && !isDocPreExistingIngredient(doc)) {
+          const newIngredient = ingredientFromDoc(doc);
+          ingredients.push(newIngredient);
+          console.log(`\tAdded new private ingredient: ${JSON.stringify(newIngredient)}`);
+          numNew++;
+        } else {
+        // Delete this duplicated ID from the actual DB
+          console.log(`Bad ingredient with : ${doc.id} info: ${JSON.stringify(doc.data())} `);
+        }
+      });
+      updateIngredientsMetadata();
+
+      console.log(`Added ${numNew} new ingredients from private collection`);
+    } catch (e) {
+      console.error('Error fetching private documents: ', e);
+    }
+  },
+
 };
 
 
