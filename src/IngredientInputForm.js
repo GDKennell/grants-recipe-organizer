@@ -1,17 +1,46 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {collection, addDoc} from 'firebase/firestore';
 import {globalFirebaseManager} from './FirebaseManager';
+import {isValidNumberString, removeAllWhitespace} from './RecipeConversion/utilities/stringHelpers';
+import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
 
 // eslint-disable-next-line react/prop-types
 export default function IngredientInputForm({startText}) {
   const [ingredientText, setIngredientText] = useState(startText);
   const [gramsPerCupText, setGramsPerCupText] = useState('');
+  const [fieldsAreValid, setFieldsAreValid] = useState(false);
+  const areFieldsValid = () => {
+    const gramsPerCupValue = parseFloat(gramsPerCupText);
+    if (!isValidNumberString(gramsPerCupText)) {
+      return false;
+    }
+    if (isNaN(gramsPerCupValue)) {
+      return false;
+    }
+    if (removeAllWhitespace(ingredientText).length == 0) {
+      return false;
+    }
+    const words = ingredientText.split(',');
+    for (const word of words ) {
+      if (globalIngredientManager.isIngredientName(word) ) {
+        return false;
+      }
+    }
+    return true;
+  };
+  const validateFields = () => {
+    setFieldsAreValid(areFieldsValid());
+  };
   const handleIngredientChange = (event) => {
     setIngredientText(event.target.value);
   };
   const handleGramsPerCupChange = (event) => {
     setGramsPerCupText(event.target.value);
   };
+
+  useEffect(() => {
+    validateFields();
+  }, [gramsPerCupText, ingredientText]);
 
   const handleSubmit = async () => {
     const db = globalFirebaseManager.getDb();
@@ -37,7 +66,7 @@ export default function IngredientInputForm({startText}) {
       <label>          Grams per Cup:
         <input type="text" onChange={handleGramsPerCupChange} />
       </label>
-      <button onClick={handleSubmit}> Submit </button>
+      <button onClick={handleSubmit} disabled={!fieldsAreValid}> Submit </button>
     </div>
   );
 }

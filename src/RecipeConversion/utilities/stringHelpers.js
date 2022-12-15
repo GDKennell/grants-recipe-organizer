@@ -31,6 +31,21 @@ export function isDecimal(character) {
   return '0123456789'.indexOf(character) != -1;
 }
 
+export function isValidNumberString(string) {
+  let numPeriods = 0;
+  for (const char of string) {
+    if (isDecimal(char)) {
+      continue;
+    }
+    if (char == '.' && numPeriods == 0) {
+      numPeriods++;
+      continue;
+    }
+    return false;
+  };
+  return true;
+}
+
 const whitespaceChars = ' \n\r\t';
 function isWhitespace(character) {
   return stringContains(whitespaceChars, character);
