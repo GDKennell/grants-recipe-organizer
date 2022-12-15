@@ -5,6 +5,7 @@ import {convertRecipe} from './RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
 import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
 import {parseIngredientListLine} from './RecipeConversion/RecipeParsing/ingredientParsing';
+import {removeAllWhitespace} from './RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from './UnkownIngredientsSection';
 // import {writeToDb} from './RecipeConversion/DataStructures/ingredient';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -31,7 +32,7 @@ function RecipeConversion() {
     const lines = textInput.split('\n');
     for (const origString of lines) {
       const [, ingredientString, realIngredient] = parseIngredientListLine(origString, globalIngredientManager);
-      if (realIngredient == null ) {
+      if (realIngredient == null && removeAllWhitespace(ingredientString).length > 0) {
         localUnknownIngredients.push(ingredientString);
       }
     }
