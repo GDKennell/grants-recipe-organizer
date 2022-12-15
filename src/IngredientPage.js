@@ -8,6 +8,7 @@ import {getFirestore} from 'firebase/firestore';
 import {getAnalytics} from 'firebase/analytics';
 import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
 import Table from './Table';
+import IngredientInputForm from './IngredientInputForm';
 
 
 function IngredientPage() {
@@ -49,8 +50,7 @@ function IngredientPage() {
   return (
     <div>
       <h1>IngredientPage Page</h1>
-
-      <div> Ingredient | Grams per cup </div>
+      <IngredientInputForm />
       <Table data={ingredients} />
     </div>
   );

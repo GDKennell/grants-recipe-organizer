@@ -104,6 +104,7 @@ export const globalIngredientManager = {
   },
 
   fetchIngredientsFromDb: async function(db) {
+    // return;
     if (dbFetched) {
       return;
     }
