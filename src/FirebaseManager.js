@@ -8,6 +8,11 @@ let firebaseInitialized = false;
 let globalDb = null;
 let globalApp = null;
 let globalAnalytics = null;
+
+let globalUser = null;
+let globalCredential = null;
+let globalToken = null;
+
 export const globalFirebaseManager = {
   initialize: function() {
     if (firebaseInitialized) {
@@ -39,5 +44,16 @@ export const globalFirebaseManager = {
   },
   getDb: function() {
     return globalDb;
+  },
+  userSignedIn: function(user, credential, token) {
+    globalUser = user;
+    globalCredential = credential;
+    globalToken = token;
+  },
+  getAuthDetails: function() {
+    return [globalUser, globalCredential, globalToken];
+  },
+  getUser: function() {
+    return globalUser;
   },
 };

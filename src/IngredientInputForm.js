@@ -10,6 +10,9 @@ export default function IngredientInputForm({startText}) {
   const [gramsPerCupText, setGramsPerCupText] = useState('');
   const [fieldsAreValid, setFieldsAreValid] = useState(false);
   const areFieldsValid = () => {
+    if (globalFirebaseManager.getUser() == null) {
+      return false;
+    }
     const gramsPerCupValue = parseFloat(gramsPerCupText);
     if (!isValidNumberString(gramsPerCupText)) {
       return false;
@@ -47,11 +50,13 @@ export default function IngredientInputForm({startText}) {
     console.log(`Submitting ${ingredientText} ${gramsPerCupText}`);
     const names = ingredientText.split(',');
     const gramsPerCup = parseFloat(gramsPerCupText);
+    const userId = globalFirebaseManager.getUser().uid;
     try {
-      await addDoc(collection(db, 'ingredients'), {
+      await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {
         names: names,
         gramsPerCup: gramsPerCup,
       });
+      console.log(`success adding document : ${names} ${gramsPerCup}`);
     } catch (e) {
       console.error('Error adding document: ', e);
     }

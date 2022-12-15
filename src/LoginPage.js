@@ -6,6 +6,7 @@ import 'firebaseui/dist/firebaseui.css';
 
 
 import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
+import {globalFirebaseManager} from './FirebaseManager';
 
 
 export default function LoginPage() {
@@ -23,6 +24,7 @@ export default function LoginPage() {
           const user = result.user;
           console.log(`Login succes. Got credential : ${credential}  token : ${token}  user : ${JSON.stringify(user)} `);
           setLoginMessage(`Welcome ${user.displayName}!\nYour root uid is: ${user.uid}\nYour provider uid is ${user.providerData[0].uid}`);
+          globalFirebaseManager.userSignedIn(user, credential, token);
           // ...
         }).catch((error) => {
           // Handle Errors here.
