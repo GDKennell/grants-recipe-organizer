@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
+import {collection, addDoc} from 'firebase/firestore';
 
-export default function IngredientInputForm() {
+// eslint-disable-next-line react/prop-types
+export default function IngredientInputForm({db}) {
   const [ingredientText, setIngredientText] = useState('');
   const [gramsPerCupText, setGramsPerCupText] = useState('');
   const handleIngredientChange = (event) => {
@@ -10,12 +12,22 @@ export default function IngredientInputForm() {
     setGramsPerCupText(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log(`Submitting ${ingredientText} ${gramsPerCupText}`);
+    const names = ingredientText.split(',');
+    const gramsPerCup = parseFloat(gramsPerCupText);
+    try {
+      await addDoc(collection(db, 'ingredients'), {
+        names: names,
+        gramsPerCup: gramsPerCup,
+      });
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
   };
   return (
     <div>
-            Add new ingredient
+            Add new ingredient ( <a href="https://www.aqua-calc.com/calculate/food-volume-to-weight" target="_blank" rel="noreferrer">look up grams per cup here </a> )
       <br/>
       <label>          Ingredient:
         <input type="text" onChange={handleIngredientChange} />

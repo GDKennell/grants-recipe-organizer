@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useEffect} from 'react';
 import './App.css';
 // Import the functions you need from the SDKs you need
@@ -12,6 +12,7 @@ import IngredientInputForm from './IngredientInputForm';
 
 
 function IngredientPage() {
+  const [dbState, setDbState] = useState(null);
   useEffect(() => {
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -30,7 +31,7 @@ function IngredientPage() {
     const analytics = getAnalytics(app);
     // Initialize Cloud Firestore and get a reference to the service
     const db = getFirestore(app);
-
+    setDbState(dbState);
     console.log(db != null);
     console.log(analytics != null);
 
@@ -50,7 +51,8 @@ function IngredientPage() {
   return (
     <div>
       <h1>IngredientPage Page</h1>
-      <IngredientInputForm />
+      <IngredientInputForm db={dbState}/>
+      <br/>
       <Table data={ingredients} />
     </div>
   );
