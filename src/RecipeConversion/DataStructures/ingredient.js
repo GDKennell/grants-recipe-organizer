@@ -24,8 +24,13 @@ async function storeIngredientToDb(ingredient, db) {
   }
 }
 async function deleteIngredient(db, id) {
-  await deleteDoc(doc(db, 'ingredients', id));
+  try {
+    await deleteDoc(doc(db, 'ingredients', id));
+  } catch (e) {
+    console.error('Error deleting documents: ', e);
+  }
 }
+
 export async function writeToDb(db) {
   const allDbNames = [];
   let numDocs = 0;
@@ -121,9 +126,12 @@ export const globalIngredientManager = {
         } else {
         // Delete this duplicated ID from the actual DB
           console.log(`delet dis: ${doc.id}`);
+          deleteIngredient(db, doc.id);
         }
       });
       if (localIngredients.length > 0 ) {
+        console.log(`Successfully fetched : ${localIngredients.length} ingredients`);
+
         ingredients = localIngredients;
       }
     } catch (e) {
