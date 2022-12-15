@@ -29,17 +29,30 @@ test('converts values to cups', () => {
   ];
 
   for (const testCase of testCases) {
-    const [result] = parseIngredientListLine(testCase[0], ingredientManager);
-    expect(result).toEqual(testCase[1]);
+    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(parsedLine).toEqual(testCase[1]);
   }
 });
 
 
+test('unknown ingredients', () => {
+  const testCases = [
+    ['2.5 cups flour', 'flour'],
+    ['1 tsp alien juice', 'alien juice'],
+    ['1 cup your mother', 'your mother'],
+    ['2 1/3 Tbsp nonesense', 'nonesense'],
+  ];
+  for (const testCase of testCases) {
+    const [, possibleIngredient] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(possibleIngredient).toEqual(testCase[1]);
+  }
+});
+
 test('2.5 cups flour', () => {
   const testCases = [['- 2.5 cups flour', '- 312.5g (2.5 cups) flour']];
   for (const testCase of testCases) {
-    const [result] = parseIngredientListLine(testCase[0], ingredientManager);
-    expect(result).toEqual(testCase[1]);
+    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(parsedLine).toEqual(testCase[1]);
   }
 });
 
@@ -48,16 +61,16 @@ test('oz weight ', () => {
     ['▢ 10.6 oz cream cheese', '▢ 300.5g (10.6 oz) cream cheese'],
   ];
   for (const testCase of testCases) {
-    const [result] = parseIngredientListLine(testCase[0], ingredientManager);
-    expect(result).toEqual(testCase[1]);
+    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(parsedLine).toEqual(testCase[1]);
   }
 });
 
 // test('1 ½ tsp baking powder', () => {
 //   const testCases = [['1 ½ tsp baking powder', '']];
 //   for (const testCase of testCases) {
-//     const [result] = parseIngredientListLine(testCase[0], ingredientManager);
-//     expect(result).toEqual(testCase[1]);
+//     const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+//     expect(parsedLine).toEqual(testCase[1]);
 //   }
 // });
 
@@ -80,8 +93,8 @@ test('handles modifiers to ingredients and extraneous notes', () => {
 
   for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const [result] = parseIngredientListLine(testCase[0], ingredientManager);
-    expect(result).toEqual(testCase[1]);
+    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(parsedLine).toEqual(testCase[1]);
   }
 });
 
@@ -95,14 +108,14 @@ test('Half cup cold shortening', () => {
 
   for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const [result] = parseIngredientListLine(testCase[0], ingredientManager);
-    expect(result).toEqual(testCase[1]);
+    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(parsedLine).toEqual(testCase[1]);
   }
 });
 
 test('cold water = water', () => {
-  const [result] = parseIngredientListLine('1/4 cup  cold water', ingredientManager);
-  expect(result).toEqual('59.1g (0.25 cup)  cold water');
+  const [parsedLine,,] = parseIngredientListLine('1/4 cup  cold water', ingredientManager);
+  expect(parsedLine).toEqual('59.1g (0.25 cup)  cold water');
 });
 test('handles unicode fractions', () => {
   const testCases = [
@@ -127,8 +140,8 @@ test('handles unicode fractions', () => {
 
   for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const [result] = parseIngredientListLine(testCase[0], ingredientManager);
-    expect(result).toEqual(testCase[1]);
+    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(parsedLine).toEqual(testCase[1]);
   }
 });
 
@@ -139,8 +152,8 @@ test('cream vs cream of tartar', () => {
 
   for (const testCase of testCases) {
     //   console.log("testing " + testCase[0]);
-    const [result] = parseIngredientListLine(testCase[0], ingredientManager);
-    expect(result).toEqual(testCase[1]);
+    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(parsedLine).toEqual(testCase[1]);
   }
 });
 

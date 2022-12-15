@@ -30,7 +30,7 @@ function RecipeConversion() {
     const localUnknownIngredients = [];
     const lines = textInput.split('\n');
     for (const origString of lines) {
-      const [ingredientString, realIngredient] = parseIngredientListLine(origString, globalIngredientManager);
+      const [, ingredientString, realIngredient] = parseIngredientListLine(origString, globalIngredientManager);
       if (realIngredient == null ) {
         localUnknownIngredients.push(ingredientString);
       }

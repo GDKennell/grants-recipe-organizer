@@ -5,11 +5,13 @@ import {
   convertFractionsToDecimals,
 } from '../utilities/numberConversion';
 
+
 import {findUnitMeasureString} from './volumeParsing';
 import {MeasuredIngredient} from '../DataStructures/measuredIngredient';
 import {
   removeLeadingWhiteSpace,
   removeSpacesBeforePunctuation,
+  strRemoveRange,
   sanitizePunctuation,
 } from '../utilities/stringHelpers';
 
@@ -18,7 +20,7 @@ export function parseIngredientList(ingredientListStringIn, ingredientManager) {
   const newLines = [];
   const measuredIngredients = [];
   for (const line of lines) {
-    const [newLine, measuredIngredient] = parseIngredientListLine(line, ingredientManager);
+    const [newLine,, measuredIngredient] = parseIngredientListLine(line, ingredientManager);
     newLines.push(newLine);
     if (measuredIngredient != null) {
       measuredIngredients.push(measuredIngredient);
@@ -37,8 +39,9 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
   newLine = convertFractionsToDecimals(newLine);
   newLine = sanitizePunctuation(newLine);
 
+  const defaultLine = postProcessIngredientLine(lineIn);
   if (!containsUnitMeasurement(newLine)) {
-    return [lineIn, null];
+    return [defaultLine, defaultLine, null];
   }
 
   //  ------- Finding Volume Amount ------------ //
@@ -58,7 +61,8 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
       unitStringStartIndex, ingredientManager,
   );
   if (ingredientName == '') {
-    return [postProcessIngredientLine(lineIn), null];
+    const possibleIngredient = strRemoveRange(newLine, unitStringStartIndex, unitStringEndIndex);
+    return [defaultLine, removeLeadingWhiteSpace(possibleIngredient), null];
   }
   const ingredient = ingredientManager.findIngredientByName(ingredientName);
 
@@ -83,7 +87,7 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
   //  ------- Post Processing ------------ //
   finalString = postProcessIngredientLine(finalString);
 
-  return [finalString, finalIngredient];
+  return [finalString, ingredientName, finalIngredient];
 }
 
 function postProcessIngredientLine(line) {
@@ -133,3 +137,4 @@ export function findIngredientName(lineIn, startIndex, ingredientManager) {
 
   return [ingredientFound, testStringEndPosition];
 }
+

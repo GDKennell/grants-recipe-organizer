@@ -1,4 +1,4 @@
-import {findIngredientName, parseIngredientListLine} from './ingredientParsing';
+import {findIngredientName} from './ingredientParsing';
 import {removeSimpleLines} from './recipePostProcessing';
 
 import {findVolumeStringBefore} from './volumeParsing';
@@ -12,10 +12,6 @@ import {
 } from '../utilities/stringHelpers';
 import {convertFractionsToDecimals} from '../utilities/numberConversion';
 
-
-export function parseIngredientListLineWrapper(lineIn, ingredientManager) {
-  return parseIngredientListLine(lineIn, ingredientManager);
-}
 
 export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManager) {
   let recipe = recipeStringIn.replaceAll('.', '\n');
