@@ -5,6 +5,7 @@ import {allHardCodedIngredients} from './hardCodedIngredients';
 export function Ingredient(names, gramsPerCup) {
   this.names = names;
   this.gramsPerCup = gramsPerCup;
+  this.key = names.join(',') + gramsPerCup;
 }
 
 function ingredientFromDoc(doc) {
@@ -58,6 +59,7 @@ let ingredients = allHardCodedIngredients;
 let allIngredientNameStrings;
 let allIngredientWords;
 let nameToIngredient = {};
+let dbFetched = false;
 
 function updateIngredientsMetadata() {
   allIngredientNameStrings =ingredients
@@ -102,12 +104,22 @@ export const globalIngredientManager = {
   },
 
   fetchIngredientsFromDb: async function(db) {
+    if (dbFetched) {
+      return;
+    }
     // TODO: don't overwrite list if DB fetch fails
     ingredients = [];
     const querySnapshot = await getDocs(collection(db, 'ingredients'));
+    const allNames = [];
     querySnapshot.forEach((doc) => {
-      if (doc.data().names != undefined ) {
+      dbFetched = true;
+      const namesKey = doc.data().names ? doc.data().names.join('---') : null;
+      if (doc.data().names != undefined && !allNames.includes(namesKey) && !isNaN(doc.data().gramsPerCup)) {
         ingredients.push(ingredientFromDoc(doc));
+        allNames.push(namesKey);
+      } else {
+        // Delete this duplicated ID from the actual DB
+        console.log(`delet dis: ${doc.id}`);
       }
     });
 
