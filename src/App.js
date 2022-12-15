@@ -1,6 +1,7 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
 import './App.css';
+import {globalFirebaseManager} from './FirebaseManager';
 import IngredientPage from './IngredientPage';
 import RecipeConversion from './RecipeConversion';
 
@@ -22,7 +23,7 @@ function getCurrentComponent(pageType) {
 function App() {
   const [showingPage, setShowingPage] = useState(PageType.RECIPE_CONVERSION);
   useEffect(() => {
-
+    globalFirebaseManager.initialize();
   }, []);
 
   const toggleButtonPressed = () => {

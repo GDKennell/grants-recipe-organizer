@@ -104,25 +104,31 @@ export const globalIngredientManager = {
   },
 
   fetchIngredientsFromDb: async function(db) {
-    // return;
     if (dbFetched) {
       return;
     }
+    try {
     // TODO: don't overwrite list if DB fetch fails
-    ingredients = [];
-    const querySnapshot = await getDocs(collection(db, 'ingredients'));
-    const allNames = [];
-    querySnapshot.forEach((doc) => {
-      dbFetched = true;
-      const namesKey = doc.data().names ? doc.data().names.join('---') : null;
-      if (doc.data().names != undefined && !allNames.includes(namesKey) && !isNaN(doc.data().gramsPerCup)) {
-        ingredients.push(ingredientFromDoc(doc));
-        allNames.push(namesKey);
-      } else {
+      const querySnapshot = await getDocs(collection(db, 'ingredients'));
+      const localIngredients = [];
+      const allNames = [];
+      querySnapshot.forEach((doc) => {
+        dbFetched = true;
+        const namesKey = doc.data().names ? doc.data().names.join('---') : null;
+        if (doc.data().names != undefined && !allNames.includes(namesKey) && !isNaN(doc.data().gramsPerCup)) {
+          localIngredients.push(ingredientFromDoc(doc));
+          allNames.push(namesKey);
+        } else {
         // Delete this duplicated ID from the actual DB
-        console.log(`delet dis: ${doc.id}`);
+          console.log(`delet dis: ${doc.id}`);
+        }
+      });
+      if (localIngredients.length > 0 ) {
+        ingredients = localIngredients;
       }
-    });
+    } catch (e) {
+      console.error('Error fetching documents: ', e);
+    }
 
     updateIngredientsMetadata();
   },
