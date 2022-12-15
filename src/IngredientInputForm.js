@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {collection, addDoc} from 'firebase/firestore';
+import {globalFirebaseManager} from './FirebaseManager';
 
 // eslint-disable-next-line react/prop-types
-export default function IngredientInputForm({db}) {
-  const [ingredientText, setIngredientText] = useState('');
+export default function IngredientInputForm({startText}) {
+  const [ingredientText, setIngredientText] = useState(startText);
   const [gramsPerCupText, setGramsPerCupText] = useState('');
   const handleIngredientChange = (event) => {
     setIngredientText(event.target.value);
@@ -13,6 +14,7 @@ export default function IngredientInputForm({db}) {
   };
 
   const handleSubmit = async () => {
+    const db = globalFirebaseManager.getDb();
     console.log(`Submitting ${ingredientText} ${gramsPerCupText}`);
     const names = ingredientText.split(',');
     const gramsPerCup = parseFloat(gramsPerCupText);
@@ -30,7 +32,7 @@ export default function IngredientInputForm({db}) {
             Add new ingredient ( <a href="https://www.aqua-calc.com/calculate/food-volume-to-weight" target="_blank" rel="noreferrer">look up grams per cup here </a> )
       <br/>
       <label>          Ingredient:
-        <input type="text" onChange={handleIngredientChange} />
+        <input type="text" onChange={handleIngredientChange} value={ingredientText}/>
       </label>
       <label>          Grams per Cup:
         <input type="text" onChange={handleGramsPerCupChange} />

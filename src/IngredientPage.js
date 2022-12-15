@@ -3,7 +3,6 @@ import './App.css'; import React from 'react';
 import Table from './Table';
 import IngredientInputForm from './IngredientInputForm';
 import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
-import {globalFirebaseManager} from './FirebaseManager';
 
 
 function IngredientPage() {
@@ -18,7 +17,7 @@ function IngredientPage() {
   return (
     <div>
       <h1>IngredientPage Page</h1>
-      <IngredientInputForm db={globalFirebaseManager.getDb()}/>
+      <IngredientInputForm startText={undefined} />
       <br/>
       <Table data={ingredients} />
     </div>
