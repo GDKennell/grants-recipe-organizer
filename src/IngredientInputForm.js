@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {globalFirebaseManager} from './FirebaseManager';
 import {isValidNumberString, removeAllWhitespace} from './RecipeConversion/utilities/stringHelpers';
-import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
+import {addNewIngredient, IngredientManager} from './RecipeConversion/DataStructures/ingredient';
+import useIngredientsStore from './hooks/useIngredientsStore';
 
 // eslint-disable-next-line react/prop-types
 export default function IngredientInputForm({startText}) {
+  const {allIngredients, dispatch} = useIngredientsStore();
+  const ingredientManager = new IngredientManager(allIngredients);
   const [ingredientText, setIngredientText] = useState(startText);
   const [gramsPerCupText, setGramsPerCupText] = useState('');
   const [fieldsAreValid, setFieldsAreValid] = useState(false);
@@ -24,7 +27,7 @@ export default function IngredientInputForm({startText}) {
     }
     const words = ingredientText.split(',');
     for (const word of words ) {
-      if (globalIngredientManager.isIngredientName(word) ) {
+      if (ingredientManager.isIngredientName(word) ) {
         return false;
       }
     }
@@ -48,7 +51,7 @@ export default function IngredientInputForm({startText}) {
     console.log(`Submitting ${ingredientText} ${gramsPerCupText}`);
     const names = ingredientText.split(',');
     const gramsPerCup = parseFloat(gramsPerCupText);
-    globalIngredientManager.addNewIngredient(names, gramsPerCup );
+    addNewIngredient(names, gramsPerCup, dispatch);
   };
   return (
     <div>

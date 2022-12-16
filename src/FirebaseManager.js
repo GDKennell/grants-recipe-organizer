@@ -2,7 +2,7 @@ import {initializeApp} from 'firebase/app';
 import {getFirestore} from 'firebase/firestore';
 
 import {getAnalytics} from 'firebase/analytics';
-import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
+import {fetchIngredientsFromDb, fetchUserScopedIngredients} from './RecipeConversion/DataStructures/ingredient';
 import {getAuth} from 'firebase/auth';
 
 let firebaseInitialized = false;
@@ -41,7 +41,7 @@ export const globalFirebaseManager = {
     console.log(globalAnalytics != null);
 
     // writeToDb(db);
-    globalIngredientManager.fetchIngredientsFromDb(globalDb, dispatch);
+    fetchIngredientsFromDb(globalDb, dispatch);
 
     const auth = getAuth();
     auth.onAuthStateChanged(function(user) {
@@ -57,7 +57,7 @@ export const globalFirebaseManager = {
     globalUser = user;
     globalCredential = credential;
     globalToken = token;
-    globalIngredientManager.fetchUserScopedIngredients(globalDb, globalUser.uid, dispatch);
+    fetchUserScopedIngredients(globalDb, globalUser.uid, dispatch);
   },
   userSignedOut: function() {
     globalUser = null;

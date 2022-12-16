@@ -69,32 +69,6 @@ export async function writeToDb(db) {
   }
 }
 
-const ingredients = allHardCodedIngredients;
-let allIngredientNameStrings;
-let allIngredientWords;
-let nameToIngredient = {};
-let dbFetched = false;
-
-function updateIngredientsMetadata() {
-  allIngredientNameStrings =ingredients
-      .flatMap((m) => m.names)
-      .map((m) => m.toLocaleLowerCase());
-
-  allIngredientWords = allIngredientNameStrings.flatMap((m) =>
-    m.toLocaleLowerCase().split(' '),
-  );
-
-  nameToIngredient = {};
-
-
-  for (const ingredient of ingredients) {
-    for (const name of ingredient.names) {
-      nameToIngredient[name.toLocaleLowerCase()] = ingredient;
-    }
-  }
-}
-updateIngredientsMetadata();
-
 function isValidIngredientDoc(doc ) {
   if (doc.data().names == undefined || doc.data().names.length == 0) {
     return false;
@@ -105,112 +79,120 @@ function isValidIngredientDoc(doc ) {
   return true;
 }
 
-function isDocPreExistingIngredient(doc) {
-  for (const name of doc.data().names) {
-    if (globalIngredientManager.isIngredientName(name)) {
-      return true;
-    }
+let dbFetched = false;
+
+export async function fetchIngredientsFromDb(db, dispatch) {
+  if (dbFetched) {
+    return;
   }
-  return false;
+  try {
+    // TODO: don't overwrite list if DB fetch fails
+    const querySnapshot = await getDocs(collection(db, 'ingredients'));
+    dbFetched = true;
+    const localIngredients = [];
+    const allNames = [];
+    querySnapshot.forEach((doc) => {
+      const namesKey = doc.data().names ? doc.data().names.join('---') : null;
+      if (!allNames.includes(namesKey) && isValidIngredientDoc(doc)) {
+        localIngredients.push(ingredientFromDoc(doc));
+        allNames.push(namesKey);
+      } else {
+        // Delete this duplicated ID from the actual DB
+        console.log(`delet dis: ${doc.id}`);
+        deleteIngredient(db, doc.id);
+      }
+    });
+    if (localIngredients.length > 0 ) {
+      console.log(`Successfully fetched : ${localIngredients.length} ingredients`);
+      dispatch(replaceIngredientList({newIngredientList: localIngredients}));
+    }
+  } catch (e) {
+    console.error('Error fetching documents: ', e);
+  }
 }
 
-export const globalIngredientManager = {
-  getAllIngredients: function() {
-    return ingredients;
-  },
+export async function fetchUserScopedIngredients(db, userId, dispatch) {
+  const querySnapshot = await getDocs(collection(db, 'users', userId, 'PrivateIngredients' ));
+  let numNew = 0;
+  const localIngredients = [];
+  try {
+    querySnapshot.forEach((doc) => {
+      if (isValidIngredientDoc(doc)) {
+        const newIngredient = ingredientFromDoc(doc);
+        localIngredients.push(newIngredient);
+        console.log(`\tAdded new private ingredient: ${JSON.stringify(newIngredient)}`);
+        numNew++;
+      } else {
+        // Delete this duplicated ID from the actual DB
+        console.log(`Bad ingredient with : ${doc.id} info: ${JSON.stringify(doc.data())} `);
+      }
+    });
+    dispatch(addNewIngredients({newIngredients: localIngredients}));
+    console.log(`Added ${numNew} new ingredients from private collection`);
+  } catch (e) {
+    console.error('Error fetching private documents: ', e);
+  }
+},
 
-  isIngredientWord: function(str) {
+
+export async function addNewIngredient( names, gramsPerCup, dispatch) {
+  const db = globalFirebaseManager.getDb();
+  const userId = globalFirebaseManager.getUser().uid;
+  try {
+    await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {
+      names: names,
+      gramsPerCup: gramsPerCup,
+    });
+    console.log(`success adding document : ${names} ${gramsPerCup}`);
+    const newIngredients = [makeIngredientObject(names, gramsPerCup)];
+    dispatch(addNewIngredients({newIngredients: newIngredients}));
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+}
+
+export class IngredientManager {
+  constructor(ingredientList) {
+    this.ingredientList = ingredientList;
+
+    this.allIngredientNameStrings = this.ingredientList
+        .flatMap((m) => m.names)
+        .map((m) => m.toLocaleLowerCase());
+
+    this.allIngredientWords = this.allIngredientNameStrings.flatMap((m) =>
+      m.toLocaleLowerCase().split(' '),
+    );
+
+    this.nameToIngredient = {};
+    for (const ingredient of this.ingredientList) {
+      for (const name of ingredient.names) {
+        this.nameToIngredient[name.toLocaleLowerCase()] = ingredient;
+      }
+    }
+  }
+
+  get getAllIngredients() {
+    return this.ingredientList;
+  }
+
+  isIngredientWord(str) {
     if (str == undefined || str == '') {
       return false;
     }
-    return allIngredientWords.includes(str.toLocaleLowerCase());
-  },
+    return this.allIngredientWords.includes(str.toLocaleLowerCase());
+  }
 
-  isIngredientName: function(strIn) {
+  isIngredientName(strIn) {
     let str = strIn;
     if (str[str.length - 1] == ' ') {
       str = str.substring(0, str.length - 1);
     }
-    return allIngredientNameStrings.includes(str.toLocaleLowerCase());
-  },
+    return this.allIngredientNameStrings.includes(str.toLocaleLowerCase());
+  }
 
-  findIngredientByName: function(ingredientName) {
-    return nameToIngredient[ingredientName];
-  },
-
-  fetchIngredientsFromDb: async function(db, dispatch) {
-    if (dbFetched) {
-      return;
-    }
-    try {
-    // TODO: don't overwrite list if DB fetch fails
-      const querySnapshot = await getDocs(collection(db, 'ingredients'));
-      const localIngredients = [];
-      const allNames = [];
-      querySnapshot.forEach((doc) => {
-        dbFetched = true;
-        const namesKey = doc.data().names ? doc.data().names.join('---') : null;
-        if (!allNames.includes(namesKey) && isValidIngredientDoc(doc)) {
-          localIngredients.push(ingredientFromDoc(doc));
-          allNames.push(namesKey);
-        } else {
-        // Delete this duplicated ID from the actual DB
-          console.log(`delet dis: ${doc.id}`);
-          deleteIngredient(db, doc.id);
-        }
-      });
-      if (localIngredients.length > 0 ) {
-        console.log(`Successfully fetched : ${localIngredients.length} ingredients`);
-        dispatch(replaceIngredientList({newIngredientList: localIngredients}));
-      }
-    } catch (e) {
-      console.error('Error fetching documents: ', e);
-    }
-
-    updateIngredientsMetadata();
-  },
-
-  addNewIngredient: async function( names, gramsPerCup) {
-    const db = globalFirebaseManager.getDb();
-    const userId = globalFirebaseManager.getUser().uid;
-    try {
-      await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {
-        names: names,
-        gramsPerCup: gramsPerCup,
-      });
-      console.log(`success adding document : ${names} ${gramsPerCup}`);
-      ingredients.push(new Ingredient(names, gramsPerCup));
-      updateIngredientsMetadata();
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
-  },
-
-  fetchUserScopedIngredients: async function(db, userId, dispatch) {
-    const querySnapshot = await getDocs(collection(db, 'users', userId, 'PrivateIngredients' ));
-    let numNew = 0;
-    const localIngredients = [];
-    try {
-      querySnapshot.forEach((doc) => {
-        if (isValidIngredientDoc(doc) && !isDocPreExistingIngredient(doc)) {
-          const newIngredient = ingredientFromDoc(doc);
-          localIngredients.push(newIngredient);
-          console.log(`\tAdded new private ingredient: ${JSON.stringify(newIngredient)}`);
-          numNew++;
-        } else {
-        // Delete this duplicated ID from the actual DB
-          console.log(`Bad ingredient with : ${doc.id} info: ${JSON.stringify(doc.data())} `);
-        }
-      });
-      dispatch(addNewIngredients({newIngredients: localIngredients}));
-      updateIngredientsMetadata();
-
-      console.log(`Added ${numNew} new ingredients from private collection`);
-    } catch (e) {
-      console.error('Error fetching private documents: ', e);
-    }
-  },
-
+  findIngredientByName(ingredientName) {
+    return this.nameToIngredient[ingredientName];
+  }
 };
 
 

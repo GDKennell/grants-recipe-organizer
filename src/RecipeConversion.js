@@ -1,9 +1,10 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
 import './App.css';
+import useIngredientsStore from './hooks/useIngredientsStore';
 import {convertRecipe} from './RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
-import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
+import {IngredientManager} from './RecipeConversion/DataStructures/ingredient';
 import {parseIngredientListLine} from './RecipeConversion/RecipeParsing/ingredientParsing';
 import {removeAllWhitespace} from './RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from './UnkownIngredientsSection';
@@ -15,6 +16,9 @@ const ingredientKey = 'ingKey';
 const recipeKey = 'recKey';
 
 function RecipeConversion() {
+  const {ingredientList} = useIngredientsStore();
+  const ingredientManager = new IngredientManager(ingredientList);
+
   const [outputText, setOutputText] = useState('');
 
   const minRows = 5;
@@ -29,7 +33,7 @@ function RecipeConversion() {
     const localUnknownIngredients = [];
     const lines = ingredientListText.split('\n');
     for (const origString of lines) {
-      const [, ingredientString, realIngredient] = parseIngredientListLine(origString, globalIngredientManager);
+      const [, ingredientString, realIngredient] = parseIngredientListLine(origString, ingredientManager);
       if (realIngredient == null && removeAllWhitespace(ingredientString).length > 0) {
         localUnknownIngredients.push(ingredientString);
       }
@@ -52,7 +56,7 @@ function RecipeConversion() {
   };
 
   useEffect(() => {
-    const newValue = convertRecipe(ingredientListText, recipeText, globalIngredientManager);
+    const newValue = convertRecipe(ingredientListText, recipeText, ingredientManager);
     setOutputText(newValue);
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientListText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));

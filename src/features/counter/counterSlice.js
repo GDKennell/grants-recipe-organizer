@@ -1,5 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {allHardCodedIngredients} from '../../RecipeConversion/DataStructures/hardCodedIngredients';
+import {IngredientManager} from '../../RecipeConversion/DataStructures/ingredient';
+
+
+function isPreExistingIngredient(ingredient, existingList) {
+  const ingredientManager = new IngredientManager(existingList);
+  for (const name of ingredient.names) {
+    if (ingredientManager.isIngredientName(name)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export const counterSlice = createSlice({
   name: 'counter',
@@ -26,7 +38,11 @@ export const counterSlice = createSlice({
       state.ingredientList = action.payload.newIngredientList;
     },
     addNewIngredients: (state, action) => {
-      state.ingredientList.push(...action.payload.newIngredients);
+      for (const newIngredient of action.payload.newIngredients) {
+        if (!isPreExistingIngredient(newIngredient, state.ingredientList)) {
+          state.ingredientList.push(newIngredient);
+        }
+      }
     },
   },
 });

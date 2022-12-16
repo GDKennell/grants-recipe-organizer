@@ -3,17 +3,11 @@ import {
 } from './convertRecipe';
 import {expect, test} from '@jest/globals';
 import {parseIngredientListLine} from './RecipeParsing/ingredientParsing';
-import {parseIngredientListLineWrapper, parseRecipe} from './RecipeParsing/recipeParsing';
-import {globalIngredientManager, IngredientManager, objectTest} from './DataStructures/ingredient';
+import {parseRecipe} from './RecipeParsing/recipeParsing';
+import {IngredientManager} from './DataStructures/ingredient';
+import {allHardCodedIngredients} from './DataStructures/hardCodedIngredients';
 
-
-test('object test', () => {
-  expect(globalIngredientManager == undefined).toBeFalsy();
-  expect(globalIngredientManager.isIngredientWord('butter')).toEqual(true);
-});
-
-const ingredientManager = globalIngredientManager;
-const measuredIngredients = null;
+const ingredientManager = new IngredientManager(allHardCodedIngredients);
 
 test('converts values to cups', () => {
   const testCases = [
