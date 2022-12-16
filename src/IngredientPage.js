@@ -2,13 +2,14 @@ import './App.css'; import React from 'react';
 // Import the functions you need from the SDKs you need
 import Table from './Table';
 import IngredientInputForm from './IngredientInputForm';
-import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
+import {useSelector} from 'react-redux';
 
 
 function IngredientPage() {
-  console.log(`Got ${globalIngredientManager.getAllIngredients().length} ingredients`);
-
-  const ingredients = globalIngredientManager.getAllIngredients().sort( (left, right) => {
+  const allIngredients = useSelector((state) => state.counter.ingredientList);
+  console.log(`Got ${allIngredients.length} ingredients`);
+  const localIngredients = [...allIngredients];
+  localIngredients.sort( (left, right) => {
     const l = left.names[0].toLocaleLowerCase();
     const r = right.names[0].toLocaleLowerCase();
     return l.localeCompare(r);
@@ -19,7 +20,7 @@ function IngredientPage() {
       <h1>IngredientPage Page</h1>
       <IngredientInputForm startText={undefined} />
       <br/>
-      <Table data={ingredients} />
+      <Table data={localIngredients} />
     </div>
   );
 };

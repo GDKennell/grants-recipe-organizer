@@ -1,9 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {allHardCodedIngredients} from '../../RecipeConversion/DataStructures/hardCodedIngredients';
 
 export const counterSlice = createSlice({
   name: 'counter',
   initialState: {
     value: 0,
+    ingredientList: allHardCodedIngredients,
   },
   reducers: {
     increment: (state) => {
