@@ -15,7 +15,7 @@ let globalCredential = null;
 let globalToken = null;
 
 export const globalFirebaseManager = {
-  initialize: function() {
+  initialize: function(dispatch) {
     if (firebaseInitialized) {
       return;
     }
@@ -41,7 +41,7 @@ export const globalFirebaseManager = {
     console.log(globalAnalytics != null);
 
     // writeToDb(db);
-    globalIngredientManager.fetchIngredientsFromDb(globalDb);
+    globalIngredientManager.fetchIngredientsFromDb(globalDb, dispatch);
 
     const auth = getAuth();
     auth.onAuthStateChanged(function(user) {

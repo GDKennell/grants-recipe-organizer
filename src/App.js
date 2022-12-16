@@ -2,6 +2,7 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import './App.css';
 import {globalFirebaseManager} from './FirebaseManager';
+import useIngredientsStore from './hooks/useIngredientsStore';
 import IngredientPage from './IngredientPage';
 import LoginPage from './LoginPage';
 import RecipeConversion from './RecipeConversion';
@@ -39,8 +40,9 @@ const nameforPageType = (pageType) => {
 
 function App() {
   const [showingPage, setShowingPage] = useState(PageType.RECIPE_CONVERSION);
+  const {dispatch} = useIngredientsStore();
   useEffect(() => {
-    globalFirebaseManager.initialize();
+    globalFirebaseManager.initialize(dispatch);
   }, []);
 
   return (

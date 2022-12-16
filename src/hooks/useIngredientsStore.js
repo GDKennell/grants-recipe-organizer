@@ -1,10 +1,11 @@
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 
 const useIngredientsStore = () => {
   const allIngredients = useSelector((state) => state.counter.ingredientList);
+  const dispatch = useDispatch();
 
-  return allIngredients;
+  return {allIngredients, dispatch};
 };
 
 export default useIngredientsStore;

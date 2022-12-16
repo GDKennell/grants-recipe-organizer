@@ -1,7 +1,7 @@
 import {collection, addDoc, getDocs, deleteDoc, doc} from 'firebase/firestore';
 import {globalFirebaseManager} from '../../FirebaseManager';
 import {allHardCodedIngredients} from './hardCodedIngredients';
-
+import {replaceIngredientList} from '../../features/counter/counterSlice';
 
 export function Ingredient(names, gramsPerCup) {
   this.names = names;
@@ -9,8 +9,16 @@ export function Ingredient(names, gramsPerCup) {
   this.key = names.join(',') + gramsPerCup;
 }
 
+export function makeIngredientObject(names, gramsPerCup) {
+  return {
+    names: names,
+    gramsPerCup: gramsPerCup,
+    key: names.join(',') + gramsPerCup,
+  };
+}
+
 function ingredientFromDoc(doc) {
-  return new Ingredient(doc.data().names, doc.data().gramsPerCup);
+  return makeIngredientObject(doc.data().names, doc.data().gramsPerCup);
 }
 
 
@@ -61,7 +69,7 @@ export async function writeToDb(db) {
   }
 }
 
-let ingredients = allHardCodedIngredients;
+const ingredients = allHardCodedIngredients;
 let allIngredientNameStrings;
 let allIngredientWords;
 let nameToIngredient = {};
@@ -130,7 +138,7 @@ export const globalIngredientManager = {
     return nameToIngredient[ingredientName];
   },
 
-  fetchIngredientsFromDb: async function(db) {
+  fetchIngredientsFromDb: async function(db, dispatch) {
     if (dbFetched) {
       return;
     }
@@ -153,8 +161,7 @@ export const globalIngredientManager = {
       });
       if (localIngredients.length > 0 ) {
         console.log(`Successfully fetched : ${localIngredients.length} ingredients`);
-
-        ingredients = localIngredients;
+        dispatch(replaceIngredientList({newIngredientList: localIngredients}));
       }
     } catch (e) {
       console.error('Error fetching documents: ', e);
@@ -182,11 +189,12 @@ export const globalIngredientManager = {
   fetchUserScopedIngredients: async function(db, userId) {
     const querySnapshot = await getDocs(collection(db, 'users', userId, 'PrivateIngredients' ));
     let numNew = 0;
+    const localIngredients = [];
     try {
       querySnapshot.forEach((doc) => {
         if (isValidIngredientDoc(doc) && !isDocPreExistingIngredient(doc)) {
           const newIngredient = ingredientFromDoc(doc);
-          ingredients.push(newIngredient);
+          localIngredients.push(newIngredient);
           console.log(`\tAdded new private ingredient: ${JSON.stringify(newIngredient)}`);
           numNew++;
         } else {
@@ -194,6 +202,7 @@ export const globalIngredientManager = {
           console.log(`Bad ingredient with : ${doc.id} info: ${JSON.stringify(doc.data())} `);
         }
       });
+      console.log(`TODO: append new ${localIngredients} to store`);
       updateIngredientsMetadata();
 
       console.log(`Added ${numNew} new ingredients from private collection`);

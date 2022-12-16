@@ -1,70 +1,70 @@
-import {Ingredient} from './ingredient';
+import {makeIngredientObject} from './ingredient';
 
-const butter = new Ingredient(
+const butter = makeIngredientObject(
     ['butter', 'unsalted butter', 'salted butter', 'melted butter'],
     227.0,
 );
 
-const Flour = new Ingredient(
+const Flour = makeIngredientObject(
     ['Flour', 'All purpose flour', 'all-purpose flour'],
     125.0,
 );
-const Parmesan_cheese = new Ingredient(['Parmesan cheese'], 100.0);
-const Honey = new Ingredient(['Honey'], 337.6);
-const Sugar = new Ingredient(['Sugar', 'Granulated sugar'], 198.0);
-const Dried_Basil = new Ingredient(['Dried Basil', 'basil'], 72.0);
-const Brown_sugar = new Ingredient(['Brown sugar'], 192.0);
-const Evaporated_milk = new Ingredient(['Evaporated milk'], 252.0);
-const Yeast = new Ingredient(['Yeast', 'active dry yeast'], 192.0);
-const Water = new Ingredient(['Water'], 236.6);
-const Poppy_seeds = new Ingredient(['Poppy seeds'], 140.8);
-const Sesame_seeds = new Ingredient(['Sesame seeds'], 245.0);
-const Salt = new Ingredient(['Salt', 'Sea Salt', 'seasalt'], 288.0);
-const Yogurt = new Ingredient(['Yogurt'], 245.0);
-const Olive_oil = new Ingredient(
+const Parmesan_cheese = makeIngredientObject(['Parmesan cheese'], 100.0);
+const Honey = makeIngredientObject(['Honey'], 337.6);
+const Sugar = makeIngredientObject(['Sugar', 'Granulated sugar'], 198.0);
+const Dried_Basil = makeIngredientObject(['Dried Basil', 'basil'], 72.0);
+const Brown_sugar = makeIngredientObject(['Brown sugar'], 192.0);
+const Evaporated_milk = makeIngredientObject(['Evaporated milk'], 252.0);
+const Yeast = makeIngredientObject(['Yeast', 'active dry yeast'], 192.0);
+const Water = makeIngredientObject(['Water'], 236.6);
+const Poppy_seeds = makeIngredientObject(['Poppy seeds'], 140.8);
+const Sesame_seeds = makeIngredientObject(['Sesame seeds'], 245.0);
+const Salt = makeIngredientObject(['Salt', 'Sea Salt', 'seasalt'], 288.0);
+const Yogurt = makeIngredientObject(['Yogurt'], 245.0);
+const Olive_oil = makeIngredientObject(
     ['Olive oil', 'oil', 'canola oil', 'vegetable oil', 'peanut oil'],
     216.0,
 );
-const Five_Spice_mix = new Ingredient(
+const Five_Spice_mix = makeIngredientObject(
     ['5 Spice mix', 'Five Spice Mix', 'Five Spice'],
     120.0,
 );
-const Soy_Sauce = new Ingredient(['Soy Sauce'], 248.0);
-const Shaoxing_Wine = new Ingredient(['Shaoxing Wine'], 236.0);
-const Garlic_powder = new Ingredient(['Garlic powder'], 155.2);
-const Black_pepper = new Ingredient(['Black pepper'], 110.0);
-const Baking_powder = new Ingredient(['Baking powder'], 220.8);
-const Baking_soda = new Ingredient(['Baking soda'], 220.8);
-const Thyme = new Ingredient(['Thyme'], 68.8);
-const Milk = new Ingredient(['Milk'], 244.0); // 2%
-const Heavy_cream = new Ingredient(['Heavy cream', 'cream'], 238.0);
-const Monterey_Jack_cheese = new Ingredient(['Monterey Jack cheese'], 112.0);
-const Cottage_cheese = new Ingredient(['Cottage cheese'], 226.0);
-const Cajun_seasoning = new Ingredient(['Cajun seasoning'], 172.0);
-const Oregano = new Ingredient(['Oregano'], 86.4);
-const Cornstarch = new Ingredient(['Cornstarch'], 128.0);
-const Walnuts = new Ingredient(['Walnuts'], 120.0);
-const Cinnamon = new Ingredient(['Cinnamon'], 124.8);
-const Ginger = new Ingredient(['Ginger'], 83.2);
-const Nutmeg = new Ingredient(['Nutmeg'], 112.0);
-const Cumin = new Ingredient(
+const Soy_Sauce = makeIngredientObject(['Soy Sauce'], 248.0);
+const Shaoxing_Wine = makeIngredientObject(['Shaoxing Wine'], 236.0);
+const Garlic_powder = makeIngredientObject(['Garlic powder'], 155.2);
+const Black_pepper = makeIngredientObject(['Black pepper'], 110.0);
+const Baking_powder = makeIngredientObject(['Baking powder'], 220.8);
+const Baking_soda = makeIngredientObject(['Baking soda'], 220.8);
+const Thyme = makeIngredientObject(['Thyme'], 68.8);
+const Milk = makeIngredientObject(['Milk'], 244.0); // 2%
+const Heavy_cream = makeIngredientObject(['Heavy cream', 'cream'], 238.0);
+const Monterey_Jack_cheese = makeIngredientObject(['Monterey Jack cheese'], 112.0);
+const Cottage_cheese = makeIngredientObject(['Cottage cheese'], 226.0);
+const Cajun_seasoning = makeIngredientObject(['Cajun seasoning'], 172.0);
+const Oregano = makeIngredientObject(['Oregano'], 86.4);
+const Cornstarch = makeIngredientObject(['Cornstarch'], 128.0);
+const Walnuts = makeIngredientObject(['Walnuts'], 120.0);
+const Cinnamon = makeIngredientObject(['Cinnamon'], 124.8);
+const Ginger = makeIngredientObject(['Ginger'], 83.2);
+const Nutmeg = makeIngredientObject(['Nutmeg'], 112.0);
+const Cumin = makeIngredientObject(
     ['cumin', 'ground cumin', 'ground cumin seed'],
     96,
 );
-const Cloves = new Ingredient(['Cloves'], 104.0); // ground
-const Onion_salt = new Ingredient(['Onion salt'], 225.6);
-const Paprika = new Ingredient(['Paprika'], 108.8);
-const Chili_powder = new Ingredient(['Chili powder'], 128.0);
-const Vanilla_Extract = new Ingredient(['Vanilla Extract'], 208.0);
-const Vinegar = new Ingredient(['Vinegar', 'white vinegar'], 238.0); // Distilled white
-const Vodka = new Ingredient(
+const Cloves = makeIngredientObject(['Cloves'], 104.0); // ground
+const Onion_salt = makeIngredientObject(['Onion salt'], 225.6);
+const Paprika = makeIngredientObject(['Paprika'], 108.8);
+const Chili_powder = makeIngredientObject(['Chili powder'], 128.0);
+const Vanilla_Extract = makeIngredientObject(['Vanilla Extract'], 208.0);
+const Vinegar = makeIngredientObject(['Vinegar', 'white vinegar'], 238.0); // Distilled white
+const Vodka = makeIngredientObject(
     ['Vodka', 'rum', 'whiskey', 'gin', 'tequila'],
     224.0,
 );
-const Shortening = new Ingredient(['Shortening'], 205.0);
-const Beer = new Ingredient(['Beer'], 236.0);
-const Cream_Of_Tartar = new Ingredient(['Cream of tartar'], 144.0);
-const Mochiko_Flour = new Ingredient(
+const Shortening = makeIngredientObject(['Shortening'], 205.0);
+const Beer = makeIngredientObject(['Beer'], 236.0);
+const Cream_Of_Tartar = makeIngredientObject(['Cream of tartar'], 144.0);
+const Mochiko_Flour = makeIngredientObject(
     ['Mochiko', 'Mochiko Flour', 'sweet rice flour', 'glutinous rice flour'],
     144.0,
 );
@@ -150,7 +150,7 @@ export function parseShortIngredient(shortIngredient) {
   const gramsPerCupString = words[words.length - 1];
   const gramsPerCupStringStart = shortIngredient.indexOf(gramsPerCupString);
   const nameString = shortIngredient.substring(0, gramsPerCupStringStart - 1);
-  return new Ingredient(
+  return makeIngredientObject(
       [nameString, nameString + 's'],
       parseFloat(gramsPerCupString),
   );

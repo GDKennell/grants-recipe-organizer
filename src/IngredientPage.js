@@ -6,7 +6,7 @@ import useIngredientsStore from './hooks/useIngredientsStore';
 
 
 function IngredientPage() {
-  const allIngredients = useIngredientsStore();
+  const {allIngredients} = useIngredientsStore();
 
   console.log(`Got ${allIngredients.length} ingredients`);
   const localIngredients = [...allIngredients];
