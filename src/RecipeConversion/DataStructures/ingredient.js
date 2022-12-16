@@ -1,4 +1,5 @@
 import {collection, addDoc, getDocs, deleteDoc, doc} from 'firebase/firestore';
+import {globalFirebaseManager} from '../../FirebaseManager';
 import {allHardCodedIngredients} from './hardCodedIngredients';
 
 
@@ -160,6 +161,22 @@ export const globalIngredientManager = {
     }
 
     updateIngredientsMetadata();
+  },
+
+  addNewIngredient: async function( names, gramsPerCup) {
+    const db = globalFirebaseManager.getDb();
+    const userId = globalFirebaseManager.getUser().uid;
+    try {
+      await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {
+        names: names,
+        gramsPerCup: gramsPerCup,
+      });
+      console.log(`success adding document : ${names} ${gramsPerCup}`);
+      ingredients.push(new Ingredient(names, gramsPerCup));
+      updateIngredientsMetadata();
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
   },
 
   fetchUserScopedIngredients: async function(db, userId) {

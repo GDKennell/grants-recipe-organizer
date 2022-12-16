@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {collection, addDoc} from 'firebase/firestore';
 import {globalFirebaseManager} from './FirebaseManager';
 import {isValidNumberString, removeAllWhitespace} from './RecipeConversion/utilities/stringHelpers';
 import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
@@ -46,20 +45,10 @@ export default function IngredientInputForm({startText}) {
   }, [gramsPerCupText, ingredientText]);
 
   const handleSubmit = async () => {
-    const db = globalFirebaseManager.getDb();
     console.log(`Submitting ${ingredientText} ${gramsPerCupText}`);
     const names = ingredientText.split(',');
     const gramsPerCup = parseFloat(gramsPerCupText);
-    const userId = globalFirebaseManager.getUser().uid;
-    try {
-      await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {
-        names: names,
-        gramsPerCup: gramsPerCup,
-      });
-      console.log(`success adding document : ${names} ${gramsPerCup}`);
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
+    globalIngredientManager.addNewIngredient(names, gramsPerCup );
   };
   return (
     <div>
