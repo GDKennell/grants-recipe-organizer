@@ -153,7 +153,7 @@ export async function addNewIngredient( names, gramsPerCup, dispatch) {
 
 export class IngredientManager {
   constructor(ingredientList) {
-    this.ingredientList = ingredientList;
+    this.ingredientList = ingredientList || [];
 
     this.allIngredientNameStrings = this.ingredientList
         .flatMap((m) => m.names)
