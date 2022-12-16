@@ -25,10 +25,18 @@ export const counterSlice = createSlice({
     replaceIngredientList: (state, action) => {
       state.ingredientList = action.payload.newIngredientList;
     },
+    addNewIngredients: (state, action) => {
+      state.ingredientList.push(...action.payload.newIngredients);
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {increment, decrement, incrementByAmount, replaceIngredientList} = counterSlice.actions;
+export const {
+  increment,
+  decrement,
+  incrementByAmount,
+  replaceIngredientList,
+  addNewIngredients} = counterSlice.actions;
 
 export default counterSlice.reducer;

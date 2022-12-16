@@ -3,18 +3,19 @@ import React, {useState, useEffect} from 'react';
 // import firebase from 'firebase/compat/app';
 // import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 
 import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
 import {globalFirebaseManager} from './FirebaseManager';
 import {decrement, incrementByAmount} from './features/counter/counterSlice';
+import useIngredientsStore from './hooks/useIngredientsStore';
 
 
 export default function LoginPage() {
   const count = useSelector((state) => state.counter.value);
-  const dispatch = useDispatch();
 
+  const {dispatch} = useIngredientsStore();
 
   const [loginMessage, setLoginMessage] = useState('Not Signed In');
   const [isUserSignedIn, setIsUserSignedIn] = useState(globalFirebaseManager.getUser != null);
@@ -25,6 +26,7 @@ export default function LoginPage() {
     setIsUserSignedIn(isSignedIn);
     if (isSignedIn) {
       setLoginMessage(`Welcome ${user.displayName}!\nYour root uid is: ${user.uid}\nYour provider uid is ${user.providerData[0].uid}`);
+      globalFirebaseManager.userSignedIn(user, null, null, dispatch);
     } else {
       setLoginMessage('Not Signed In');
     }
@@ -44,7 +46,7 @@ export default function LoginPage() {
           // The signed-in user info.
           const user = result.user;
           console.log(`Login succes. Got credential : ${credential}  token : ${token}  user : ${JSON.stringify(user)} `);
-          globalFirebaseManager.userSignedIn(user, credential, token);
+          globalFirebaseManager.userSignedIn(user, credential, token, dispatch);
           updateUserState();
           // ...
         }).catch((error) => {

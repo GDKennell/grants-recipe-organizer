@@ -46,18 +46,18 @@ export const globalFirebaseManager = {
     const auth = getAuth();
     auth.onAuthStateChanged(function(user) {
       if (user) {
-        globalFirebaseManager.userSignedIn(user, null, null);
+        globalFirebaseManager.userSignedIn(user, null, null, dispatch);
       }
     });
   },
   getDb: function() {
     return globalDb;
   },
-  userSignedIn: function(user, credential, token) {
+  userSignedIn: function(user, credential, token, dispatch) {
     globalUser = user;
     globalCredential = credential;
     globalToken = token;
-    globalIngredientManager.fetchUserScopedIngredients(globalDb, globalUser.uid);
+    globalIngredientManager.fetchUserScopedIngredients(globalDb, globalUser.uid, dispatch);
   },
   userSignedOut: function() {
     globalUser = null;

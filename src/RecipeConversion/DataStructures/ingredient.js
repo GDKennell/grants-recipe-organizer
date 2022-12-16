@@ -1,7 +1,7 @@
 import {collection, addDoc, getDocs, deleteDoc, doc} from 'firebase/firestore';
 import {globalFirebaseManager} from '../../FirebaseManager';
 import {allHardCodedIngredients} from './hardCodedIngredients';
-import {replaceIngredientList} from '../../features/counter/counterSlice';
+import {addNewIngredients, replaceIngredientList} from '../../features/counter/counterSlice';
 
 export function Ingredient(names, gramsPerCup) {
   this.names = names;
@@ -186,7 +186,7 @@ export const globalIngredientManager = {
     }
   },
 
-  fetchUserScopedIngredients: async function(db, userId) {
+  fetchUserScopedIngredients: async function(db, userId, dispatch) {
     const querySnapshot = await getDocs(collection(db, 'users', userId, 'PrivateIngredients' ));
     let numNew = 0;
     const localIngredients = [];
@@ -202,7 +202,7 @@ export const globalIngredientManager = {
           console.log(`Bad ingredient with : ${doc.id} info: ${JSON.stringify(doc.data())} `);
         }
       });
-      console.log(`TODO: append new ${localIngredients} to store`);
+      dispatch(addNewIngredients({newIngredients: localIngredients}));
       updateIngredientsMetadata();
 
       console.log(`Added ${numNew} new ingredients from private collection`);
