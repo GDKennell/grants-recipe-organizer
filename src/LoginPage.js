@@ -8,7 +8,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
 import {globalFirebaseManager} from './FirebaseManager';
-import {decrement, increment} from './features/counter/counterSlice';
+import {decrement, incrementByAmount} from './features/counter/counterSlice';
 
 
 export default function LoginPage() {
@@ -77,7 +77,7 @@ export default function LoginPage() {
 
         <button
           aria-label="Increment value"
-          onClick={() => dispatch(increment())}
+          onClick={() => dispatch(incrementByAmount({amountNumber: 5}))}
         >
           Increment
         </button>
