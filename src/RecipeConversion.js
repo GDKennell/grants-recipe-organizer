@@ -24,14 +24,10 @@ function RecipeConversion() {
   const [unknownIngredients, setUnknownIngredients] = useState([]);
 
   const [ingredientListNumRows, setIngredientListNumRows] = useState(minRows);
-  const ingredientTextAreaChange = (event) => {
-    const textInput = event.target.value;
-    setIngredientListText(textInput);
-    const numLines = textInput.split('\n').length;
-    setIngredientListNumRows(Math.max(minRows, numLines));
 
+  const updateUnknownIngredients = () => {
     const localUnknownIngredients = [];
-    const lines = textInput.split('\n');
+    const lines = ingredientListText.split('\n');
     for (const origString of lines) {
       const [, ingredientString, realIngredient] = parseIngredientListLine(origString, globalIngredientManager);
       if (realIngredient == null && removeAllWhitespace(ingredientString).length > 0) {
@@ -39,6 +35,12 @@ function RecipeConversion() {
       }
     }
     setUnknownIngredients(localUnknownIngredients);
+  };
+
+
+  const ingredientTextAreaChange = (event) => {
+    const textInput = event.target.value;
+    setIngredientListText(textInput);
   };
 
   const [recipeNumRows, setRecipeNumRows] = useState(minRows);
@@ -54,7 +56,14 @@ function RecipeConversion() {
     setOutputText(newValue);
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientListText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
+    updateUnknownIngredients();
+    const numLines = ingredientListText.split('\n').length;
+    setIngredientListNumRows(Math.max(minRows, numLines));
   }, [ingredientListText, recipeText]);
+
+  useEffect(() => {
+    updateUnknownIngredients();
+  }, []);
 
   return (
     <div className="App">
