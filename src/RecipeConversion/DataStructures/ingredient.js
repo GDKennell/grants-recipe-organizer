@@ -76,7 +76,9 @@ function updateIngredientsMetadata() {
   );
 
   nameToIngredient = {};
-  for (const ingredient of allHardCodedIngredients) {
+
+
+  for (const ingredient of ingredients) {
     for (const name of ingredient.names) {
       nameToIngredient[name.toLocaleLowerCase()] = ingredient;
     }
