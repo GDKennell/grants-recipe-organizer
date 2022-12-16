@@ -6,7 +6,7 @@ import {convertRecipe} from './RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
 import {IngredientManager} from './RecipeConversion/DataStructures/ingredient';
 import {parseIngredientListLine} from './RecipeConversion/RecipeParsing/ingredientParsing';
-import {removeAllWhitespace} from './RecipeConversion/utilities/stringHelpers';
+import {removeAllWhitespace, removeExtraNewLines} from './RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from './UnkownIngredientsSection';
 // import {writeToDb} from './RecipeConversion/DataStructures/ingredient';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -42,7 +42,7 @@ function RecipeConversion() {
 
 
   const ingredientTextAreaChange = (event) => {
-    const textInput = event.target.value;
+    const textInput = removeExtraNewLines(event.target.value);
     setIngredientListText(textInput);
   };
 
@@ -62,7 +62,7 @@ function RecipeConversion() {
     updateUnknownIngredients();
     const numLines = ingredientListText.split('\n').length;
     setIngredientListNumRows(Math.max(minRows, numLines));
-  }, [ingredientListText, recipeText]);
+  }, [ingredientListText, recipeText, ingredientManager]);
 
   useEffect(() => {
     updateUnknownIngredients();

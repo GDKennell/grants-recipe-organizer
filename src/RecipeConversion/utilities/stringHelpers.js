@@ -15,6 +15,10 @@ function hasSuffix(string, suffix) {
   return string.indexOf(suffix) == string.length - suffix.length;
 }
 
+export function removeExtraNewLines(string) {
+  return string.replaceAll('\n\n', '\n');
+}
+
 export function roundDecimalNumber(number) {
   const result = number.toFixed(1);
   if (hasSuffix(result, '.0')) {
