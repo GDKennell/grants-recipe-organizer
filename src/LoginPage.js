@@ -3,18 +3,14 @@ import React, {useState, useEffect} from 'react';
 // import firebase from 'firebase/compat/app';
 // import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
-import {useSelector} from 'react-redux';
 
 
 import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
 import {globalFirebaseManager} from './FirebaseManager';
-import {decrement, incrementByAmount} from './features/counter/counterSlice';
 import useIngredientsStore from './hooks/useIngredientsStore';
 
 
 export default function LoginPage() {
-  const count = useSelector((state) => state.counter.value);
-
   const {dispatch} = useIngredientsStore();
 
   const [loginMessage, setLoginMessage] = useState('Not Signed In');
@@ -25,7 +21,7 @@ export default function LoginPage() {
     const isSignedIn = (user != null);
     setIsUserSignedIn(isSignedIn);
     if (isSignedIn) {
-      setLoginMessage(`Welcome ${user.displayName}!\nYour root uid is: ${user.uid}\nYour provider uid is ${user.providerData[0].uid}`);
+      setLoginMessage(`Welcome ${user.displayName}!`);
       globalFirebaseManager.userSignedIn(user, null, null, dispatch);
     } else {
       setLoginMessage('Not Signed In');
@@ -71,27 +67,11 @@ export default function LoginPage() {
     });
   };
   return (
-    <div>LoginPage
+    <div>
+      <h1>Login</h1>
       {!isUserSignedIn && <button onClick={signIn}> Sign In</button>}
       {isUserSignedIn && <button onClick={signOut}> Sign Out</button>}
       <div> {loginMessage} </div>
-      <div>
-
-        <button
-          aria-label="Increment value"
-          onClick={() => dispatch(incrementByAmount({otherThing: 2, amountNumber: 5}))}
-        >
-          Increment
-        </button>
-        <span>{count}</span>
-        <button
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          Decrement
-        </button>
-
-      </div>
     </div>
   );
 }

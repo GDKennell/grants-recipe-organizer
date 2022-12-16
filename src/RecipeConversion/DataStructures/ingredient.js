@@ -1,7 +1,7 @@
 import {collection, addDoc, getDocs, deleteDoc, doc} from 'firebase/firestore';
 import {globalFirebaseManager} from '../../FirebaseManager';
 import {allHardCodedIngredients} from './hardCodedIngredients';
-import {addNewIngredients, replaceIngredientList} from '../../features/counter/counterSlice';
+import {addNewIngredients, replaceIngredientList} from '../../features/ingredientStore/ingredientStoreSlice';
 
 export function Ingredient(names, gramsPerCup) {
   this.names = names;
@@ -135,7 +135,7 @@ export async function fetchUserScopedIngredients(db, userId, dispatch) {
 }
 
 
-export async function addNewIngredient( names, gramsPerCup, dispatch) {
+export async function addNewIngredient( names, gramsPerCup, dispatch, completion) {
   const db = globalFirebaseManager.getDb();
   const userId = globalFirebaseManager.getUser().uid;
   try {
@@ -146,6 +146,7 @@ export async function addNewIngredient( names, gramsPerCup, dispatch) {
     console.log(`success adding document : ${names} ${gramsPerCup}`);
     const newIngredients = [makeIngredientObject(names, gramsPerCup)];
     dispatch(addNewIngredients({newIngredients: newIngredients}));
+    completion();
   } catch (e) {
     console.error('Error adding document: ', e);
   }

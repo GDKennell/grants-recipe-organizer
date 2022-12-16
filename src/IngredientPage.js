@@ -18,7 +18,7 @@ function IngredientPage() {
 
   return (
     <div>
-      <h1>IngredientPage Page</h1>
+      <h1>Ingredients Database</h1>
       <IngredientInputForm startText={undefined} />
       <br/>
       <Table data={localIngredients} />

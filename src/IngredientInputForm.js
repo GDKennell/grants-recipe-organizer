@@ -51,7 +51,10 @@ export default function IngredientInputForm({startText}) {
     console.log(`Submitting ${ingredientText} ${gramsPerCupText}`);
     const names = ingredientText.split(',');
     const gramsPerCup = parseFloat(gramsPerCupText);
-    addNewIngredient(names, gramsPerCup, dispatch);
+    addNewIngredient(names, gramsPerCup, dispatch, () => {
+      setIngredientText('');
+      setGramsPerCupText('');
+    });
   };
   return (
     <div>
@@ -61,7 +64,7 @@ export default function IngredientInputForm({startText}) {
         <input type="text" onChange={handleIngredientChange} value={ingredientText}/>
       </label>
       <label>          Grams per Cup:
-        <input type="text" onChange={handleGramsPerCupChange} />
+        <input type="text" onChange={handleGramsPerCupChange} value={gramsPerCupText}/>
       </label>
       <button onClick={handleSubmit} disabled={!fieldsAreValid}> Submit </button>
     </div>

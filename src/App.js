@@ -47,6 +47,7 @@ function App() {
 
   return (
     <div className="App">
+      <br/>
       {pageTypes.map((type) => {
         return <button key={nameforPageType(type)}
           onClick={ () => {
