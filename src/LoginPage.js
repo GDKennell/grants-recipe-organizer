@@ -3,13 +3,19 @@ import React, {useState, useEffect} from 'react';
 // import firebase from 'firebase/compat/app';
 // import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
+import {useSelector, useDispatch} from 'react-redux';
 
 
 import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
 import {globalFirebaseManager} from './FirebaseManager';
+import {decrement, increment} from './features/counter/counterSlice';
 
 
 export default function LoginPage() {
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+
+
   const [loginMessage, setLoginMessage] = useState('Not Signed In');
   const [isUserSignedIn, setIsUserSignedIn] = useState(globalFirebaseManager.getUser != null);
 
@@ -67,6 +73,23 @@ export default function LoginPage() {
       {!isUserSignedIn && <button onClick={signIn}> Sign In</button>}
       {isUserSignedIn && <button onClick={signOut}> Sign Out</button>}
       <div> {loginMessage} </div>
+      <div>
+
+        <button
+          aria-label="Increment value"
+          onClick={() => dispatch(increment())}
+        >
+          Increment
+        </button>
+        <span>{count}</span>
+        <button
+          aria-label="Decrement value"
+          onClick={() => dispatch(decrement())}
+        >
+          Decrement
+        </button>
+
+      </div>
     </div>
   );
 }
