@@ -16,9 +16,8 @@ const ingredientKey = 'ingKey';
 const recipeKey = 'recKey';
 
 function RecipeConversion() {
-  const {ingredientList} = useIngredientsStore();
-  const ingredientManager = new IngredientManager(ingredientList);
-
+  const {allIngredients} = useIngredientsStore();
+  const ingredientManager = new IngredientManager(allIngredients);
   const [outputText, setOutputText] = useState('');
 
   const minRows = 5;
