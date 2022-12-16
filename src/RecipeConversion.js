@@ -11,13 +11,15 @@ import UnkownIngredientsSection from './UnkownIngredientsSection';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+const ingredientKey = 'ingKey';
+const recipeKey = 'recKey';
 
 function RecipeConversion() {
   const [outputText, setOutputText] = useState('');
 
   const minRows = 5;
-  const [ingredientListText, setIngredientListText] = useState('');
-  const [recipeText, setRecipeText] = useState('');
+  const [ingredientListText, setIngredientListText] = useState(JSON.parse(localStorage.getItem(ingredientKey)) || '');
+  const [recipeText, setRecipeText] = useState(JSON.parse(localStorage.getItem(recipeKey)) || '');
 
   const [unknownIngredients, setUnknownIngredients] = useState([]);
 
@@ -50,6 +52,8 @@ function RecipeConversion() {
   useEffect(() => {
     const newValue = convertRecipe(ingredientListText, recipeText, globalIngredientManager);
     setOutputText(newValue);
+    localStorage.setItem(ingredientKey, JSON.stringify(ingredientListText));
+    localStorage.setItem(recipeKey, JSON.stringify(recipeText));
   }, [ingredientListText, recipeText]);
 
   return (
@@ -62,6 +66,7 @@ function RecipeConversion() {
           className="ingredient-list input-field"
           rows={ingredientListNumRows}
           onChange={ingredientTextAreaChange}
+          value={ingredientListText}
         ></textarea>
         <UnkownIngredientsSection unknownIngredients={unknownIngredients}/>
         <div className="instructions">Preparation Steps</div>
@@ -70,6 +75,7 @@ function RecipeConversion() {
           className="main-recipe input-field"
           onChange={recipeTextAreaChange}
           rows={recipeNumRows}
+          value={recipeText}
         ></textarea>
         <h3 className="instructions"> Converted Recipe:</h3>
 
