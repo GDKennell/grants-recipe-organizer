@@ -132,7 +132,7 @@ export async function fetchUserScopedIngredients(db, userId, dispatch) {
   } catch (e) {
     console.error('Error fetching private documents: ', e);
   }
-},
+}
 
 
 export async function addNewIngredient( names, gramsPerCup, dispatch) {
