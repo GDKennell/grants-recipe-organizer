@@ -2,11 +2,12 @@ import './App.css'; import React from 'react';
 // Import the functions you need from the SDKs you need
 import Table from './Table';
 import IngredientInputForm from './IngredientInputForm';
-import {useSelector} from 'react-redux';
+import useIngredientsStore from './hooks/useIngredientsStore';
 
 
 function IngredientPage() {
-  const allIngredients = useSelector((state) => state.counter.ingredientList);
+  const allIngredients = useIngredientsStore();
+
   console.log(`Got ${allIngredients.length} ingredients`);
   const localIngredients = [...allIngredients];
   localIngredients.sort( (left, right) => {
