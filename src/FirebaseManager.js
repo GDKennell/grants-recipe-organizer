@@ -3,6 +3,7 @@ import {getFirestore} from 'firebase/firestore';
 
 import {getAnalytics} from 'firebase/analytics';
 import {globalIngredientManager} from './RecipeConversion/DataStructures/ingredient';
+import {getAuth} from 'firebase/auth';
 
 let firebaseInitialized = false;
 let globalDb = null;
@@ -41,6 +42,13 @@ export const globalFirebaseManager = {
 
     // writeToDb(db);
     globalIngredientManager.fetchIngredientsFromDb(globalDb);
+
+    const auth = getAuth();
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        globalFirebaseManager.userSignedIn(user, null, null);
+      }
+    });
   },
   getDb: function() {
     return globalDb;

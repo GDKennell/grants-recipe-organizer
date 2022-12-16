@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 // import firebase from 'firebase/compat/app';
 // import * as firebaseui from 'firebaseui';
@@ -11,7 +11,7 @@ import {globalFirebaseManager} from './FirebaseManager';
 
 export default function LoginPage() {
   const [loginMessage, setLoginMessage] = useState('Not Signed In');
-  const [isUserSignedIn, setIsUserSignedIn] = useState(false);// useState(globalFirebaseManager.getUser != null);
+  const [isUserSignedIn, setIsUserSignedIn] = useState(globalFirebaseManager.getUser != null);
 
   const updateUserState = () => {
     const user = globalFirebaseManager.getUser();
@@ -24,6 +24,9 @@ export default function LoginPage() {
     }
   };
 
+  useEffect(() => {
+    updateUserState();
+  }, []);
   const signIn = () => {
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
