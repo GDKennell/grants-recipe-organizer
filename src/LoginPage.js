@@ -77,7 +77,7 @@ export default function LoginPage() {
 
         <button
           aria-label="Increment value"
-          onClick={() => dispatch(incrementByAmount({amountNumber: 5}))}
+          onClick={() => dispatch(incrementByAmount({otherThing: 2, amountNumber: 5}))}
         >
           Increment
         </button>
