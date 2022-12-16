@@ -51,6 +51,12 @@ export const globalFirebaseManager = {
     globalToken = token;
     globalIngredientManager.fetchUserScopedIngredients(globalDb, globalUser.uid);
   },
+  userSignedOut: function() {
+    globalUser = null;
+    globalCredential = null;
+    globalToken == null;
+  },
+
   getAuthDetails: function() {
     return [globalUser, globalCredential, globalToken];
   },
