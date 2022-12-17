@@ -5,15 +5,18 @@ import {globalFirebaseManager} from './FirebaseManager';
 import useIngredientsStore from './hooks/useIngredientsStore';
 import IngredientPage from './IngredientPage';
 import LoginPage from './LoginPage';
+import MyIngredientsPage from './MyIngredientsPage';
 import RecipeConversion from './RecipeConversion';
 
 const PageType = {
   RECIPE_CONVERSION: 0,
   INGREDIENTS_PAGE: 1,
   LOGIN_PAGE: 2,
+  MY_INGREDIENTS_PAGE: 3,
+
 };
 
-const pageTypes = [PageType.RECIPE_CONVERSION, PageType.INGREDIENTS_PAGE, PageType.LOGIN_PAGE];
+const pageTypes = [PageType.RECIPE_CONVERSION, PageType.INGREDIENTS_PAGE, PageType.MY_INGREDIENTS_PAGE, PageType.LOGIN_PAGE];
 
 function getCurrentComponent(pageType) {
   switch (pageType) {
@@ -23,6 +26,8 @@ function getCurrentComponent(pageType) {
       return <IngredientPage />;
     case PageType.LOGIN_PAGE:
       return <LoginPage/>;
+    case PageType.MY_INGREDIENTS_PAGE:
+      return <MyIngredientsPage/>;
   }
   return <div />;
 }
@@ -32,9 +37,11 @@ const nameforPageType = (pageType) => {
     case PageType.RECIPE_CONVERSION:
       return 'Recipe Conversion';
     case PageType.INGREDIENTS_PAGE:
-      return 'Ingredients';
+      return 'All Ingredients';
     case PageType.LOGIN_PAGE:
       return 'Login';
+    case PageType.MY_INGREDIENTS_PAGE:
+      return 'My Ingredients';
   }
 };
 
