@@ -9,19 +9,13 @@ function IngredientPage() {
   const {allIngredients} = useIngredientsStore();
 
   console.log(`Got ${allIngredients.length} ingredients`);
-  const localIngredients = [...allIngredients];
-  localIngredients.sort( (left, right) => {
-    const l = left.names[0].toLocaleLowerCase();
-    const r = right.names[0].toLocaleLowerCase();
-    return l.localeCompare(r);
-  });
 
   return (
     <div>
       <h1>Ingredients Database</h1>
       <IngredientInputForm startText={undefined} />
       <br/>
-      <Table data={localIngredients} />
+      <Table data={allIngredients} />
     </div>
   );
 };

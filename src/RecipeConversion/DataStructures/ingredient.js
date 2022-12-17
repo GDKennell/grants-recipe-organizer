@@ -9,16 +9,22 @@ export function Ingredient(names, gramsPerCup) {
   this.key = names.join(',') + gramsPerCup;
 }
 
-export function makeIngredientObject(names, gramsPerCup) {
+export function makeIngredientObject(names, gramsPerCup, isGlobal, userId) {
   return {
     names: names,
     gramsPerCup: gramsPerCup,
     key: names.join(',') + gramsPerCup,
+    isGlobal: isGlobal,
+    userId: userId,
   };
 }
 
-function ingredientFromDoc(doc) {
-  return makeIngredientObject(doc.data().names, doc.data().gramsPerCup);
+function ingredientFromDoc(doc, isGlobal, userId) {
+  return makeIngredientObject(
+      doc.data().names,
+      doc.data().gramsPerCup,
+      isGlobal,
+      userId);
 }
 
 
@@ -94,7 +100,7 @@ export async function fetchIngredientsFromDb(db, dispatch) {
     querySnapshot.forEach((doc) => {
       const namesKey = doc.data().names ? doc.data().names.join('---') : null;
       if (!allNames.includes(namesKey) && isValidIngredientDoc(doc)) {
-        localIngredients.push(ingredientFromDoc(doc));
+        localIngredients.push(ingredientFromDoc(doc, /* isGlobal: */ true, /* userId:  */ null));
         allNames.push(namesKey);
       } else {
         // Delete this duplicated ID from the actual DB
@@ -118,7 +124,7 @@ export async function fetchUserScopedIngredients(db, userId, dispatch) {
   try {
     querySnapshot.forEach((doc) => {
       if (isValidIngredientDoc(doc)) {
-        const newIngredient = ingredientFromDoc(doc);
+        const newIngredient = ingredientFromDoc(doc, /* isGlobal: */ false, userId);
         localIngredients.push(newIngredient);
         console.log(`\tAdded new private ingredient: ${JSON.stringify(newIngredient)}`);
         numNew++;
@@ -144,7 +150,7 @@ export async function addNewIngredient( names, gramsPerCup, dispatch, completion
       gramsPerCup: gramsPerCup,
     });
     console.log(`success adding document : ${names} ${gramsPerCup}`);
-    const newIngredients = [makeIngredientObject(names, gramsPerCup)];
+    const newIngredients = [makeIngredientObject(names, gramsPerCup, /* isGlobal: */ false, userId)];
     dispatch(addNewIngredients({newIngredients: newIngredients}));
     completion();
   } catch (e) {
@@ -170,10 +176,27 @@ export class IngredientManager {
         this.nameToIngredient[name.toLocaleLowerCase()] = ingredient;
       }
     }
+    const localIngredients = [...this.ingredientList];
+    localIngredients.sort( (left, right) => {
+      const l = left.names[0].toLocaleLowerCase();
+      const r = right.names[0].toLocaleLowerCase();
+      return l.localeCompare(r);
+    });
+    this.ingredientList = localIngredients;
   }
 
   get getAllIngredients() {
     return this.ingredientList;
+  }
+
+  get getUserScopedIngredients() {
+    const userId = globalFirebaseManager.getUser()?.uid;
+    if (userId == null) {
+      return [];
+    }
+    return this.ingredientList.filter((ingredient) => {
+      !ingredient.isGlobal && ingredient.userId == userId;
+    });
   }
 
   isIngredientWord(str) {
