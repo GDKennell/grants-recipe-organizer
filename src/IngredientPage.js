@@ -6,16 +6,14 @@ import useIngredientsStore from './hooks/useIngredientsStore';
 
 
 function IngredientPage() {
-  const {allIngredients} = useIngredientsStore();
-
-  console.log(`Got ${allIngredients.length} ingredients`);
+  const {ingredientManager} = useIngredientsStore();
 
   return (
     <div>
       <h1>Ingredients Database</h1>
       <IngredientInputForm startText={undefined} />
       <br/>
-      <Table data={allIngredients} />
+      <Table data={ingredientManager.getAllIngredients} />
     </div>
   );
 };

@@ -4,7 +4,6 @@ import './App.css';
 import useIngredientsStore from './hooks/useIngredientsStore';
 import {convertRecipe} from './RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
-import {IngredientManager} from './RecipeConversion/DataStructures/ingredient';
 import {parseIngredientListLine} from './RecipeConversion/RecipeParsing/ingredientParsing';
 import {removeAllWhitespace, removeExtraNewLines} from './RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from './UnkownIngredientsSection';
@@ -16,14 +15,8 @@ const ingredientKey = 'ingKey';
 const recipeKey = 'recKey';
 
 function RecipeConversion() {
-  const {allIngredients} = useIngredientsStore();
-  const [ingredientManager, setIngredientManager] = useState(new IngredientManager(allIngredients));
+  const {ingredientManager} = useIngredientsStore();
   const [outputText, setOutputText] = useState('');
-
-  useEffect(() => {
-    setIngredientManager(new IngredientManager(allIngredients));
-    console.log(`Creating new IngredientManager with ${allIngredients.length} ingredients `);
-  }, [allIngredients]);
 
   const minRows = 5;
   const [ingredientListText, setIngredientListText] = useState(JSON.parse(localStorage.getItem(ingredientKey)) || '');
