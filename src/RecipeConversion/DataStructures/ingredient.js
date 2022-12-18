@@ -190,12 +190,12 @@ export class IngredientManager {
   }
 
   get getUserScopedIngredients() {
-    const userId = globalFirebaseManager.getUser()?.uid;
+    const userId = globalFirebaseManager.getUser().uid;
     if (userId == null) {
       return [];
     }
     return this.ingredientList.filter((ingredient) => {
-      !ingredient.isGlobal && ingredient.userId == userId;
+      return !ingredient.isGlobal && ingredient.userId == userId;
     });
   }
 
