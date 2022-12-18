@@ -5,6 +5,8 @@ import {getAnalytics} from 'firebase/analytics';
 import {fetchIngredientsFromDb, fetchUserScopedIngredients} from './RecipeConversion/DataStructures/ingredient';
 import {getAuth} from 'firebase/auth';
 
+const ADMIN_USER_UID = 'todo - fill this in';
+
 let firebaseInitialized = false;
 let globalDb = null;
 let globalApp = null;
@@ -70,5 +72,8 @@ export const globalFirebaseManager = {
   },
   getUser: function() {
     return globalUser;
+  },
+  isUserAdmin: function() {
+    return globalUser != null && globalUser.uid == ADMIN_USER_UID;
   },
 };

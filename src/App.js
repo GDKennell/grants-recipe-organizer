@@ -1,5 +1,6 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
+import AdminPanel from './AdminPanel';
 import './App.css';
 import {globalFirebaseManager} from './FirebaseManager';
 import useIngredientsStore from './hooks/useIngredientsStore';
@@ -13,10 +14,14 @@ const PageType = {
   INGREDIENTS_PAGE: 1,
   LOGIN_PAGE: 2,
   MY_INGREDIENTS_PAGE: 3,
+  ADMIN_PANEL: 4,
 
 };
 
-const pageTypes = [PageType.RECIPE_CONVERSION, PageType.INGREDIENTS_PAGE, PageType.MY_INGREDIENTS_PAGE, PageType.LOGIN_PAGE];
+const pageTypes = [PageType.RECIPE_CONVERSION,
+  PageType.INGREDIENTS_PAGE,
+  PageType.MY_INGREDIENTS_PAGE,
+  PageType.LOGIN_PAGE];
 
 function getCurrentComponent(pageType) {
   switch (pageType) {
@@ -28,6 +33,8 @@ function getCurrentComponent(pageType) {
       return <LoginPage/>;
     case PageType.MY_INGREDIENTS_PAGE:
       return <MyIngredientsPage/>;
+    case PageType.ADMIN_PANEL:
+      return <AdminPanel/>;
   }
   return <div />;
 }
@@ -42,6 +49,8 @@ const nameforPageType = (pageType) => {
       return 'Login';
     case PageType.MY_INGREDIENTS_PAGE:
       return 'My Ingredients';
+    case PageType.ADMIN_PANEL:
+      return 'Admin Panel';
   }
 };
 
@@ -52,6 +61,13 @@ function App() {
     globalFirebaseManager.initialize(dispatch);
   }, []);
 
+  // TODO read this from redux store
+  const isUserAdmin = globalFirebaseManager.isUserAdmin();
+  if (isUserAdmin && !pageTypes.includes(PageType.ADMIN_PANEL)) {
+    pageTypes.push(PageType.ADMIN_PANEL);
+  } else if (!isUserAdmin && pageTypes.includes(PageType.ADMIN_PANEL)) {
+    console.log('TODO: Remove the admin panel from array here');
+  }
   return (
     <div className="App">
       <br/>
