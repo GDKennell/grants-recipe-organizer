@@ -17,8 +17,13 @@ const recipeKey = 'recKey';
 
 function RecipeConversion() {
   const {allIngredients} = useIngredientsStore();
-  const ingredientManager = new IngredientManager(allIngredients);
+  const [ingredientManager, setIngredientManager] = useState(new IngredientManager(allIngredients));
   const [outputText, setOutputText] = useState('');
+
+  useEffect(() => {
+    setIngredientManager(new IngredientManager(allIngredients));
+    console.log(`Creating new IngredientManager with ${allIngredients.length} ingredients `);
+  }, [allIngredients]);
 
   const minRows = 5;
   const [ingredientListText, setIngredientListText] = useState(JSON.parse(localStorage.getItem(ingredientKey)) || '');
