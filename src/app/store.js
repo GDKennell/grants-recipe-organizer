@@ -5,4 +5,5 @@ export default configureStore({
   reducer: {
     ingredientStore: ingredientStoreReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
 });

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 // import firebase from 'firebase/compat/app';
 // import * as firebaseui from 'firebaseui';
@@ -6,31 +6,25 @@ import 'firebaseui/dist/firebaseui.css';
 
 
 import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
-import {globalFirebaseManager} from './FirebaseManager';
 import useIngredientsStore from './hooks/useIngredientsStore';
+import useFirebase from './hooks/useFirebase';
 
 
+const signedOutMessage = 'Not Signed In';
 export default function LoginPage() {
-  const {dispatch} = useIngredientsStore();
-
-  const [loginMessage, setLoginMessage] = useState('Not Signed In');
-  const [isUserSignedIn, setIsUserSignedIn] = useState(globalFirebaseManager.getUser != null);
-
-  const updateUserState = () => {
-    const user = globalFirebaseManager.getUser();
-    const isSignedIn = (user != null);
-    setIsUserSignedIn(isSignedIn);
-    if (isSignedIn) {
-      setLoginMessage(`Welcome ${user.displayName}!`);
-      globalFirebaseManager.userSignedIn(user, null, null, dispatch);
-    } else {
-      setLoginMessage('Not Signed In');
-    }
-  };
+  const {dispatch, ingredientManager} = useIngredientsStore();
+  const {firebaseUser} = useFirebase(dispatch, ingredientManager);
+  const isUserSignedIn = (firebaseUser != null);
+  const [loginMessage, setLoginMessage] = useState(signedOutMessage);
 
   useEffect(() => {
-    updateUserState();
-  }, []);
+    if (firebaseUser != null ) {
+      setLoginMessage(`Welcome ${firebaseUser.displayName}!`);
+    } else {
+      setLoginMessage(signedOutMessage);
+    }
+  }, [firebaseUser]);
+
   const signIn = () => {
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
@@ -42,8 +36,6 @@ export default function LoginPage() {
           // The signed-in user info.
           const user = result.user;
           console.log(`Login succes. Got credential : ${credential}  token : ${token}  user : ${JSON.stringify(user)} `);
-          globalFirebaseManager.userSignedIn(user, credential, token, dispatch);
-          updateUserState();
           // ...
         }).catch((error) => {
           // Handle Errors here.
@@ -60,8 +52,7 @@ export default function LoginPage() {
   };
   const signOut = () => {
     getAuth().signOut().then(() => {
-      globalFirebaseManager.userSignedOut();
-      updateUserState();
+      console.log(`user signed out successfully`);
     }).catch((error) => {
       setLoginMessage(`Failed to sign out ${error}`);
     });
@@ -69,8 +60,10 @@ export default function LoginPage() {
   return (
     <div>
       <h1>Login</h1>
-      {!isUserSignedIn && <button onClick={signIn}> Sign In</button>}
-      {isUserSignedIn && <button onClick={signOut}> Sign Out</button>}
+      {isUserSignedIn ?
+      <button onClick={signOut}> Sign Out</button> :
+      <button onClick={signIn}> Sign In</button>
+      }
       <div> {loginMessage} </div>
     </div>
   );

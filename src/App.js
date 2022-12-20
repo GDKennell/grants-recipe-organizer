@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import AdminPanel from './AdminPanel';
 import './App.css';
 import {globalFirebaseManager} from './FirebaseManager';
+import useFirebase from './hooks/useFirebase';
 import useIngredientsStore from './hooks/useIngredientsStore';
 import IngredientPage from './IngredientPage';
 import LoginPage from './LoginPage';
@@ -18,10 +19,6 @@ const PageType = {
 
 };
 
-const pageTypes = [PageType.RECIPE_CONVERSION,
-  PageType.INGREDIENTS_PAGE,
-  PageType.MY_INGREDIENTS_PAGE,
-  PageType.LOGIN_PAGE];
 
 function getCurrentComponent(pageType) {
   switch (pageType) {
@@ -53,21 +50,30 @@ const nameforPageType = (pageType) => {
       return 'Admin Panel';
   }
 };
+const defaultPageTypes = [PageType.RECIPE_CONVERSION,
+  PageType.INGREDIENTS_PAGE,
+  PageType.MY_INGREDIENTS_PAGE,
+  PageType.LOGIN_PAGE];
+
 
 function App() {
   const [showingPage, setShowingPage] = useState(PageType.RECIPE_CONVERSION);
-  const {dispatch} = useIngredientsStore();
-  useEffect(() => {
-    globalFirebaseManager.initialize(dispatch);
-  }, []);
 
-  // TODO read this from redux store
-  const isUserAdmin = globalFirebaseManager.isUserAdmin();
-  if (isUserAdmin && !pageTypes.includes(PageType.ADMIN_PANEL)) {
-    pageTypes.push(PageType.ADMIN_PANEL);
-  } else if (!isUserAdmin && pageTypes.includes(PageType.ADMIN_PANEL)) {
-    console.log('TODO: Remove the admin panel from array here');
-  }
+  const {ingredientManager, firebaseData, dispatch} = useIngredientsStore();
+  const [pageTypes, setPageTypes] = useState(defaultPageTypes);
+
+  const {firebaseUser} = useFirebase(dispatch, ingredientManager);
+
+  useEffect(() => {
+    const isUserAdmin = globalFirebaseManager.isUserAdmin(firebaseUser);
+    const newPageTypes = pageTypes;
+    if (isUserAdmin && !newPageTypes.includes(PageType.ADMIN_PANEL)) {
+      newPageTypes.push(PageType.ADMIN_PANEL);
+    } else if (!isUserAdmin && newPageTypes.includes(PageType.ADMIN_PANEL)) {
+      console.log('TODO: How to remove item from array?');
+    }
+    setPageTypes(newPageTypes);
+  }, [firebaseData]);
   return (
     <div className="App">
       <br/>

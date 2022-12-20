@@ -7,7 +7,6 @@ import {convertRecipe} from './RecipeConversion/convertRecipe';
 import {parseIngredientListLine} from './RecipeConversion/RecipeParsing/ingredientParsing';
 import {removeAllWhitespace, removeExtraNewLines} from './RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from './UnkownIngredientsSection';
-// import {writeToDb} from './RecipeConversion/DataStructures/ingredient';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 

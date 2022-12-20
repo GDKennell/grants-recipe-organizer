@@ -13,6 +13,7 @@ function isPreExistingIngredient(ingredient, existingList) {
   return false;
 }
 
+
 export const ingredientStoreSlice = createSlice({
   name: 'ingredientStore',
   initialState: {
@@ -21,7 +22,8 @@ export const ingredientStoreSlice = createSlice({
   reducers: {
     // {newIngredientList: [Ingredient]}
     replaceIngredientList: (state, action) => {
-      state.ingredientList = action.payload.newIngredientList;
+      console.log(`Reducer. updatig state list with ${action.payload.newIngredientList.length} new ingredients`);
+      state.ingredientList = [...action.payload.newIngredientList];
     },
     addNewIngredients: (state, action) => {
       for (const newIngredient of action.payload.newIngredients) {
@@ -36,6 +38,7 @@ export const ingredientStoreSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   replaceIngredientList,
-  addNewIngredients} = ingredientStoreSlice.actions;
+  addNewIngredients,
+} = ingredientStoreSlice.actions;
 
 export default ingredientStoreSlice.reducer;

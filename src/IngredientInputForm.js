@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {globalFirebaseManager} from './FirebaseManager';
 import {isValidNumberString, removeAllWhitespace} from './RecipeConversion/utilities/stringHelpers';
-import {addNewIngredient, IngredientManager} from './RecipeConversion/DataStructures/ingredient';
+import {IngredientManager} from './RecipeConversion/DataStructures/ingredient';
 import useIngredientsStore from './hooks/useIngredientsStore';
+import {addNewIngredient} from './Database';
 
 // eslint-disable-next-line react/prop-types
 export default function IngredientInputForm({startText}) {
-  const {allIngredients, dispatch} = useIngredientsStore();
+  const {allIngredients, dispatch, firebaseData} = useIngredientsStore();
   const ingredientManager = new IngredientManager(allIngredients);
   const [ingredientText, setIngredientText] = useState(startText);
   const [gramsPerCupText, setGramsPerCupText] = useState('');
   const [fieldsAreValid, setFieldsAreValid] = useState(false);
   const areFieldsValid = () => {
-    if (globalFirebaseManager.getUser() == null) {
+    if (firebaseData == null || firebaseData.firebaseUser == null) {
       return false;
     }
     const gramsPerCupValue = parseFloat(gramsPerCupText);
@@ -51,7 +51,7 @@ export default function IngredientInputForm({startText}) {
     console.log(`Submitting ${ingredientText} ${gramsPerCupText}`);
     const names = ingredientText.split(',');
     const gramsPerCup = parseFloat(gramsPerCupText);
-    addNewIngredient(names, gramsPerCup, dispatch, () => {
+    addNewIngredient(names, gramsPerCup, firebaseData, dispatch, () => {
       setIngredientText('');
       setGramsPerCupText('');
     });
