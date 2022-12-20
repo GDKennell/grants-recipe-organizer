@@ -1,3 +1,4 @@
+import {cleanIngredientWord} from '../utilities/stringHelpers';
 
 export function Ingredient(names, gramsPerCup) {
   this.names = names;
@@ -6,8 +7,9 @@ export function Ingredient(names, gramsPerCup) {
 }
 
 export function makeIngredientObject(names, gramsPerCup, isGlobal, userId) {
+  const finalNames = names.map((name) => cleanIngredientWord(name));
   return {
-    names: names,
+    names: finalNames,
     gramsPerCup: gramsPerCup,
     key: names.join(',') + gramsPerCup,
     isGlobal: isGlobal,

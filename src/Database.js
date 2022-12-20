@@ -3,6 +3,7 @@ import {collection, getDocs, deleteDoc, doc, addDoc} from 'firebase/firestore';
 import {addNewIngredients, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
+import {cleanIngredientWord} from './RecipeConversion/utilities/stringHelpers';
 
 
 function isValidIngredientDoc(doc ) {
@@ -79,13 +80,14 @@ export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
 export async function addNewIngredient( names, gramsPerCup, firebaseData, dispatch, completion) {
   const db = firebaseData.firebaseDb;
   const userId = firebaseData.firebaseUser.uid;
+  const finalNames = names.map((name) => cleanIngredientWord(name));
   try {
     await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {
-      names: names,
+      names: finalNames,
       gramsPerCup: gramsPerCup,
     });
-    console.log(`success adding document : ${names} ${gramsPerCup}`);
-    const newIngredients = [makeIngredientObject(names, gramsPerCup, /* isGlobal: */ false, userId)];
+    console.log(`success adding document : ${finalNames} ${gramsPerCup}`);
+    const newIngredients = [makeIngredientObject(finalNames, gramsPerCup, /* isGlobal: */ false, userId)];
     dispatch(addNewIngredients({newIngredients: newIngredients}));
     completion();
   } catch (e) {

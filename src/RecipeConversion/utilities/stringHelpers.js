@@ -103,6 +103,10 @@ export function removeLeadingWhiteSpace(string) {
   return string.substring(lastIndex);
 }
 
+export function cleanIngredientWord(string) {
+  return removeLeadingWhiteSpace(removeTrailingWhitespace(string));
+}
+
 function isWordSeparator(character) {
   return isWhitespace(character) || isPunctuation(character);
 }
