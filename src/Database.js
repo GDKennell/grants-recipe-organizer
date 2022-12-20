@@ -48,7 +48,9 @@ export async function fetchUserScopedIngredients(db, userId, dispatch) {
 }
 
 export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
-  if (ingredientManager != null && ingredientManager.getAllIngredients.length > 0) {
+  if (ingredientManager != null &&
+    ingredientManager.getAllIngredients!= null &&
+    ingredientManager.getAllIngredients.length > 0) {
     return;
   }
   try {
@@ -77,9 +79,9 @@ export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
 }
 
 
-export async function addNewIngredient( names, gramsPerCup, firebaseData, dispatch, completion) {
-  const db = firebaseData.firebaseDb;
-  const userId = firebaseData.firebaseUser.uid;
+export async function addNewIngredient( names, gramsPerCup, firebaseDb, firebaseUser, dispatch, completion) {
+  const db = firebaseDb;
+  const userId = firebaseUser.uid;
   const finalNames = names.map((name) => cleanIngredientWord(name));
   try {
     await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {

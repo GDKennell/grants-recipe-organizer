@@ -8,6 +8,7 @@ import 'firebaseui/dist/firebaseui.css';
 import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
 import useIngredientsStore from './hooks/useIngredientsStore';
 import useFirebase from './hooks/useFirebase';
+import {userSignedOut} from './features/ingredientStore/ingredientStoreSlice';
 
 
 const signedOutMessage = 'Not Signed In';
@@ -53,6 +54,7 @@ export default function LoginPage() {
   const signOut = () => {
     getAuth().signOut().then(() => {
       console.log(`user signed out successfully`);
+      dispatch(userSignedOut());
     }).catch((error) => {
       setLoginMessage(`Failed to sign out ${error}`);
     });

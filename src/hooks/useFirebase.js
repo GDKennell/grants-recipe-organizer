@@ -37,7 +37,9 @@ const useFirebase = (dispatch, ingredientsManager) => {
     const auth = getAuth();
     auth.onAuthStateChanged(function(user) {
       setFirebaseUser(user);
-      fetchUserScopedIngredients(localFirebaseDb, user.uid, dispatch);
+      if (user) {
+        fetchUserScopedIngredients(localFirebaseDb, user.uid, dispatch);
+      }
     });
     fetchIngredientsFromDb(localFirebaseDb, dispatch, ingredientsManager);
   }, []);

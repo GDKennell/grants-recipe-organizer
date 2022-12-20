@@ -32,6 +32,11 @@ export const ingredientStoreSlice = createSlice({
         }
       }
     },
+    userSignedOut: (state, action) => {
+      state.ingredientList = state.ingredientList.filter((ingredient ) => {
+        return ingredient.isGlobal;
+      });
+    },
   },
 });
 
@@ -39,6 +44,7 @@ export const ingredientStoreSlice = createSlice({
 export const {
   replaceIngredientList,
   addNewIngredients,
+  userSignedOut,
 } = ingredientStoreSlice.actions;
 
 export default ingredientStoreSlice.reducer;
