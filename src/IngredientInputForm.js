@@ -7,7 +7,7 @@ import useFirebase from './hooks/useFirebase';
 // eslint-disable-next-line react/prop-types
 export default function IngredientInputForm({startText}) {
   const {ingredientManager, dispatch} = useIngredientsStore();
-  const {firebaseUser, firebaseDb} = useFirebase(dispatch, ingredientManager);
+  const {firebaseUser, firebaseDb} = useFirebase();
 
   const [ingredientText, setIngredientText] = useState(startText);
   const [gramsPerCupText, setGramsPerCupText] = useState('');

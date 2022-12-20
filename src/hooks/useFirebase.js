@@ -4,9 +4,11 @@ import {useState, useEffect} from 'react';
 import {getAuth} from 'firebase/auth';
 import {getAnalytics} from 'firebase/analytics';
 import {fetchIngredientsFromDb, fetchUserScopedIngredients} from '../Database';
+import useIngredientsStore from './useIngredientsStore';
 
 
-const useFirebase = (dispatch, ingredientsManager) => {
+const useFirebase = () => {
+  const {dispatch, ingredientsManager} = useIngredientsStore();
   const [firebaseApp, setFirebaseApp] = useState(null);
   const [firebaseAnalytics, setFirebaseAnalytics] = useState(null);
   const [firebaseDb, setFirebaseDb] = useState(null);

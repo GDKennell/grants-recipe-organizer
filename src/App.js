@@ -59,10 +59,8 @@ const defaultPageTypes = [PageType.RECIPE_CONVERSION,
 function App() {
   const [showingPage, setShowingPage] = useState(PageType.RECIPE_CONVERSION);
 
-  const {ingredientManager, firebaseData, dispatch} = useIngredientsStore();
+  const {firebaseUser} = useFirebase();
   const [pageTypes, setPageTypes] = useState(defaultPageTypes);
-
-  const {firebaseUser} = useFirebase(dispatch, ingredientManager);
 
   useEffect(() => {
     const isUserAdmin = globalFirebaseManager.isUserAdmin(firebaseUser);
@@ -73,7 +71,7 @@ function App() {
       console.log('TODO: How to remove item from array?');
     }
     setPageTypes(newPageTypes);
-  }, [firebaseData]);
+  }, [firebaseUser]);
   return (
     <div className="App">
       <br/>

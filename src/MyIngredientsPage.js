@@ -5,8 +5,8 @@ import IngredientInputForm from './IngredientInputForm';
 import Table from './Table';
 
 export default function MyIngredientsPage() {
-  const {dispatch, ingredientManager} = useIngredientsStore();
-  const {firebaseUser} = useFirebase(dispatch, ingredientManager);
+  const {ingredientManager} = useIngredientsStore();
+  const {firebaseUser} = useFirebase();
   return (
     <div><h1>My Ingredients</h1>
       <IngredientInputForm startText={undefined} />
