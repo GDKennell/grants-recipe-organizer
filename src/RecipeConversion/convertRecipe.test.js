@@ -29,6 +29,18 @@ test('converts values to cups', () => {
 });
 
 
+test('start with cups', () => {
+  const testCases = [
+    ['cup (8 tablespoons)/115 grams unsalted butter, very soft',
+      'cup (8 tablespoons)/115 grams unsalted butter, very soft'],
+  ];
+
+  for (const testCase of testCases) {
+    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
+    expect(parsedLine).toEqual(testCase[1]);
+  }
+});
+
 test('unknown ingredients', () => {
   const testCases = [
     ['2.5 cups flour', 'flour'],

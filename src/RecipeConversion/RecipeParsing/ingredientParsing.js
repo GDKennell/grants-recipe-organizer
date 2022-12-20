@@ -54,6 +54,10 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
     unitStringEndIndex,
   ] = findUnitMeasureString(newLine);
 
+  if (unitStringStartIndex == -1) {
+    return [defaultLine, defaultLine, null];
+  }
+
   //  ------- Finding Ingredient Name  ------------ //
 
   const [ingredientName] = findIngredientName(
