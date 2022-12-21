@@ -27,21 +27,18 @@ async function deleteIngredient(db, id) {
 
 export async function fetchUserScopedIngredients(db, userId, dispatch) {
   const querySnapshot = await getDocs(collection(db, 'users', userId, 'PrivateIngredients' ));
-  let numNew = 0;
   const localIngredients = [];
   try {
     querySnapshot.forEach((doc) => {
       if (isValidIngredientDoc(doc)) {
         const newIngredient = ingredientFromDoc(doc, /* isGlobal: */ false, userId);
         localIngredients.push(newIngredient);
-        numNew++;
       } else {
         // Delete this duplicated ID from the actual DB
         console.log(`Bad ingredient with : ${doc.id} info: ${JSON.stringify(doc.data())} `);
       }
     });
     dispatch(addNewIngredients({newIngredients: localIngredients}));
-    console.log(`Added ${numNew} new ingredients from private collection`);
   } catch (e) {
     console.error('Error fetching private documents: ', e);
   }

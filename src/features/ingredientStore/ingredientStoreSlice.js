@@ -22,7 +22,6 @@ export const ingredientStoreSlice = createSlice({
   reducers: {
     // {newIngredientList: [Ingredient]}
     replaceIngredientList: (state, action) => {
-      console.log(`Reducer. updatig state list with ${action.payload.newIngredientList.length} new ingredients`);
       state.ingredientList = [...action.payload.newIngredientList];
     },
     addNewIngredients: (state, action) => {
