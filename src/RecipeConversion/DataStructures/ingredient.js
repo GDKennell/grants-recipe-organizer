@@ -6,6 +6,12 @@ export function Ingredient(names, gramsPerCup) {
   this.key = names.join(',') + gramsPerCup;
 }
 
+export function isIngredientOwned(ingredient, firebaseUser) {
+  return firebaseUser != null &&
+  ingredient.isGlobal == false &&
+  ingredient.userId == firebaseUser.uid;
+}
+
 export function makeIngredientObject(names, gramsPerCup, isGlobal, userId) {
   const finalNames = names.map((name) => cleanIngredientWord(name));
   return {
