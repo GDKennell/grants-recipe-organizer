@@ -78,6 +78,21 @@ export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
 }
 
 
+export async function deleteUserIngredient( ingredient, firebaseDb, firebaseUser, dispatch, completion) {
+  const db = firebaseDb;
+  const userId = firebaseUser.uid;
+  try {
+    await deleteDoc(doc(db, 'users', userId, 'PrivateIngredients', ingredient.id));
+    dispatch(deleteIngredient({ingredientToDelete: ingredient}));
+    if (completion) {
+      completion();
+    }
+  } catch (e) {
+    console.error('Error deleting document: ', e);
+  }
+}
+
+
 export async function addNewIngredient( names, gramsPerCup, firebaseDb, firebaseUser, dispatch, completion) {
   const db = firebaseDb;
   const userId = firebaseUser.uid;

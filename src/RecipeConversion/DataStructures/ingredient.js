@@ -12,7 +12,7 @@ export function isIngredientOwned(ingredient, firebaseUser) {
   ingredient.userId == firebaseUser.uid;
 }
 
-export function makeIngredientObject(names, gramsPerCup, isGlobal, userId) {
+export function makeIngredientObject(names, gramsPerCup, isGlobal, userId, id) {
   const finalNames = names.map((name) => cleanIngredientWord(name));
   return {
     names: finalNames,
@@ -20,6 +20,7 @@ export function makeIngredientObject(names, gramsPerCup, isGlobal, userId) {
     key: names.join(',') + gramsPerCup,
     isGlobal: isGlobal,
     userId: userId,
+    id: id,
   };
 }
 
@@ -28,7 +29,8 @@ export function ingredientFromDoc(doc, isGlobal, userId) {
       doc.data().names,
       doc.data().gramsPerCup,
       isGlobal,
-      userId);
+      userId,
+      doc.id);
 }
 
 

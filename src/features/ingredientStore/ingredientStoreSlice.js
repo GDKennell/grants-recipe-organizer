@@ -37,6 +37,14 @@ export const ingredientStoreSlice = createSlice({
         console.log(`Ing Store: added new ingredients `);
       }
     },
+    deleteIngredient: (state, action) => {
+      const oldAmount = state.ingredientList.length;
+      state.ingredientList = state.ingredientList.filter((ing) => {
+        return ing.id != action.payload.ingredientToDelete.id;
+      });
+      const deletionOccurred = state.ingredientList.length < oldAmount;
+      console.log(`deleteIngredient: did delete? ${deletionOccurred}`);
+    },
     userSignedOut: (state, action) => {
       state.ingredientList = state.ingredientList.filter((ingredient ) => {
         return ingredient.isGlobal;
@@ -49,6 +57,7 @@ export const ingredientStoreSlice = createSlice({
 export const {
   replaceIngredientList,
   addNewIngredients,
+  deleteIngredient,
   userSignedOut,
 } = ingredientStoreSlice.actions;
 
