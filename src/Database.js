@@ -1,6 +1,6 @@
 
 import {collection, getDocs, deleteDoc, doc, addDoc} from 'firebase/firestore';
-import {addNewIngredients, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
+import {addNewIngredients, deleteIngredient, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
 import {cleanIngredientWord} from './RecipeConversion/utilities/stringHelpers';
@@ -16,7 +16,7 @@ function isValidIngredientDoc(doc ) {
   return true;
 }
 
-async function deleteIngredient(db, id) {
+async function deleteGlobalIngredient(db, id) {
   try {
     await deleteDoc(doc(db, 'ingredients', id));
   } catch (e) {
@@ -65,7 +65,7 @@ export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
       } else {
         // Delete this duplicated ID from the actual DB
         console.log(`delet dis: ${doc.id}`);
-        deleteIngredient(db, doc.id);
+        deleteGlobalIngredient(db, doc.id);
       }
     });
     if (localIngredients.length > 0 ) {
@@ -82,8 +82,9 @@ export async function deleteUserIngredient( ingredient, firebaseDb, firebaseUser
   const db = firebaseDb;
   const userId = firebaseUser.uid;
   try {
-    await deleteDoc(doc(db, 'users', userId, 'PrivateIngredients', ingredient.id));
     dispatch(deleteIngredient({ingredientToDelete: ingredient}));
+    await deleteDoc(doc(db, 'users', userId, 'PrivateIngredients', ingredient.id));
+    console.log(`Successfully deleted document`);
     if (completion) {
       completion();
     }
