@@ -2,9 +2,9 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import AdminPanel from './AdminPanel';
 import './App.css';
+// import useIngredientsStore from './hooks/useIngredientsStore';
 import {globalFirebaseManager} from './FirebaseManager';
 import useFirebase from './hooks/useFirebase';
-import useIngredientsStore from './hooks/useIngredientsStore';
 import IngredientPage from './IngredientPage';
 import LoginPage from './LoginPage';
 import MyIngredientsPage from './MyIngredientsPage';
@@ -63,6 +63,7 @@ function App() {
   const [pageTypes, setPageTypes] = useState(defaultPageTypes);
 
   useEffect(() => {
+    console.log('App.js useEffect [firebaseUser]');
     const isUserAdmin = globalFirebaseManager.isUserAdmin(firebaseUser);
     const newPageTypes = pageTypes;
     if (isUserAdmin && !newPageTypes.includes(PageType.ADMIN_PANEL)) {

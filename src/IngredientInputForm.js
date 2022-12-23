@@ -45,6 +45,7 @@ export default function IngredientInputForm({startText}) {
   };
 
   useEffect(() => {
+    console.log('IngredientInputForm useEffect [gramsPerCupText, ingredientText] ');
     validateFields();
   }, [gramsPerCupText, ingredientText]);
 

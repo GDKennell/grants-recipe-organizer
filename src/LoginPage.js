@@ -19,6 +19,7 @@ export default function LoginPage() {
   const [loginMessage, setLoginMessage] = useState(signedOutMessage);
 
   useEffect(() => {
+    console.log('LoginPage useEffect [firebaseUser]');
     if (firebaseUser != null ) {
       setLoginMessage(`Welcome ${firebaseUser.displayName}!`);
     } else {

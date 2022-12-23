@@ -62,6 +62,8 @@ function RecipeConversion() {
   }, [ingredientListText, recipeText, ingredientManager]);
 
   useEffect(() => {
+    console.log('RecipeConversion useEffect[]');
+
     updateUnknownIngredients();
   }, []);
 

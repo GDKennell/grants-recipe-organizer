@@ -8,13 +8,15 @@ import useIngredientsStore from './useIngredientsStore';
 
 
 const useFirebase = () => {
-  const {dispatch, ingredientsManager} = useIngredientsStore();
+  const {ingredientsManager, dispatch} = useIngredientsStore();
   const [firebaseApp, setFirebaseApp] = useState(null);
   const [firebaseAnalytics, setFirebaseAnalytics] = useState(null);
   const [firebaseDb, setFirebaseDb] = useState(null);
   const [firebaseUser, setFirebaseUser] = useState(null);
 
   useEffect(() => {
+    console.log('useFirebase useEffect[]');
+
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {

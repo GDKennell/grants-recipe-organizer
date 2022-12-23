@@ -23,12 +23,18 @@ export const ingredientStoreSlice = createSlice({
     // {newIngredientList: [Ingredient]}
     replaceIngredientList: (state, action) => {
       state.ingredientList = [...action.payload.newIngredientList];
+      console.log(`Ing Store: replaced ingredients `);
     },
     addNewIngredients: (state, action) => {
+      let added = false;
       for (const newIngredient of action.payload.newIngredients) {
         if (!isPreExistingIngredient(newIngredient, state.ingredientList)) {
+          added = true;
           state.ingredientList.push(newIngredient);
         }
+      }
+      if (added) {
+        console.log(`Ing Store: added new ingredients `);
       }
     },
     userSignedOut: (state, action) => {

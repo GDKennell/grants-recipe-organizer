@@ -48,7 +48,10 @@ export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
   if (ingredientManager != null &&
     ingredientManager.getAllIngredients!= null &&
     ingredientManager.getAllIngredients.length > 0) {
+    console.log(`Skipping fetch`);
     return;
+  } else {
+    console.log(`Going to fetch`);
   }
   try {
     // TODO: don't overwrite list if DB fetch fails
