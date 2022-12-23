@@ -34,7 +34,7 @@ export function ingredientFromDoc(doc, isGlobal, userId) {
 
 export class IngredientManager {
   constructor(ingredientList) {
-    console.log(`Creating new IngredientManager with ${!!(ingredientList)}`);
+    // console.log(`Creating new IngredientManager with ${!!(ingredientList)}`);
     this.ingredientList = ingredientList || [];
 
     this.allIngredientNameStrings = this.ingredientList
