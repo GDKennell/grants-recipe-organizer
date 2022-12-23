@@ -6,6 +6,7 @@ import useIngredientsStore from './hooks/useIngredientsStore';
 
 function IngredientPage() {
   const {ingredientManager} = useIngredientsStore();
+  console.log(`IngredientPage redner: ing store: ${ingredientManager != null}`);
 
   return (
     <div>

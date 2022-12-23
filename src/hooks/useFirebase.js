@@ -8,8 +8,8 @@ import useIngredientsStore from './useIngredientsStore';
 
 
 const useFirebase = () => {
-  const {ingredientsManager, dispatch} = useIngredientsStore();
-  console.log(`useFirebase hook: ing store: ${ingredientsManager != null}`);
+  const {ingredientManager, dispatch} = useIngredientsStore();
+  console.log(`useFirebase hook: ing store: ${ingredientManager != null}`);
   const [firebaseApp, setFirebaseApp] = useState(null);
   const [firebaseAnalytics, setFirebaseAnalytics] = useState(null);
   const [firebaseDb, setFirebaseDb] = useState(null);
@@ -46,7 +46,7 @@ const useFirebase = () => {
         fetchUserScopedIngredients(localFirebaseDb, user.uid, dispatch);
       }
     });
-    fetchIngredientsFromDb(localFirebaseDb, dispatch, ingredientsManager);
+    fetchIngredientsFromDb(localFirebaseDb, dispatch, ingredientManager);
   }, []);
   return {firebaseApp, firebaseAnalytics, firebaseDb, firebaseUser};
 };
