@@ -8,6 +8,27 @@ export function strInsert(baseString, insertionString, index) {
   );
 }
 
+// function objectsEqual(o1, o2) {
+//   return typeof o1 === 'object' &&
+//   Object.keys(o1).length > 0 ?
+//         Object.keys(o1).length === Object.keys(o2).length &&
+//             Object.keys(o1).every((p) => objectsEqual(o1[p], o2[p])) :
+//         o1 === o2;
+// }
+
+
+// function objectArraysEqual(a1, a2) {
+//   if ( a1.length != a2.length ) {
+//     return false;
+//   }
+//   for (let i = 0; i < a1.length; i++) {
+//     if (!objectsEqual(a1[i], a2[i])) {
+//       return false;
+//     }
+//   }
+//   return true;
+// }
+
 function hasSuffix(string, suffix) {
   if (suffix.length > string.length) {
     return false;
