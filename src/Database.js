@@ -81,6 +81,9 @@ export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
 export async function deleteUserIngredient( ingredient, firebaseDb, firebaseUser, dispatch, completion) {
   const db = firebaseDb;
   const userId = firebaseUser.uid;
+  if (!confirm(`Are you sure you want to delete ${ingredient.names[0]}?`)) {
+    return;
+  }
   try {
     dispatch(deleteIngredient({ingredientToDelete: ingredient}));
     await deleteDoc(doc(db, 'users', userId, 'PrivateIngredients', ingredient.id));
