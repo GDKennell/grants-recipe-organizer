@@ -102,13 +102,14 @@ export async function addNewIngredient( names, gramsPerCup, firebaseDb, firebase
   const userId = firebaseUser.uid;
   const finalNames = names.map((name) => cleanIngredientWord(name));
   try {
+    const newIngredients = [makeIngredientObject(finalNames, gramsPerCup, /* isGlobal: */ false, userId)];
+    dispatch(addNewIngredients({newIngredients: newIngredients}));
+
     await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {
       names: finalNames,
       gramsPerCup: gramsPerCup,
     });
     // console.log(`success adding document : ${finalNames} ${gramsPerCup}`);
-    const newIngredients = [makeIngredientObject(finalNames, gramsPerCup, /* isGlobal: */ false, userId)];
-    dispatch(addNewIngredients({newIngredients: newIngredients}));
     completion();
   } catch (e) {
     console.error('Error adding document: ', e);
