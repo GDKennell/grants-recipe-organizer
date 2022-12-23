@@ -1,14 +1,14 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import AdminPanel from './AdminPanel';
+import AdminPanel from './Pages/AdminPanel';
 import './App.css';
 // import useIngredientsStore from './hooks/useIngredientsStore';
-import {globalFirebaseManager} from './FirebaseManager';
+import {globalFirebaseManager} from './Helpers/FirebaseManager';
 import useFirebase from './hooks/useFirebase';
-import IngredientPage from './IngredientPage';
-import LoginPage from './LoginPage';
-import MyIngredientsPage from './MyIngredientsPage';
-import RecipeConversion from './RecipeConversion';
+import IngredientPage from './Pages/IngredientPage';
+import LoginPage from './Pages/LoginPage';
+import MyIngredientsPage from './Pages/MyIngredientsPage';
+import RecipeConversion from './Pages/RecipeConversion';
 
 const PageType = {
   RECIPE_CONVERSION: 0,

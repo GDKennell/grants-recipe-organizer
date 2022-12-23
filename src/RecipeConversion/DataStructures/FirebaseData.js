@@ -1,4 +1,4 @@
-import {Serializer} from '../../ClassSerializer';
+import {Serializer} from '../../Helpers/ClassSerializer';
 
 export class FirebaseData {
   constructor(firebaseInitialized,

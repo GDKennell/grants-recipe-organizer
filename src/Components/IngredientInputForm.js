@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {isValidNumberString, removeAllWhitespace} from './RecipeConversion/utilities/stringHelpers';
-import useIngredientsStore from './hooks/useIngredientsStore';
-import {addNewIngredient} from './Database';
-import useFirebase from './hooks/useFirebase';
+import {isValidNumberString, removeAllWhitespace} from '../RecipeConversion/utilities/stringHelpers';
+import useIngredientsStore from '../hooks/useIngredientsStore';
+import {addNewIngredient} from '../Database';
+import useFirebase from '../hooks/useFirebase';
 
 // eslint-disable-next-line react/prop-types
 export default function IngredientInputForm({startText}) {

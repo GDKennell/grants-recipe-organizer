@@ -6,9 +6,9 @@ import 'firebaseui/dist/firebaseui.css';
 
 
 import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
-import useIngredientsStore from './hooks/useIngredientsStore';
-import useFirebase from './hooks/useFirebase';
-import {userSignedOut} from './features/ingredientStore/ingredientStoreSlice';
+import useIngredientsStore from '../hooks/useIngredientsStore';
+import useFirebase from '../hooks/useFirebase';
+import {userSignedOut} from '../features/ingredientStore/ingredientStoreSlice';
 
 
 const signedOutMessage = 'Not Signed In';

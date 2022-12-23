@@ -1,12 +1,12 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import './App.css';
-import useIngredientsStore from './hooks/useIngredientsStore';
-import {convertRecipe} from './RecipeConversion/convertRecipe';
+import '../App.css';
+import useIngredientsStore from '../hooks/useIngredientsStore';
+import {convertRecipe} from '../RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
-import {parseIngredientListLine} from './RecipeConversion/RecipeParsing/ingredientParsing';
-import {removeAllWhitespace, removeExtraNewLines} from './RecipeConversion/utilities/stringHelpers';
-import UnkownIngredientsSection from './UnkownIngredientsSection';
+import {parseIngredientListLine} from '../RecipeConversion/RecipeParsing/ingredientParsing';
+import {removeAllWhitespace, removeExtraNewLines} from '../RecipeConversion/utilities/stringHelpers';
+import UnkownIngredientsSection from '../Components/UnkownIngredientsSection';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 

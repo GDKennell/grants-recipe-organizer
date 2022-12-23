@@ -1,8 +1,8 @@
 import React from 'react';
-import useFirebase from './hooks/useFirebase';
-import useIngredientsStore from './hooks/useIngredientsStore';
-import IngredientInputForm from './IngredientInputForm';
-import Table from './Table';
+import useFirebase from '../hooks/useFirebase';
+import useIngredientsStore from '../hooks/useIngredientsStore';
+import IngredientInputForm from '../Components/IngredientInputForm';
+import Table from '../Components/Table';
 
 export default function MyIngredientsPage() {
   const {ingredientManager} = useIngredientsStore();

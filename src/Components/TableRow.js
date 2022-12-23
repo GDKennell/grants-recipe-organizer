@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import {deleteUserIngredient} from './Database';
-import useFirebase from './hooks/useFirebase';
-import useIngredientsStore from './hooks/useIngredientsStore';
-import {isIngredientOwned} from './RecipeConversion/DataStructures/ingredient';
+import {deleteUserIngredient} from '../Database';
+import useFirebase from '../hooks/useFirebase';
+import useIngredientsStore from '../hooks/useIngredientsStore';
+import {isIngredientOwned} from '../RecipeConversion/DataStructures/ingredient';
 
 export default function TableRow({rowData, firebaseUser, ingredientManager}) {
   const {dispatch} = useIngredientsStore();

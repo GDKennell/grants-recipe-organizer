@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import useFirebase from './hooks/useFirebase';
-import useIngredientsStore from './hooks/useIngredientsStore';
+import useFirebase from '../hooks/useFirebase';
+import useIngredientsStore from '../hooks/useIngredientsStore';
 import TableRow from './TableRow';
 
 export default function Table({data}) {
