@@ -32,9 +32,11 @@ export function ingredientFromDoc(doc, isGlobal, userId) {
 }
 
 
+let numManagers = 0;
 export class IngredientManager {
   constructor(ingredientList) {
-    // console.log(`Creating new IngredientManager with ${!!(ingredientList)}`);
+    numManagers++;
+    console.log(`creating IngredientManager #${numManagers}`);
     this.ingredientList = ingredientList || [];
 
     this.allIngredientNameStrings = this.ingredientList

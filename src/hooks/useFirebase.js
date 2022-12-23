@@ -9,6 +9,7 @@ import useIngredientsStore from './useIngredientsStore';
 
 const useFirebase = () => {
   const {ingredientsManager, dispatch} = useIngredientsStore();
+  console.log(`useFirebase hook: ing store: ${ingredientsManager != null}`);
   const [firebaseApp, setFirebaseApp] = useState(null);
   const [firebaseAnalytics, setFirebaseAnalytics] = useState(null);
   const [firebaseDb, setFirebaseDb] = useState(null);
