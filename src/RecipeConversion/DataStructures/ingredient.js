@@ -36,7 +36,10 @@ let numManagers = 0;
 export class IngredientManager {
   constructor(ingredientList) {
     numManagers++;
-    console.log(`creating IngredientManager #${numManagers}`);
+    const factor = 30;
+    if (numManagers % factor == 1) {
+      console.log(`creating IngredientManager #${numManagers}`);
+    }
     this.ingredientList = ingredientList || [];
 
     this.allIngredientNameStrings = this.ingredientList
