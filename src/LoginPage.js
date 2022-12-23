@@ -13,13 +13,12 @@ import {userSignedOut} from './features/ingredientStore/ingredientStoreSlice';
 
 const signedOutMessage = 'Not Signed In';
 export default function LoginPage() {
-  const {dispatch, ingredientManager} = useIngredientsStore();
-  const {firebaseUser} = useFirebase(dispatch, ingredientManager);
+  const {dispatch} = useIngredientsStore();
+  const {firebaseUser} = useFirebase();
   const isUserSignedIn = (firebaseUser != null);
   const [loginMessage, setLoginMessage] = useState(signedOutMessage);
 
   useEffect(() => {
-    console.log('LoginPage useEffect [firebaseUser]');
     if (firebaseUser != null ) {
       setLoginMessage(`Welcome ${firebaseUser.displayName}!`);
     } else {

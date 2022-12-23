@@ -97,7 +97,6 @@ export function convertFractionsToDecimals(strIn) {
 
   const numString = str.substring(numeratorStartIndex, slashIndex);
   const denomString = str.substring(slashIndex + 1, denomEndIndex);
-  // console.log(str + " ; found " + numString + " / " + denomString);
   let fraction = parseFloat(numString) / parseFloat(denomString);
   let wholeNumStart = numeratorStartIndex - 2;
   while (wholeNumStart >= 0 && isDecimal(str[wholeNumStart])) {

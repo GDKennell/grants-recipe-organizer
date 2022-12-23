@@ -48,11 +48,10 @@ export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
   if (ingredientManager != null &&
     ingredientManager.getAllIngredients!= null &&
     ingredientManager.getAllIngredients.length > 0) {
-    console.log(`Skipping fetch`);
     return;
-  } else {
-    console.log(`Going to fetch`);
   }
+  console.log(`Going to fetch`);
+
   try {
     // TODO: don't overwrite list if DB fetch fails
     const querySnapshot = await getDocs(collection(db, 'ingredients'));
@@ -88,7 +87,7 @@ export async function addNewIngredient( names, gramsPerCup, firebaseDb, firebase
       names: finalNames,
       gramsPerCup: gramsPerCup,
     });
-    console.log(`success adding document : ${finalNames} ${gramsPerCup}`);
+    // console.log(`success adding document : ${finalNames} ${gramsPerCup}`);
     const newIngredients = [makeIngredientObject(finalNames, gramsPerCup, /* isGlobal: */ false, userId)];
     dispatch(addNewIngredients({newIngredients: newIngredients}));
     completion();
@@ -112,7 +111,6 @@ async function storeIngredientToDb(ingredient, db) {
 export async function writeToDb(db) {
   const allDbNames = [];
   let numDocs = 0;
-  console.log('here we go');
   try {
     const querySnapshot = await getDocs(collection(db, 'ingredients'));
     querySnapshot.forEach((doc) => {

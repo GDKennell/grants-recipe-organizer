@@ -63,7 +63,6 @@ function App() {
   const [pageTypes, setPageTypes] = useState(defaultPageTypes);
 
   useEffect(() => {
-    console.log('App.js useEffect [firebaseUser]');
     const isUserAdmin = globalFirebaseManager.isUserAdmin(firebaseUser);
     const newPageTypes = pageTypes;
     if (isUserAdmin && !newPageTypes.includes(PageType.ADMIN_PANEL)) {

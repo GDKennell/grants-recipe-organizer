@@ -32,14 +32,8 @@ export function ingredientFromDoc(doc, isGlobal, userId) {
 }
 
 
-let numManagers = 0;
 export class IngredientManager {
   constructor(ingredientList) {
-    numManagers++;
-    const factor = 5;
-    if (numManagers % factor == 1) {
-      console.log(`creating IngredientManager #${numManagers}`);
-    }
     this.ingredientList = ingredientList || [];
 
     this.allIngredientNameStrings = this.ingredientList

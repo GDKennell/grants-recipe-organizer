@@ -11,7 +11,6 @@ const useIngredientsStore = () => {
     return new IngredientManager(ingredientList);
   }, [ingredientList]);
 
-  console.log(`useIngredientsStore hook making new IngredientManager(${ingredientList.length})`);
   return {ingredientManager: ingredientManager,
     dispatch: dispatch};
 };

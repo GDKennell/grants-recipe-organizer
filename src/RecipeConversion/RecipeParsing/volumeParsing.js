@@ -136,7 +136,6 @@ export function findGenericUnitMeasureString(
   let unitType = null;
   for (const str of getAllStringsFn()) {
     if (stringContainsWord(lowerLine, str)) {
-      // console.log("found match " + str + " in " + line);
       unitNamePos = lowerLine.indexOf(str);
       unitType = findByNameFn(str);
       unitTypeString = str;

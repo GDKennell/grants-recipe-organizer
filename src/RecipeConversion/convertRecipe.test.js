@@ -98,7 +98,6 @@ test('handles modifiers to ingredients and extraneous notes', () => {
   ];
 
   for (const testCase of testCases) {
-    //   console.log("testing " + testCase[0]);
     const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
     expect(parsedLine).toEqual(testCase[1]);
   }
@@ -113,7 +112,6 @@ test('Half cup cold shortening', () => {
   ];
 
   for (const testCase of testCases) {
-    //   console.log("testing " + testCase[0]);
     const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
     expect(parsedLine).toEqual(testCase[1]);
   }
@@ -145,7 +143,6 @@ test('handles unicode fractions', () => {
   ];
 
   for (const testCase of testCases) {
-    //   console.log("testing " + testCase[0]);
     const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
     expect(parsedLine).toEqual(testCase[1]);
   }
@@ -157,7 +154,6 @@ test('cream vs cream of tartar', () => {
   ];
 
   for (const testCase of testCases) {
-    //   console.log("testing " + testCase[0]);
     const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
     expect(parsedLine).toEqual(testCase[1]);
   }
