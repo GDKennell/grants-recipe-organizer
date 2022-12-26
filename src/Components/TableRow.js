@@ -29,9 +29,15 @@ export default function TableRow({rowData,
 
   useEffect(() => {
     console.log(`useEffect : namesText: ${namesText} gramsPerCupText: ${gramsPerCupText} originalNames:${originalNames}  originalGramsPerCupText:${originalGramsPerCupText}`);
-    setSaveEnabled(isNewIngredientValid(gramsPerCupText, namesText, ingredientManager) &&
-    (gramsPerCupText != originalGramsPerCupText || namesText != originalNames));
-  }, [namesText, gramsPerCupText]);
+    if (!isEditing) {
+      return;
+    }
+    let enableSave = (gramsPerCupText != originalGramsPerCupText || namesText != originalNames);
+    if (!isNewIngredientValid(gramsPerCupText, namesText, ingredientManager, rowData)) {
+      enableSave = false;
+    }
+    setSaveEnabled(enableSave);
+  }, [namesText, gramsPerCupText, isEditing]);
 
   const editPressed = () => {
     setIsEditing(true);

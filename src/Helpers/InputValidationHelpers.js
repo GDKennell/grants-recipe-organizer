@@ -17,13 +17,18 @@ export function isIngredientValid(namesText, gramsPerCupText) {
   return true;
 }
 
-export function isNewIngredientValid(gramsPerCupText, namesText, ingredientManager) {
+export function isNewIngredientValid(gramsPerCupText, namesText, ingredientManager, allowedIngredient) {
   if (!isIngredientValid(namesText, gramsPerCupText)) {
     return false;
   }
   const words = namesText.split(',');
   for (const word of words ) {
     if (ingredientManager.isIngredientName(word) ) {
+      const foundIng = ingredientManager.findIngredientByName(word);
+      if (allowedIngredient != null &&
+        foundIng.key == allowedIngredient.key) {
+        return true;
+      }
       return false;
     }
   }

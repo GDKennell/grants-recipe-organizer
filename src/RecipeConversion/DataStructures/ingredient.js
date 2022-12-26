@@ -90,7 +90,7 @@ export class IngredientManager {
   }
 
   findIngredientByName(ingredientName) {
-    return this.nameToIngredient[ingredientName];
+    return this.nameToIngredient[ingredientName.toLocaleLowerCase()];
   }
 };
 
