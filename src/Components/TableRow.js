@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from 'react';
-import {isIngredientValid} from '../Helpers/InputValidationHelpers';
+import {isNewIngredientValid} from '../Helpers/InputValidationHelpers';
 import {isIngredientOwned} from '../RecipeConversion/DataStructures/ingredient';
 import DeleteButton from './DeleteButton';
 
 export default function TableRow({rowData, firebaseUser, ingredientManager}) {
   const originalNames = rowData.names.join(', ');
   const originalGramsPerCupText = `${rowData.gramsPerCup}`;
+
 
   const isEditable = (isIngredientOwned(rowData, firebaseUser));
   const editableIngredientsExist = (ingredientManager.getUserScopedIngredients(firebaseUser).length > 0);
@@ -19,7 +20,7 @@ export default function TableRow({rowData, firebaseUser, ingredientManager}) {
 
   useEffect(() => {
     console.log(`useEffect : namesText: ${namesText} gramsPerCupText: ${gramsPerCupText} originalNames:${originalNames}  originalGramsPerCupText:${originalGramsPerCupText}`);
-    setSaveEnabled(isIngredientValid(namesText, gramsPerCupText) &&
+    setSaveEnabled(isNewIngredientValid(gramsPerCupText, namesText, ingredientManager) &&
     (gramsPerCupText != originalGramsPerCupText || namesText != originalNames));
   }, [namesText, gramsPerCupText]);
 

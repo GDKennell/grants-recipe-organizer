@@ -1,5 +1,6 @@
 import {isValidNumberString, removeAllWhitespace} from '../RecipeConversion/utilities/stringHelpers';
 
+
 export function isIngredientValid(namesText, gramsPerCupText) {
   const gramsPerCupValue = parseFloat(gramsPerCupText);
   if (!isValidNumberString(gramsPerCupText)) {
