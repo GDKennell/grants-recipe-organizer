@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, {useState} from 'react';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
 import TableRow from './TableRow';
@@ -7,6 +7,11 @@ import TableRow from './TableRow';
 export default function Table({data}) {
   const {ingredientManager} = useIngredientsStore();
   const {firebaseUser} = useFirebase();
+  const [editingRowKey, setEditingRowKey] = useState(null);
+
+  const startedEditingFn = (key) => {
+    setEditingRowKey(key);
+  };
 
   const headerData = {names: ['Ingredient Name(s)'], gramsPerCup: 'Grams per Cup'};
   return (
@@ -15,12 +20,16 @@ export default function Table({data}) {
         <TableRow rowData={headerData}
           key = {'heyimakeygoshdarnit'}
           firebaseUser={firebaseUser}
-          ingredientManager={ingredientManager}/>
+          ingredientManager={ingredientManager}
+          editingRowKey={editingRowKey}
+          startedEditingFn={startedEditingFn}/>
         {data.map((rowData) =>
           <TableRow rowData={rowData}
             key={rowData.key}
             firebaseUser={firebaseUser}
-            ingredientManager={ingredientManager}/>,
+            ingredientManager={ingredientManager}
+            editingRowKey={editingRowKey}
+            startedEditingFn={startedEditingFn}/>,
         )}
       </tbody>
     </table>

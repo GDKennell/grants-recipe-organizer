@@ -4,7 +4,11 @@ import {isNewIngredientValid} from '../Helpers/InputValidationHelpers';
 import {isIngredientOwned} from '../RecipeConversion/DataStructures/ingredient';
 import DeleteButton from './DeleteButton';
 
-export default function TableRow({rowData, firebaseUser, ingredientManager}) {
+export default function TableRow({rowData,
+  firebaseUser,
+  ingredientManager,
+  editingRowKey,
+  startedEditingFn}) {
   const originalNames = rowData.names.join(', ');
   const originalGramsPerCupText = `${rowData.gramsPerCup}`;
 
@@ -17,6 +21,11 @@ export default function TableRow({rowData, firebaseUser, ingredientManager}) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [saveEnabled, setSaveEnabled] = useState(false);
+  const [editEnabled, setEditEnabled] = useState(true);
+
+  useEffect(() => {
+    setEditEnabled(editingRowKey == null);
+  }, [editingRowKey]);
 
   useEffect(() => {
     console.log(`useEffect : namesText: ${namesText} gramsPerCupText: ${gramsPerCupText} originalNames:${originalNames}  originalGramsPerCupText:${originalGramsPerCupText}`);
@@ -26,6 +35,7 @@ export default function TableRow({rowData, firebaseUser, ingredientManager}) {
 
   const editPressed = () => {
     setIsEditing(true);
+    startedEditingFn(rowData.key);
   };
 
   const savePressed = () => {
@@ -34,6 +44,7 @@ export default function TableRow({rowData, firebaseUser, ingredientManager}) {
     }
     console.log(`Saved!`);
     setIsEditing(false);
+    startedEditingFn(null);
     // TODO: Save change to local & remote DB
   };
 
@@ -41,6 +52,7 @@ export default function TableRow({rowData, firebaseUser, ingredientManager}) {
     setNamesText(originalNames);
     setGramsPerCupText(originalGramsPerCupText);
     setIsEditing(false);
+    startedEditingFn(null);
   };
 
   const namesTextChaned = (event) => {
@@ -72,7 +84,7 @@ export default function TableRow({rowData, firebaseUser, ingredientManager}) {
         {isEditable && <DeleteButton ingredient={rowData}/>}
       </td>}
       {editableIngredientsExist && <td style= {{border: '1px solid'}}>
-        {isEditable && !isEditing && <button onClick={editPressed}>Edit</button>}
+        {isEditable && !isEditing && <button onClick={editPressed} disabled={!editEnabled}>Edit</button>}
         {isEditable && isEditing && <button onClick={savePressed} disabled={!saveEnabled}>Save</button>}
         {isEditable && isEditing && <button onClick={cancelPressed}>Cancel</button>}
       </td>}
