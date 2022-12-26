@@ -18,6 +18,7 @@ export default function TableRow({rowData, firebaseUser, ingredientManager}) {
   const [saveEnabled, setSaveEnabled] = useState(false);
 
   useEffect(() => {
+    console.log(`useEffect : namesText: ${namesText} gramsPerCupText: ${gramsPerCupText} originalNames:${originalNames}  originalGramsPerCupText:${originalGramsPerCupText}`);
     setSaveEnabled(isIngredientValid(namesText, gramsPerCupText) &&
     (gramsPerCupText != originalGramsPerCupText || namesText != originalNames));
   }, [namesText, gramsPerCupText]);
