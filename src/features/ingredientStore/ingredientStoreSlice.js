@@ -50,6 +50,13 @@ export const ingredientStoreSlice = createSlice({
         return ingredient.isGlobal;
       });
     },
+    ingredientUpdated: (state, action) => {
+      const newIngredient = action.payload.updatedIngredient;
+      state.ingredientList = state.ingredientList.filter((ingredient ) => {
+        return ingredient.id != newIngredient.id;
+      });
+      state.ingredientList.push(newIngredient);
+    },
   },
 });
 
@@ -59,6 +66,7 @@ export const {
   addNewIngredients,
   deleteIngredient,
   userSignedOut,
+  ingredientUpdated,
 } = ingredientStoreSlice.actions;
 
 export default ingredientStoreSlice.reducer;

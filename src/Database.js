@@ -1,6 +1,6 @@
 
 import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc} from 'firebase/firestore';
-import {addNewIngredients, deleteIngredient, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
+import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
 import {cleanIngredientWord} from './RecipeConversion/utilities/stringHelpers';
@@ -88,6 +88,7 @@ export async function updateUserIngredient(oldIngredient,
   const updateDict = {names: newIngredient.names,
     gramsPerCup: newIngredient.gramsPerCup};
   try {
+    dispatch(ingredientUpdated({updatedIngredient: newIngredient}));
     const docRef = doc(firebaseDb, 'users', userId, 'PrivateIngredients', oldIngredient.id);
     await updateDoc(docRef, updateDict);
     console.log(`Successfully updated ingredient ${JSON.stringify(updateDict)}`);
