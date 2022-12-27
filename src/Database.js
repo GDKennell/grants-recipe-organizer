@@ -1,5 +1,5 @@
 
-import {collection, getDocs, deleteDoc, doc, addDoc} from 'firebase/firestore';
+import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc} from 'firebase/firestore';
 import {addNewIngredients, deleteIngredient, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
@@ -77,6 +77,24 @@ export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
   }
 }
 
+export async function updateUserIngredient(oldIngredient,
+    newIngredient,
+    firebaseUser,
+    firebaseDb,
+    dispatch,
+    completion) {
+  const userId = firebaseUser.uid;
+
+  const updateDict = {names: newIngredient.names,
+    gramsPerCup: newIngredient.gramsPerCup};
+  try {
+    const docRef = doc(firebaseDb, 'users', userId, 'PrivateIngredients', oldIngredient.id);
+    await updateDoc(docRef, updateDict);
+    console.log(`Successfully updated ingredient ${JSON.stringify(updateDict)}`);
+  } catch (e) {
+    console.error('Error updating document: ', e);
+  }
+}
 
 export async function deleteUserIngredient( ingredient, firebaseDb, firebaseUser, dispatch, completion) {
   const db = firebaseDb;

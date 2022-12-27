@@ -1,6 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from 'react';
+import {updateUserIngredient} from '../Database';
 import {isNewIngredientValid} from '../Helpers/InputValidationHelpers';
+import useFirebase from '../hooks/useFirebase';
+import useIngredientsStore from '../hooks/useIngredientsStore';
+import {makeIngredientObject} from '../RecipeConversion/DataStructures/ingredient';
+import {sanitizeIngredientName} from '../RecipeConversion/utilities/stringHelpers';
 import {isIngredientOwned} from '../RecipeConversion/DataStructures/ingredient';
 import DeleteButton from './DeleteButton';
 
@@ -11,6 +16,8 @@ export default function TableRow({rowData,
   startedEditingFn}) {
   const originalNames = rowData.names.join(', ');
   const originalGramsPerCupText = `${rowData.gramsPerCup}`;
+  const {dispatch} = useIngredientsStore();
+  const {firebaseDb} = useFirebase();
 
 
   const isEditable = (isIngredientOwned(rowData, firebaseUser));
@@ -28,15 +35,19 @@ export default function TableRow({rowData,
   }, [editingRowKey]);
 
   useEffect(() => {
-    console.log(`useEffect : namesText: ${namesText} gramsPerCupText: ${gramsPerCupText} originalNames:${originalNames}  originalGramsPerCupText:${originalGramsPerCupText}`);
     if (!isEditing) {
       return;
     }
-    let enableSave = (gramsPerCupText != originalGramsPerCupText || namesText != originalNames);
-    if (!isNewIngredientValid(gramsPerCupText, namesText, ingredientManager, rowData)) {
-      enableSave = false;
+    if (parseFloat(gramsPerCupText) == parseFloat(originalGramsPerCupText) &&
+    sanitizeIngredientName(namesText) == sanitizeIngredientName(originalNames)) {
+      setSaveEnabled(false);
+      return;
     }
-    setSaveEnabled(enableSave);
+    if (!isNewIngredientValid(gramsPerCupText, namesText, ingredientManager, rowData)) {
+      setSaveEnabled(false);
+      return;
+    }
+    setSaveEnabled(true);
   }, [namesText, gramsPerCupText, isEditing]);
 
   const editPressed = () => {
@@ -51,7 +62,8 @@ export default function TableRow({rowData,
     console.log(`Saved!`);
     setIsEditing(false);
     startedEditingFn(null);
-    // TODO: Save change to local & remote DB
+    const newIngredient = makeIngredientObject(namesText.split(','), parseFloat(gramsPerCupText), false, firebaseUser.id, null);
+    updateUserIngredient(rowData, newIngredient, firebaseUser, firebaseDb, dispatch);
   };
 
   const cancelPressed = () => {

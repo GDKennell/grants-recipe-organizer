@@ -1,4 +1,4 @@
-import {cleanIngredientWord} from '../utilities/stringHelpers';
+import {cleanIngredientWord, sanitizeIngredientName} from '../utilities/stringHelpers';
 
 export function Ingredient(names, gramsPerCup) {
   this.names = names;
@@ -82,15 +82,13 @@ export class IngredientManager {
   }
 
   isIngredientName(strIn) {
-    let str = strIn;
-    if (str[str.length - 1] == ' ') {
-      str = str.substring(0, str.length - 1);
-    }
-    return this.allIngredientNameStrings.includes(str.toLocaleLowerCase());
+    const str = sanitizeIngredientName(strIn);
+    return this.allIngredientNameStrings.includes(str);
   }
 
   findIngredientByName(ingredientName) {
-    return this.nameToIngredient[ingredientName.toLocaleLowerCase()];
+    const str = sanitizeIngredientName(ingredientName);
+    return this.nameToIngredient[str];
   }
 };
 

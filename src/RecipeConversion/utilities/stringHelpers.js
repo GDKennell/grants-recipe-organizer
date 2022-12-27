@@ -265,6 +265,14 @@ export function sanitizePunctuation(strIn) {
   return str;
 }
 
+export function sanitizeIngredientName(strIn) {
+  let str = strIn;
+  str = removeTrailingWhitespace(str);
+  str = removeLeadingWhiteSpace(str);
+  str = str.toLocaleLowerCase();
+  return str;
+}
+
 export function removeSpacesBeforePunctuation(strIn) {
   let str = strIn;
   const excludedPunctuation = '(';
