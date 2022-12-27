@@ -14,6 +14,10 @@ export function isIngredientOwned(ingredient, firebaseUser) {
 
 export function makeIngredientObject(names, gramsPerCup, isGlobal, userId, id) {
   const finalNames = names.map((name) => cleanIngredientWord(name));
+
+  if (isGlobal == undefined) {
+    isGlobal = true;
+  }
   return {
     names: finalNames,
     gramsPerCup: gramsPerCup,
@@ -71,6 +75,21 @@ export class IngredientManager {
     }
     return this.ingredientList.filter((ingredient) => {
       return !ingredient.isGlobal && ingredient.userId == firebaseUser.uid;
+    });
+  }
+
+  getUserScopedIngredientsByUserId(userId) {
+    if (userId == null) {
+      return [];
+    }
+    return this.ingredientList.filter((ingredient) => {
+      return !ingredient.isGlobal && ingredient.userId == userId;
+    });
+  }
+
+  getAllUserScopedIngredients() {
+    return this.ingredientList.filter((ingredient) => {
+      return !ingredient.isGlobal;
     });
   }
 

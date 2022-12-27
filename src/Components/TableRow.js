@@ -62,7 +62,7 @@ export default function TableRow({rowData,
     console.log(`Saved!`);
     setIsEditing(false);
     startedEditingFn(null);
-    const newIngredient = makeIngredientObject(namesText.split(','), parseFloat(gramsPerCupText), false, firebaseUser.id, null);
+    const newIngredient = makeIngredientObject(namesText.split(','), parseFloat(gramsPerCupText), /* isGlobal */ false, firebaseUser.id, null);
     updateUserIngredient(rowData, newIngredient, firebaseUser, firebaseDb, dispatch);
   };
 

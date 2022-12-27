@@ -25,7 +25,11 @@ async function deleteGlobalIngredient(db, id) {
 }
 
 
-export async function fetchUserScopedIngredients(db, userId, dispatch) {
+export async function fetchUserScopedIngredients(db, userId, dispatch, ingredientManager) {
+  if (ingredientManager.getUserScopedIngredientsByUserId(userId).length > 0) {
+    return;
+  }
+
   const querySnapshot = await getDocs(collection(db, 'users', userId, 'PrivateIngredients' ));
   const localIngredients = [];
   try {
@@ -43,6 +47,25 @@ export async function fetchUserScopedIngredients(db, userId, dispatch) {
     console.error('Error fetching private documents: ', e);
   }
 }
+
+export async function fetchAllUserScopedIngredients(db, dispatch, ingredientManager) {
+  if (ingredientManager.getAllUserScopedIngredients().length > 0 ) {
+    return;
+  }
+  try {
+    let numUsers = 0;
+    const usersQuerySnapshot = await getDocs(collection(db, 'users' ));
+    usersQuerySnapshot.forEach((userDoc) => {
+      console.log(`admin: Going to try to fetch data for ${userDoc.id} #${numUsers}`);
+      numUsers++;
+      fetchUserScopedIngredients(db, userDoc.id, dispatch, ingredientManager);
+    });
+    console.log(`admin: fetched data for ${numUsers} users`);
+  } catch (e) {
+    console.error('Error fetching user documents: ', e);
+  }
+}
+
 
 export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
   if (ingredientManager != null &&
