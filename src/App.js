@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import AdminPanel from './Pages/AdminPanel';
 import './App.css';
 // import useIngredientsStore from './hooks/useIngredientsStore';
-import {globalFirebaseManager} from './Helpers/FirebaseManager';
+import {isUserAdmin} from './Helpers/FirebaseManager';
 import useFirebase from './hooks/useFirebase';
 import IngredientPage from './Pages/IngredientPage';
 import LoginPage from './Pages/LoginPage';
@@ -63,12 +63,14 @@ function App() {
   const [pageTypes, setPageTypes] = useState(defaultPageTypes);
 
   useEffect(() => {
-    const isUserAdmin = globalFirebaseManager.isUserAdmin(firebaseUser);
-    const newPageTypes = pageTypes;
-    if (isUserAdmin && !newPageTypes.includes(PageType.ADMIN_PANEL)) {
+    const userIsAdmin = isUserAdmin(firebaseUser);
+    let newPageTypes = pageTypes;
+    if (userIsAdmin && !newPageTypes.includes(PageType.ADMIN_PANEL)) {
       newPageTypes.push(PageType.ADMIN_PANEL);
-    } else if (!isUserAdmin && newPageTypes.includes(PageType.ADMIN_PANEL)) {
-      console.log('TODO: How to remove item from array?');
+    } else if (!userIsAdmin && newPageTypes.includes(PageType.ADMIN_PANEL)) {
+      newPageTypes = pageTypes.filter((type) => {
+        return type !=PageType.ADMIN_PANEL;
+      });
     }
     setPageTypes(newPageTypes);
   }, [firebaseUser]);
