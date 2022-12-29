@@ -3,7 +3,7 @@ import {getFirestore} from 'firebase/firestore';
 import {useState, useEffect} from 'react';
 import {getAuth} from 'firebase/auth';
 import {getAnalytics} from 'firebase/analytics';
-import {fetchAllUserScopedIngredients, fetchIngredientsFromDb, fetchUserScopedIngredients} from '../Database';
+import {fetchAllUserScopedIngredients, fetchIngredientsFromDb, fetchUserScopedIngredients, storeUserData} from '../Database';
 import useIngredientsStore from './useIngredientsStore';
 import {isUserAdmin} from '../Helpers/FirebaseManager';
 
@@ -40,6 +40,7 @@ const useFirebase = () => {
     const auth = getAuth();
     auth.onAuthStateChanged(function(user) {
       setFirebaseUser(user);
+      storeUserData(localFirebaseDb, user);
       if (isUserAdmin(user)) {
         console.log(`Fetching for admin`);
         fetchAllUserScopedIngredients(localFirebaseDb, dispatch, ingredientManager);

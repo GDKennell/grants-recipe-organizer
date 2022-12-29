@@ -1,9 +1,9 @@
 
-import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc} from 'firebase/firestore';
+import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc, getDoc, setDoc} from 'firebase/firestore';
 import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
-import {cleanIngredientWord} from './RecipeConversion/utilities/stringHelpers';
+import {cleanIngredientWord, objectsEqual} from './RecipeConversion/utilities/stringHelpers';
 
 
 function isValidIngredientDoc(doc ) {
@@ -24,6 +24,47 @@ async function deleteGlobalIngredient(db, id) {
   }
 }
 
+const userEmailKey = 'user-email';
+const userNameKey = 'user-name';
+function metadataFromUser(user) {
+  const obj = {};
+  obj[userEmailKey] = user.email;
+  obj[userNameKey] = user.displayName;
+  return obj;
+}
+function userMetadataFromDoc(doc) {
+  const obj = {};
+  obj[userEmailKey] = doc.data()[userEmailKey];
+  obj[userNameKey] = doc.data()[userNameKey];
+  return obj;
+}
+
+function docMatchesUser(doc, user) {
+  return objectsEqual(metadataFromUser(user), userMetadataFromDoc(doc));
+}
+
+export async function storeUserData(db, user) {
+  if (!user) {
+    return;
+  }
+  const userDocRef = doc(db, 'users', user.uid);
+  const userDocSnap = await getDoc(userDocRef);
+
+  if (userDocSnap.exists()) {
+    if (!docMatchesUser(userDocSnap, user)) {
+      console.log(`User exists but wrong data: ${userMetadataFromDoc(userDocSnap)}`);
+      await updateDoc(userDocRef, metadataFromUser(user));
+    }
+  } else {
+    const docData = metadataFromUser(user);
+    setDoc(userDocRef, docData).then(() => {
+      console.log('Document has been added successfully');
+    })
+        .catch((error) => {
+          console.error(error);
+        });
+  }
+}
 
 export async function fetchUserScopedIngredients(db, userId, dispatch, ingredientManager) {
   if (ingredientManager.getUserScopedIngredientsByUserId(userId).length > 0) {
