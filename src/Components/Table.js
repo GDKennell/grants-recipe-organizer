@@ -13,7 +13,7 @@ export default function Table({data}) {
     setEditingRowKey(key);
   };
 
-  const headerData = {names: ['Ingredient Name(s)'], gramsPerCup: 'Grams per Cup'};
+  const headerData = {names: ['Ingredient Name(s)'], gramsPerCup: 'Grams per Cup', userId: null};
   return (
     <table style= {{border: '1px solid'}}>
       <tbody>

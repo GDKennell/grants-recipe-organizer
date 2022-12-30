@@ -107,13 +107,13 @@ export async function fetchAllUserScopedIngredients(db, dispatch, ingredientMana
   }
 }
 
+let dbFetchStarted = false;
 
-export async function fetchIngredientsFromDb(db, dispatch, ingredientManager) {
-  if (ingredientManager != null &&
-    ingredientManager.getAllIngredients!= null &&
-    ingredientManager.getAllIngredients.length > 0) {
+export async function fetchIngredientsFromDb(db, dispatch) {
+  if (dbFetchStarted) {
     return;
   }
+  dbFetchStarted = true;
   console.log(`Going to fetch`);
 
   try {
