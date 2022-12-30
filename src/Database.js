@@ -89,6 +89,18 @@ export async function fetchUserScopedIngredients(db, userId, dispatch, ingredien
   }
 }
 
+const userIdToName = {};
+export function getNameForUserId(userId, fallback) {
+  return (!userId) ? fallback : userIdToName[userId];
+}
+
+async function fetchUserName(db, userId) {
+  const userDocRef = doc(db, 'users', userId);
+  const userDocSnap = await getDoc(userDocRef);
+  const userName = userDocSnap.data()[userNameKey];
+  userIdToName[userId] = userName;
+}
+
 export async function fetchAllUserScopedIngredients(db, dispatch, ingredientManager) {
   if (ingredientManager.getAllUserScopedIngredients().length > 0 ) {
     return;
@@ -100,6 +112,7 @@ export async function fetchAllUserScopedIngredients(db, dispatch, ingredientMana
       console.log(`admin: Going to try to fetch data for ${userDoc.id} #${numUsers}`);
       numUsers++;
       fetchUserScopedIngredients(db, userDoc.id, dispatch, ingredientManager);
+      fetchUserName(db, userDoc.id);
     });
     console.log(`admin: fetched data for ${numUsers} users`);
   } catch (e) {

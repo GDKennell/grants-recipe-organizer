@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from 'react';
-import {updateUserIngredient} from '../Database';
+import {getNameForUserId, updateUserIngredient} from '../Database';
 import {isNewIngredientValid} from '../Helpers/InputValidationHelpers';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
@@ -8,6 +8,7 @@ import {makeIngredientObject} from '../RecipeConversion/DataStructures/ingredien
 import {sanitizeIngredientName} from '../RecipeConversion/utilities/stringHelpers';
 import {isIngredientOwned} from '../RecipeConversion/DataStructures/ingredient';
 import DeleteButton from './DeleteButton';
+import {isUserAdmin} from '../Helpers/FirebaseManager';
 
 export default function TableRow({rowData,
   firebaseUser,
@@ -18,7 +19,7 @@ export default function TableRow({rowData,
   const originalGramsPerCupText = `${rowData.gramsPerCup}`;
   const {dispatch} = useIngredientsStore();
   const {firebaseDb} = useFirebase();
-
+  const isAdmin = isUserAdmin(firebaseUser);
 
   const isEditable = (isIngredientOwned(rowData, firebaseUser));
   const editableIngredientsExist = (ingredientManager.getUserScopedIngredients(firebaseUser).length > 0);
@@ -29,6 +30,8 @@ export default function TableRow({rowData,
 
   const [saveEnabled, setSaveEnabled] = useState(false);
   const [editEnabled, setEditEnabled] = useState(true);
+
+  const userName = getNameForUserId(rowData.userId, 'User Name');
 
   useEffect(() => {
     setEditEnabled(editingRowKey == null);
@@ -84,6 +87,9 @@ export default function TableRow({rowData,
 
   return (
     <tr >
+      { isAdmin && <td style= {{border: '1px solid'}}>
+        {userName}
+      </td>}
       <td style= {{border: '1px solid'}}>
         {
       isEditing ?
