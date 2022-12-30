@@ -7,6 +7,7 @@ import {convertRecipe} from '../RecipeConversion/convertRecipe';
 import {parseIngredientListLine} from '../RecipeConversion/RecipeParsing/ingredientParsing';
 import {removeAllWhitespace, removeExtraNewLines} from '../RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from '../Components/UnkownIngredientsSection';
+// eslint-disable-next-line no-unused-vars
 import {allHardCodedRecipes, ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/hardCodedRecipes';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -74,18 +75,19 @@ function RecipeConversion() {
     updateUnknownIngredients();
   }, []);
 
+  const savePressed = () => {
+    console.log(`Save recipe`);
+  };
+
   return (
     <div className="App">
       <div className="root-container">
         <h1 className="title"> Recipe Converter </h1>
-        {allHardCodedRecipes.map((recipe) => {
-          return <button key={recipe[recipeNameKey]} onClick={() => {
-            setIngredientListText(recipe[ingredientTextKey]);
-            setRecipeText(recipe[recipeTextKey]);
-          }}>
-            {recipe[recipeNameKey]}
-          </button>;
-        })}
+        <select>
+          {allHardCodedRecipes.map((recipe) => {
+            return <option key={recipe[recipeNameKey]}> {recipe[recipeNameKey]}</option>;
+          })}
+        </select>
         <h3 className="instructions"> Paste recipe below:</h3>
         <div className="instructions">Ingredient list</div>
         <textarea
@@ -104,7 +106,7 @@ function RecipeConversion() {
           value={recipeText}
         ></textarea>
         <h3 className="instructions"> Converted Recipe:</h3>
-
+        <button onClick={savePressed}>Save Recipe</button>
         <textarea
           className="main-recipe input-field"
           onChange={outputTextChange}
