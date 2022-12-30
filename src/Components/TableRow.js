@@ -14,14 +14,16 @@ export default function TableRow({rowData,
   firebaseUser,
   ingredientManager,
   editingRowKey,
+  isHeader,
   startedEditingFn}) {
   const originalNames = rowData.names.join(', ');
   const originalGramsPerCupText = `${rowData.gramsPerCup}`;
   const {dispatch} = useIngredientsStore();
   const {firebaseDb} = useFirebase();
   const isAdmin = isUserAdmin(firebaseUser);
+  const canPromote = isAdmin && !isHeader;
 
-  const isEditable = (isIngredientOwned(rowData, firebaseUser) || isAdmin);
+  const isEditable = !isHeader && (isIngredientOwned(rowData, firebaseUser) || isAdmin);
   const editableIngredientsExist = (ingredientManager.getUserScopedIngredients(firebaseUser).length > 0);
 
   const [namesText, setNamesText] = useState(originalNames);
@@ -121,10 +123,11 @@ export default function TableRow({rowData,
         {isEditable && isEditing && <button onClick={savePressed} disabled={!saveEnabled}>Save</button>}
         {isEditable && isEditing && <button onClick={cancelPressed}>Cancel</button>}
       </td>}
-      {isAdmin &&
       <td style= {{border: '1px solid'}}>
+        {canPromote &&
         <button onClick={promotePressed} disabled={!promoteEnabled}>Promote</button>
-      </td>}
+        }
+      </td>
 
 
     </tr>

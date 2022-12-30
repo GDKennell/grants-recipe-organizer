@@ -22,6 +22,7 @@ export default function Table({data}) {
           firebaseUser={firebaseUser}
           ingredientManager={ingredientManager}
           editingRowKey={editingRowKey}
+          isHeader={true}
           startedEditingFn={startedEditingFn}/>
         {data.map((rowData) =>
           <TableRow rowData={rowData}
@@ -29,6 +30,7 @@ export default function Table({data}) {
             firebaseUser={firebaseUser}
             ingredientManager={ingredientManager}
             editingRowKey={editingRowKey}
+            isHeader={false}
             startedEditingFn={startedEditingFn}/>,
         )}
       </tbody>
