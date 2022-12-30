@@ -101,6 +101,11 @@ async function fetchUserName(db, userId) {
   userIdToName[userId] = userName;
 }
 
+export async function promoteIngredient(db, dispatch, ingredient) {
+// Create a global ingredient with same name as this ingredient
+// Update the local ingredient manaager to reflec that
+}
+
 export async function fetchAllUserScopedIngredients(db, dispatch, ingredientManager) {
   if (ingredientManager.getAllUserScopedIngredients().length > 0 ) {
     return;

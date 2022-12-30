@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from 'react';
-import {getNameForUserId, updateUserIngredient} from '../Database';
+import {getNameForUserId, promoteIngredient, updateUserIngredient} from '../Database';
 import {isNewIngredientValid} from '../Helpers/InputValidationHelpers';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
@@ -30,12 +30,17 @@ export default function TableRow({rowData,
 
   const [saveEnabled, setSaveEnabled] = useState(false);
   const [editEnabled, setEditEnabled] = useState(true);
+  const [promoteEnabled, setPromoteEnabled] = useState(true);
 
   const userName = getNameForUserId(rowData.userId, 'User Name');
 
   useEffect(() => {
     setEditEnabled(editingRowKey == null);
   }, [editingRowKey]);
+
+  useEffect(() => {
+    setPromoteEnabled(!isEditing && !rowData.isGlobal);
+  }, [isEditing]);
 
   useEffect(() => {
     if (!isEditing) {
@@ -67,6 +72,10 @@ export default function TableRow({rowData,
     startedEditingFn(null);
     const newIngredient = makeIngredientObject(namesText.split(','), parseFloat(gramsPerCupText), /* isGlobal */ false, firebaseUser.id, null);
     updateUserIngredient(rowData, newIngredient, firebaseUser, firebaseDb, dispatch);
+  };
+
+  const promotePressed = () => {
+    promoteIngredient(firebaseDb, dispatch, rowData);
   };
 
   const cancelPressed = () => {
@@ -112,6 +121,11 @@ export default function TableRow({rowData,
         {isEditable && isEditing && <button onClick={savePressed} disabled={!saveEnabled}>Save</button>}
         {isEditable && isEditing && <button onClick={cancelPressed}>Cancel</button>}
       </td>}
+      {isAdmin &&
+      <td style= {{border: '1px solid'}}>
+        <button onClick={promotePressed} disabled={!promoteEnabled}>Promote</button>
+      </td>}
+
 
     </tr>
 
