@@ -51,9 +51,17 @@ function RecipeConversion() {
     setRecipeNumRows(Math.max(minRows, numLines));
   };
 
+  const outputTextChange = (event) => {
+    const textInput = event.target.value;
+    setOutputText(textInput);
+  };
+
+  const [outputNumRows, setOutputNumRows] = useState(minRows);
+
   useEffect(() => {
     const newValue = convertRecipe(ingredientListText, recipeText, ingredientManager);
     setOutputText(newValue);
+    setOutputNumRows(Math.max(minRows, newValue.split('\n').length));
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientListText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
     updateUnknownIngredients();
@@ -88,7 +96,13 @@ function RecipeConversion() {
         ></textarea>
         <h3 className="instructions"> Converted Recipe:</h3>
 
-        <div className="output-field">{outputText}</div>
+        <textarea
+          className="main-recipe input-field"
+          onChange={outputTextChange}
+          rows={outputNumRows}
+          value={outputText}
+        ></textarea>
+
       </div>
     </div>
   );
