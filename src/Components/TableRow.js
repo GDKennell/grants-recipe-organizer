@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from 'react';
-import {getNameForUserId, promoteIngredient, updateUserIngredient} from '../Database';
+import {getNameForUserId, promoteIngredient, updateIngredient} from '../Database';
 import {isNewIngredientValid} from '../Helpers/InputValidationHelpers';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
@@ -21,7 +21,7 @@ export default function TableRow({rowData,
   const {firebaseDb} = useFirebase();
   const isAdmin = isUserAdmin(firebaseUser);
 
-  const isEditable = (isIngredientOwned(rowData, firebaseUser));
+  const isEditable = (isIngredientOwned(rowData, firebaseUser) || isAdmin);
   const editableIngredientsExist = (ingredientManager.getUserScopedIngredients(firebaseUser).length > 0);
 
   const [namesText, setNamesText] = useState(originalNames);
@@ -70,8 +70,8 @@ export default function TableRow({rowData,
     console.log(`Saved!`);
     setIsEditing(false);
     startedEditingFn(null);
-    const newIngredient = makeIngredientObject(namesText.split(','), parseFloat(gramsPerCupText), /* isGlobal */ false, firebaseUser.id, null);
-    updateUserIngredient(rowData, newIngredient, firebaseUser, firebaseDb, dispatch);
+    const newIngredient = makeIngredientObject(namesText.split(','), parseFloat(gramsPerCupText), /* isGlobal */ rowData.isGlobal, firebaseUser.id, rowData.id);
+    updateIngredient(rowData, newIngredient, firebaseUser, firebaseDb, dispatch);
   };
 
   const promotePressed = () => {

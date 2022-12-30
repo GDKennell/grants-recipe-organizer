@@ -159,7 +159,7 @@ export async function fetchIngredientsFromDb(db, dispatch) {
   }
 }
 
-export async function updateUserIngredient(oldIngredient,
+export async function updateIngredient(oldIngredient,
     newIngredient,
     firebaseUser,
     firebaseDb,
@@ -171,7 +171,12 @@ export async function updateUserIngredient(oldIngredient,
     gramsPerCup: newIngredient.gramsPerCup};
   try {
     dispatch(ingredientUpdated({updatedIngredient: newIngredient}));
-    const docRef = doc(firebaseDb, 'users', userId, 'PrivateIngredients', oldIngredient.id);
+    let docRef;
+    if (newIngredient.isGlobal) {
+      docRef = doc(firebaseDb, 'ingredients', oldIngredient.id);
+    } else {
+      docRef = doc(firebaseDb, 'users', userId, 'PrivateIngredients', oldIngredient.id);
+    }
     await updateDoc(docRef, updateDict);
     console.log(`Successfully updated ingredient ${JSON.stringify(updateDict)}`);
   } catch (e) {
