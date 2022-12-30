@@ -7,6 +7,7 @@ import {convertRecipe} from '../RecipeConversion/convertRecipe';
 import {parseIngredientListLine} from '../RecipeConversion/RecipeParsing/ingredientParsing';
 import {removeAllWhitespace, removeExtraNewLines} from '../RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from '../Components/UnkownIngredientsSection';
+import {allHardCodedRecipes, ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/hardCodedRecipes';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -77,6 +78,14 @@ function RecipeConversion() {
     <div className="App">
       <div className="root-container">
         <h1 className="title"> Recipe Converter </h1>
+        {allHardCodedRecipes.map((recipe) => {
+          return <button key={recipe[recipeNameKey]} onClick={() => {
+            setIngredientListText(recipe[ingredientTextKey]);
+            setRecipeText(recipe[recipeTextKey]);
+          }}>
+            {recipe[recipeNameKey]}
+          </button>;
+        })}
         <h3 className="instructions"> Paste recipe below:</h3>
         <div className="instructions">Ingredient list</div>
         <textarea
