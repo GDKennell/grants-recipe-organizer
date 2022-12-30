@@ -34,7 +34,8 @@ export default function TableRow({rowData,
   const [editEnabled, setEditEnabled] = useState(true);
   const [promoteEnabled, setPromoteEnabled] = useState(true);
 
-  const userName = getNameForUserId(rowData.userId, 'User Name');
+  const defaultName = isHeader ? 'User Name' : 'Global';
+  const userName = getNameForUserId(rowData.userId, defaultName);
 
   useEffect(() => {
     setEditEnabled(editingRowKey == null);
