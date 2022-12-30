@@ -1,5 +1,5 @@
 import React from 'react';
-import {deleteUserIngredient} from '../Database';
+import {deleteIngredientFromDb} from '../Database';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
 
@@ -9,7 +9,7 @@ export default function DeleteButton({ingredient}) {
   const {firebaseDb, firebaseUser} = useFirebase();
 
   const deleteClicked = () => {
-    deleteUserIngredient(ingredient, firebaseDb, firebaseUser, dispatch);
+    deleteIngredientFromDb(ingredient, firebaseDb, firebaseUser, dispatch);
   };
 
   return (

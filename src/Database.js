@@ -184,15 +184,21 @@ export async function updateIngredient(oldIngredient,
   }
 }
 
-export async function deleteUserIngredient( ingredient, firebaseDb, firebaseUser, dispatch, completion) {
-  const db = firebaseDb;
+export async function deleteIngredientFromDb( ingredient, firebaseDb, firebaseUser, dispatch, completion) {
   const userId = firebaseUser.uid;
   if (!confirm(`Are you sure you want to delete ${ingredient.names[0]}?`)) {
     return;
   }
   try {
     dispatch(deleteIngredient({ingredientToDelete: ingredient}));
-    await deleteDoc(doc(db, 'users', userId, 'PrivateIngredients', ingredient.id));
+
+    let docRef;
+    if (ingredient.isGlobal) {
+      docRef = doc(firebaseDb, 'ingredients', ingredient.id);
+    } else {
+      docRef = doc(firebaseDb, 'users', userId, 'PrivateIngredients', ingredient.id);
+    }
+    await deleteDoc(docRef);
     console.log(`Successfully deleted document`);
     if (completion) {
       completion();
