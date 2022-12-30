@@ -1,5 +1,6 @@
 
 import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc, getDoc, setDoc} from 'firebase/firestore';
+import {ingredientsCollection, privateIngredientsCollection, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
 import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
@@ -18,14 +19,12 @@ function isValidIngredientDoc(doc ) {
 
 async function deleteGlobalIngredient(db, id) {
   try {
-    await deleteDoc(doc(db, 'ingredients', id));
+    await deleteDoc(doc(db, ingredientsCollection, id));
   } catch (e) {
     console.error('Error deleting documents: ', e);
   }
 }
 
-const userEmailKey = 'user-email';
-const userNameKey = 'user-name';
 function metadataFromUser(user) {
   const obj = {};
   obj[userEmailKey] = user.email;
@@ -47,7 +46,7 @@ export async function storeUserData(db, user) {
   if (!user) {
     return;
   }
-  const userDocRef = doc(db, 'users', user.uid);
+  const userDocRef = doc(db, usersCollection, user.uid);
   const userDocSnap = await getDoc(userDocRef);
 
   if (userDocSnap.exists()) {
@@ -71,7 +70,7 @@ export async function fetchUserScopedIngredients(db, userId, dispatch, ingredien
     return;
   }
 
-  const querySnapshot = await getDocs(collection(db, 'users', userId, 'PrivateIngredients' ));
+  const querySnapshot = await getDocs(collection(db, usersCollection, userId, privateIngredientsCollection ));
   const localIngredients = [];
   try {
     querySnapshot.forEach((doc) => {
@@ -95,7 +94,7 @@ export function getNameForUserId(userId, fallback) {
 }
 
 async function fetchUserName(db, userId) {
-  const userDocRef = doc(db, 'users', userId);
+  const userDocRef = doc(db, usersCollection, userId);
   const userDocSnap = await getDoc(userDocRef);
   const userName = userDocSnap.data()[userNameKey];
   userIdToName[userId] = userName;
@@ -105,7 +104,7 @@ export async function promoteIngredient(db, dispatch, ingredient) {
   const newIngredient = makeIngredientObject(ingredient.names, ingredient.gramsPerCup, /* isGlobal */ true, /* userId */ null, /* id*/ null);
   dispatch(addNewIngredients({newIngredients: [newIngredient]}));
   try {
-    await addDoc(collection(db, 'ingredients'), {
+    await addDoc(collection(db, ingredientsCollection), {
       names: ingredient.names,
       gramsPerCup: ingredient.gramsPerCup,
     });
@@ -121,7 +120,7 @@ export async function fetchAllUserScopedIngredients(db, dispatch, ingredientMana
   }
   try {
     let numUsers = 0;
-    const usersQuerySnapshot = await getDocs(collection(db, 'users' ));
+    const usersQuerySnapshot = await getDocs(collection(db, usersCollection ));
     usersQuerySnapshot.forEach((userDoc) => {
       console.log(`admin: Going to try to fetch data for ${userDoc.id} #${numUsers}`);
       numUsers++;
@@ -145,7 +144,7 @@ export async function fetchIngredientsFromDb(db, dispatch) {
 
   try {
     // TODO: don't overwrite list if DB fetch fails
-    const querySnapshot = await getDocs(collection(db, 'ingredients'));
+    const querySnapshot = await getDocs(collection(db, ingredientsCollection));
     const localIngredients = [];
     const allNames = [];
     querySnapshot.forEach((doc) => {
@@ -182,9 +181,9 @@ export async function updateIngredient(oldIngredient,
     dispatch(ingredientUpdated({updatedIngredient: newIngredient}));
     let docRef;
     if (newIngredient.isGlobal) {
-      docRef = doc(firebaseDb, 'ingredients', oldIngredient.id);
+      docRef = doc(firebaseDb, ingredientsCollection, oldIngredient.id);
     } else {
-      docRef = doc(firebaseDb, 'users', userId, 'PrivateIngredients', oldIngredient.id);
+      docRef = doc(firebaseDb, usersCollection, userId, privateIngredientsCollection, oldIngredient.id);
     }
     await updateDoc(docRef, updateDict);
     console.log(`Successfully updated ingredient ${JSON.stringify(updateDict)}`);
@@ -203,9 +202,9 @@ export async function deleteIngredientFromDb( ingredient, firebaseDb, firebaseUs
 
     let docRef;
     if (ingredient.isGlobal) {
-      docRef = doc(firebaseDb, 'ingredients', ingredient.id);
+      docRef = doc(firebaseDb, ingredientsCollection, ingredient.id);
     } else {
-      docRef = doc(firebaseDb, 'users', userId, 'PrivateIngredients', ingredient.id);
+      docRef = doc(firebaseDb, usersCollection, userId, privateIngredientsCollection, ingredient.id);
     }
     await deleteDoc(docRef);
     console.log(`Successfully deleted document`);
@@ -226,7 +225,7 @@ export async function addNewIngredient( names, gramsPerCup, firebaseDb, firebase
     const newIngredients = [makeIngredientObject(finalNames, gramsPerCup, /* isGlobal: */ false, userId)];
     dispatch(addNewIngredients({newIngredients: newIngredients}));
 
-    await addDoc(collection(db, 'users', userId, 'PrivateIngredients' ), {
+    await addDoc(collection(db, usersCollection, userId, privateIngredientsCollection ), {
       names: finalNames,
       gramsPerCup: gramsPerCup,
     });
@@ -240,7 +239,7 @@ export async function addNewIngredient( names, gramsPerCup, firebaseDb, firebase
 
 async function storeIngredientToDb(ingredient, db) {
   try {
-    await addDoc(collection(db, 'ingredients'), {
+    await addDoc(collection(db, ingredientsCollection), {
       names: ingredient.names,
       gramsPerCup: ingredient.gramsPerCup,
     });
@@ -253,7 +252,7 @@ export async function writeToDb(db) {
   const allDbNames = [];
   let numDocs = 0;
   try {
-    const querySnapshot = await getDocs(collection(db, 'ingredients'));
+    const querySnapshot = await getDocs(collection(db, ingredientsCollection));
     querySnapshot.forEach((doc) => {
       if (doc.data().gramsPerCup != undefined ) {
         numDocs ++;
