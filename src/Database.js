@@ -102,8 +102,17 @@ async function fetchUserName(db, userId) {
 }
 
 export async function promoteIngredient(db, dispatch, ingredient) {
-// Create a global ingredient with same name as this ingredient
-// Update the local ingredient manaager to reflec that
+  const newIngredient = makeIngredientObject(ingredient.names, ingredient.gramsPerCup, /* isGlobal */ true, /* userId */ null, /* id*/ null);
+  dispatch(addNewIngredients({newIngredients: [newIngredient]}));
+  try {
+    await addDoc(collection(db, 'ingredients'), {
+      names: ingredient.names,
+      gramsPerCup: ingredient.gramsPerCup,
+    });
+    console.log(`success adding global ingredient : ${ingredient.names} / ${ingredient.gramsPerCup}`);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
 }
 
 export async function fetchAllUserScopedIngredients(db, dispatch, ingredientManager) {
