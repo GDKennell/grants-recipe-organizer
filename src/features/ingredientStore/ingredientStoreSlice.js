@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {allHardCodedIngredients} from '../../RecipeConversion/DataStructures/hardCodedIngredients';
-import {IngredientManager} from '../../RecipeConversion/DataStructures/ingredient';
+import {IngredientManager, ingredientsEqual} from '../../RecipeConversion/DataStructures/ingredient';
 
 
 function isPreExistingIngredient(ingredient, existingList) {
@@ -28,6 +28,9 @@ export const ingredientStoreSlice = createSlice({
     addNewIngredients: (state, action) => {
       let added = false;
       for (const newIngredient of action.payload.newIngredients) {
+        if (newIngredient.isGlobal) {
+          state.ingredientList = state.ingredientList.filter((ing) => !ingredientsEqual(ing, newIngredient));
+        }
         if (!isPreExistingIngredient(newIngredient, state.ingredientList)) {
           added = true;
           state.ingredientList.push(newIngredient);

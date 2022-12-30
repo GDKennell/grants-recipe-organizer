@@ -37,6 +37,22 @@ export function ingredientFromDoc(doc, isGlobal, userId) {
       doc.id);
 }
 
+function namesDescription(ingredient) {
+  const names = [...ingredient.names];
+  names.sort( (left, right) => {
+    return left.localeCompare(right);
+  });
+  return names.join('----');
+}
+
+export function ingredientsEqual(i1, i2) {
+  if (i1.names.length != i2.names.length ||
+    i1.gramsPerCup != i2.gramsPerCup) {
+    return false;
+  }
+  return namesDescription(i1) == namesDescription(i2);
+}
+
 
 export class IngredientManager {
   constructor(ingredientList) {
