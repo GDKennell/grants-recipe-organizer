@@ -17,7 +17,7 @@ const recipeKey = 'recKey';
 
 function RecipeConversion() {
   const {ingredientManager} = useIngredientsStore();
-  const [outputText, setOutputText] = useState('');
+  const [autoConvertedOutputText, setAutoConvertedOutputText] = useState('');
 
   const minRows = 5;
   const [ingredientListText, setIngredientListText] = useState(JSON.parse(localStorage.getItem(ingredientKey)) || '');
@@ -53,16 +53,16 @@ function RecipeConversion() {
     setRecipeNumRows(Math.max(minRows, numLines));
   };
 
-  const outputTextChange = (event) => {
+  const autoConvertedOutputTextChange = (event) => {
     const textInput = event.target.value;
-    setOutputText(textInput);
+    setAutoConvertedOutputText(textInput);
   };
 
   const [outputNumRows, setOutputNumRows] = useState(minRows);
 
   useEffect(() => {
     const newValue = convertRecipe(ingredientListText, recipeText, ingredientManager);
-    setOutputText(newValue);
+    setAutoConvertedOutputText(newValue);
     setOutputNumRows(Math.max(minRows, newValue.split('\n').length));
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientListText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
@@ -115,9 +115,9 @@ function RecipeConversion() {
         <button onClick={savePressed}>Save Recipe</button>
         <textarea
           className="main-recipe input-field"
-          onChange={outputTextChange}
+          onChange={autoConvertedOutputTextChange}
           rows={outputNumRows}
-          value={outputText}
+          value={autoConvertedOutputText}
         ></textarea>
 
       </div>
