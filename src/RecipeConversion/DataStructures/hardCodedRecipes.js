@@ -84,3 +84,12 @@ const gochujangCookiesRecipe = makeRecipe('Gochujang cookies',
 );
 
 export const allHardCodedRecipes = [pizzaDoughRecipe, chickenSaladRecipe, gochujangCookiesRecipe];
+
+const nameToRecipe = {};
+for (const recipe of allHardCodedRecipes) {
+  nameToRecipe[recipe[recipeNameKey]] = recipe;
+}
+
+export function getRecipeByName(name) {
+  return nameToRecipe[name];
+}

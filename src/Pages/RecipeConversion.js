@@ -8,7 +8,7 @@ import {parseIngredientListLine} from '../RecipeConversion/RecipeParsing/ingredi
 import {removeAllWhitespace, removeExtraNewLines} from '../RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from '../Components/UnkownIngredientsSection';
 // eslint-disable-next-line no-unused-vars
-import {allHardCodedRecipes, ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/hardCodedRecipes';
+import {allHardCodedRecipes, getRecipeByName, ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/hardCodedRecipes';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -78,12 +78,18 @@ function RecipeConversion() {
   const savePressed = () => {
     console.log(`Save recipe`);
   };
-
+  const presetSelectChange = (arg) => {
+    const selectedName = arg.target.value;
+    const recipe = getRecipeByName(selectedName);
+    setIngredientListText(recipe[ingredientTextKey]);
+    setRecipeText(recipe[recipeTextKey]);
+  };
   return (
     <div className="App">
       <div className="root-container">
         <h1 className="title"> Recipe Converter </h1>
-        <select>
+        <select onChange={presetSelectChange}>
+          <option value="" disabled selected>Preset Recipe</option>
           {allHardCodedRecipes.map((recipe) => {
             return <option key={recipe[recipeNameKey]}> {recipe[recipeNameKey]}</option>;
           })}
