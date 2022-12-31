@@ -78,6 +78,7 @@ function RecipeConversion() {
         if (!manualEditing || confirm('Do you want to overwrite your manual edits?')) {
           setManualEditedOutputText(newValue);
           setManualEditing(false);
+          setOutputType((oldType) => (oldType == outputTypeManualEdit ? outputTypeAutomatic : oldType));
         }
       }
       return newValue;
