@@ -15,10 +15,16 @@ import {allHardCodedRecipes, getRecipeByName, ingredientTextKey, recipeNameKey, 
 const ingredientKey = 'ingKey';
 const recipeKey = 'recKey';
 
+const outputTypeAutomatic='AutomaticRecipe';
+const outputTypeManualEdit='ManualEdit';
+const outputTypeBoth='both';
+
 function RecipeConversion() {
   const {ingredientManager} = useIngredientsStore();
   const [autoConvertedOutputText, setAutoConvertedOutputText] = useState('');
-
+  const [manualEditedOutputText, setManualEditedOutputText] = useState('');
+  const [manualEditing, setManualEditing] = useState(false);
+  const [outputType, setOutputType] = useState(outputTypeAutomatic);
   const minRows = 5;
   const [ingredientListText, setIngredientListText] = useState(JSON.parse(localStorage.getItem(ingredientKey)) || '');
   const [recipeText, setRecipeText] = useState(JSON.parse(localStorage.getItem(recipeKey)) || '');
@@ -55,14 +61,28 @@ function RecipeConversion() {
 
   const autoConvertedOutputTextChange = (event) => {
     const textInput = event.target.value;
-    setAutoConvertedOutputText(textInput);
+    console.log(`converted text changed`);
+    setManualEditedOutputText(textInput);
+    setManualEditing(textInput != autoConvertedOutputText);
+    setOutputType((oldType) => {
+      return oldType == outputTypeAutomatic ? outputTypeManualEdit : oldType;
+    });
   };
 
   const [outputNumRows, setOutputNumRows] = useState(minRows);
 
   useEffect(() => {
     const newValue = convertRecipe(ingredientListText, recipeText, ingredientManager);
-    setAutoConvertedOutputText(newValue);
+    setAutoConvertedOutputText((oldConvertedText) => {
+      if (oldConvertedText != newValue) {
+        if (!manualEditing || confirm('Do you want to overwrite your manual edits?')) {
+          setManualEditedOutputText(newValue);
+          setManualEditing(false);
+        }
+      }
+      return newValue;
+    });
+
     setOutputNumRows(Math.max(minRows, newValue.split('\n').length));
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientListText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
@@ -113,12 +133,32 @@ function RecipeConversion() {
         ></textarea>
         <h3 className="instructions"> Converted Recipe:</h3>
         <button onClick={savePressed}>Save Recipe</button>
+        <button disabled={outputType == outputTypeManualEdit}
+          onClick={ () => {
+            setOutputType(outputTypeManualEdit);
+          }}>Manually Edited</button>
+        <button disabled={outputType == outputTypeAutomatic}
+          onClick={ () => {
+            setOutputType(outputTypeAutomatic);
+          }}>Auto Generated</button>
+        <button disabled={outputType == outputTypeBoth}
+          onClick={ () => {
+            setOutputType(outputTypeBoth);
+          }}>Both</button>
+
         <textarea
           className="main-recipe input-field"
           onChange={autoConvertedOutputTextChange}
           rows={outputNumRows}
-          value={autoConvertedOutputText}
+          value={outputType == outputTypeAutomatic ? autoConvertedOutputText : manualEditedOutputText }
         ></textarea>
+        {(outputType == outputTypeBoth) &&
+        <textarea
+          className="main-recipe input-field"
+          onChange={autoConvertedOutputTextChange}
+          rows={outputNumRows}
+          value={ autoConvertedOutputText }
+        ></textarea>}
 
       </div>
     </div>
