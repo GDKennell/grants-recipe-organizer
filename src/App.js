@@ -10,6 +10,8 @@ import LoginPage from './Pages/LoginPage';
 import MyIngredientsPage from './Pages/MyIngredientsPage';
 import RecipeConversion from './Pages/RecipeConversion';
 
+import Button from 'react-bootstrap/Button';
+
 const PageType = {
   RECIPE_CONVERSION: 0,
   INGREDIENTS_PAGE: 1,
@@ -76,6 +78,7 @@ function App() {
   }, [firebaseUser]);
   return (
     <div className="App">
+      <Button >Bootstrap Button</Button>
       <br/>
       {pageTypes.map((type) => {
         return <button key={nameforPageType(type)}
