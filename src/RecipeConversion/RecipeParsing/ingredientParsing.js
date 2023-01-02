@@ -105,7 +105,14 @@ export function findIngredientName(lineIn, startIndex, ingredientManager) {
       .toLocaleLowerCase()
       .substring(startIndex + 1)
       .split(' ');
-
+  console.log(`findIngredientName: line substring: ${lineIn
+      .toLocaleLowerCase()
+      .substring(startIndex + 1)}`);
+  console.log(`findIngredientName(starting at ${startIndex})`);
+  if (startIndex > 130) {
+    console.log('Saftey early return ');
+    // return ['', 0];
+  }
   let testString = '';
   let ingredientFound = '';
   for (

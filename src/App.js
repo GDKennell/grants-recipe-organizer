@@ -78,15 +78,15 @@ function App() {
   }, [firebaseUser]);
   return (
     <div className="App">
-      <Button >Bootstrap Button</Button>
       <br/>
       {pageTypes.map((type) => {
-        return <button key={nameforPageType(type)}
+        return <Button
+          key={nameforPageType(type)}
           onClick={ () => {
             setShowingPage(type);
           }} >
           {nameforPageType(type)}
-        </button>;
+        </Button>;
       }) }
       {getCurrentComponent(showingPage)}
     </div>

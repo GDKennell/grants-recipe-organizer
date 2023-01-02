@@ -240,6 +240,21 @@ test('chicken salad ingredients', () => {
   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
 });
 
+test('gruyere eggs', () => {
+  const ingredientList ='';
+  const prepSteps =
+'In a blender , combine the water , Poppy seeds , Honey , salt , Cloves , and Onion salt \n Blend until completely smooth , 30 to 45 seconds.';
+
+  const expectedIngredients =
+'';
+  const expectedRecipe =
+'';
+  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  expect(result).toEqual(expectedRecipe);
+  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
+
 test('Brings ingredient amounts from list to prep steps', () => {
   const ingredientList =
     '1½ cups/180 grams all-purpose flour\n' +

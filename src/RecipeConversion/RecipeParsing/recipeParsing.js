@@ -4,6 +4,7 @@ import {removeSimpleLines} from './recipePostProcessing';
 import {findVolumeStringBefore} from './volumeParsing';
 
 import {
+  debugString,
   insertNewLinesAround,
   isLineAllWhitespace,
   stringContains,
@@ -29,6 +30,7 @@ export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManag
   recipe = insertMultiLineStepMarkers(recipe);
   return recipe;
 }
+
 
 function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingredientManager) {
   if (measuredIngredients == undefined) {
@@ -67,6 +69,10 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingre
 }
 
 export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
+  console.log(`putIngredientsOnOwnLine`);
+  console.log(`"${debugString(recipeStringIn)}"`);
+  console.log(`"${ingredientManager.getAllIngredients.length}"`);
+
   let recipe = recipeStringIn;
   // check each word if it's start of an ingredient
   let [ingredientName, ingredientEndIndex] = findIngredientName(recipe, 0, ingredientManager);
@@ -74,7 +80,13 @@ export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
   // TODO: handle case where false positive of ingredient word and need to backtrack to the next word
   // e.g. we have ingredients "unbleached flour" and "milk"
   // And text contains "unbleached milk". must still find milk
+  const max = 10;
+  let num = 0;
   while (ingredientName != '') {
+    if (num++ > max) {
+      console.error(`putIngredientsOnOwnLine saftey early return`);
+      return recipe;
+    }
     let ingredientStartIndex = ingredientEndIndex - ingredientName.length - 1;
     // TODO: swap this to findUnitMeasureString()
     const [volumeString, ,] = findVolumeStringBefore(
@@ -86,6 +98,7 @@ export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
       ingredientStartIndex -= volumeString.length;
       ingredientName = volumeString + ' ' + ingredientName;
     }
+    console.log(`insertNewLinesAround "${ingredientName}", start at ${ingredientStartIndex}`);
     [recipe, ingredientEndIndex] = insertNewLinesAround(
         recipe,
         ingredientName,
@@ -95,6 +108,7 @@ export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
         recipe,
         ingredientEndIndex, ingredientManager,
     );
+    console.log(`findIngredientName(from ${ingredientEndIndex}) found "${ingredientName}" ending at ${ingredientEndIndex}`);
   }
 
   return recipe;

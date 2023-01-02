@@ -132,9 +132,9 @@ function isWordSeparator(character) {
   return isWhitespace(character) || isPunctuation(character);
 }
 export function strIndexOfWord(string, word, startIndex) {
-  let index = string.indexOf(word, startIndex);
+  let index = string.toLocaleLowerCase().indexOf(word.toLocaleLowerCase(), startIndex);
   while (index != -1 && index > 0 && !isWordSeparator(string[index - 1])) {
-    index = string.indexOf(word, index + word.length);
+    index = string.toLocaleLowerCase().indexOf(word.toLocaleLowerCase(), index + word.length);
   }
   return index;
 }
@@ -171,22 +171,22 @@ function removeSpacesBeforeWord(recipeString, ingredientString, startIndex) {
 }
 
 export function insertNewLinesAround(
-    recipeString,
+    recipe,
     ingredientString,
-    startIndex,
+    ingredientEndIndex,
 ) {
   const lineStarter = ' - ';
   let ingredientStart = strIndexOfWord(
-      recipeString,
+      recipe,
       ingredientString,
-      startIndex,
+      ingredientEndIndex,
   );
-  let newRecipe = recipeString;
-  if (newLineBeforeWord(recipeString, ingredientString, startIndex)) {
+  let newRecipe = recipe;
+  if (newLineBeforeWord(recipe, ingredientString, ingredientEndIndex)) {
     [newRecipe, ingredientStart] = removeSpacesBeforeWord(
-        recipeString,
+        recipe,
         ingredientString,
-        startIndex,
+        ingredientEndIndex,
     );
   } else {
     const newLine = '\n' + NEW_LINE_MARKER;
@@ -194,8 +194,11 @@ export function insertNewLinesAround(
     ingredientStart += newLine.length;
   }
   newRecipe = strInsert(newRecipe, lineStarter, ingredientStart);
-  const ingredientEnd =
-    newRecipe.indexOf(ingredientString, startIndex) + ingredientString.length;
+  const finalIngredientStart = newRecipe.indexOf(ingredientString, ingredientEndIndex);
+  if (finalIngredientStart == -1) {
+    console.error(`Failed to find ingredient after all: ${ingredientString}`);
+  }
+  const ingredientEnd =finalIngredientStart + ingredientString.length;
   newRecipe = strInsert(newRecipe, '\n' + NEW_LINE_MARKER, ingredientEnd);
   return [newRecipe, ingredientEnd];
 }
