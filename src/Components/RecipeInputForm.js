@@ -14,7 +14,7 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
   const {ingredientManager} = useIngredientsStore();
 
   const [unknownIngredients, setUnknownIngredients] = useState([]);
-  const [numIngLines, setNumIngLines] = useState(4);
+  const [numIngLines, setNumIngLines] = useState(initIngredientsText.split('\n').length);
   const ingredientTextAreaChange = (event) => {
     const textInput = removeExtraNewLines(event.target.value);
     setNumIngLines(textInput.split('\n').length);
@@ -43,7 +43,7 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
 
   useEffect(() => {
     updateUnknownIngredients();
-  }, []);
+  }, [ingredientManager]);
 
 
   return (
