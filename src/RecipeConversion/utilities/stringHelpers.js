@@ -170,6 +170,8 @@ function removeSpacesBeforeWord(recipeString, ingredientString, startIndex) {
   return [resultString, newIngredientStart];
 }
 
+
+
 export function insertNewLinesAround(
     recipe,
     ingredientString,

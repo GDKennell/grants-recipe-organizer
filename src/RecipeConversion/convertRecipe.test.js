@@ -14,12 +14,12 @@ test('converts values to cups', () => {
     ['- 1 tsp salt', '- 6g (1 tsp) salt'],
     ['- Two Tbsp sugar ', '- 24.7g (2 Tbsp) sugar '],
     ['- 2 cups butter ', '- 454g (2 cups) butter '],
-    ['- 1/4 cup water', '- 59.1g (0.25 cup) water'],
-    ['- 1/4 cup vodka ', '- 56g (0.25 cup) vodka '],
-    ['- 2 1/4 cup rum', '- 504g (2.25 cup) rum'],
-    ['- 2 1/4 cups shortening', '- 461.3g (2.25 cups) shortening'],
-    ['3/16 tablespoons Beer', '2.8g (0.19 tablespoons) Beer'],
-    ['3 1/4 cup tequila', '728g (3.25 cup) tequila'],
+    ['- 1/4 cup water', '- 59.1g (1/4 cup) water'],
+    ['- 1/4 cup vodka ', '- 56g (1/4 cup) vodka '],
+    ['- 2 1/4 cup rum', '- 504g (2 1/4 cup) rum'],
+    ['- 2 1/4 cups shortening', '- 461.3g (2 1/4 cups) shortening'],
+    ['3/16 tablespoons Beer', '2.8g (3/16 tablespoons) Beer'],
+    ['3 1/4 cup tequila', '728g (3 1/4 cup) tequila'],
   ];
 
   for (const testCase of testCases) {
@@ -55,7 +55,7 @@ test('unknown ingredients', () => {
 });
 
 test('2.5 cups flour', () => {
-  const testCases = [['- 2.5 cups flour', '- 312.5g (2.5 cups) flour']];
+  const testCases = [['- 2.5 cups flour', '- 312.5g (2 1/2 cups) flour']];
   for (const testCase of testCases) {
     const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
     expect(parsedLine).toEqual(testCase[1]);
@@ -84,7 +84,7 @@ test('handles modifiers to ingredients and extraneous notes', () => {
   const testCases = [
     [
       '2 1/2 cups (12 1/2 ounces) unbleached all-purpose flour',
-      '312.5g (2.50 cups) (12 1/2 ounces) unbleached all-purpose flour',
+      '312.5g (2 1/2 cups) (12 1/2 ounces) unbleached all-purpose flour',
     ],
     ['1 teaspoon table salt', '6g (1 teaspoon) table salt'],
     ['2 tablespoons sugar', '24.7g (2 tablespoons) sugar'],
@@ -93,8 +93,8 @@ test('handles modifiers to ingredients and extraneous notes', () => {
       '170.2g (12 tablespoons) (1.50 sticks) cold unsalted butter, cut into 1/4-inch slices',
     ],
 
-    ['1/4 cup cold vodka', '56g (0.25 cup) cold vodka'],
-    ['1/4 cup  cold water', '59.1g (0.25 cup)  cold water'],
+    ['1/4 cup cold vodka', '56g (1/4 cup) cold vodka'],
+    ['1/4 cup  cold water', '59.1g (1/4 cup)  cold water'],
   ];
 
   for (const testCase of testCases) {
@@ -107,7 +107,7 @@ test('Half cup cold shortening', () => {
   const testCases = [
     [
       '1/2 cup cold vegetable shortening, cut into small bits',
-      '102.5g (0.50 cup) cold vegetable shortening, cut into small bits',
+      '102.5g (1/2 cup) cold vegetable shortening, cut into small bits',
     ],
   ];
 
@@ -119,26 +119,26 @@ test('Half cup cold shortening', () => {
 
 test('cold water = water', () => {
   const [parsedLine,,] = parseIngredientListLine('1/4 cup  cold water', ingredientManager);
-  expect(parsedLine).toEqual('59.1g (0.25 cup)  cold water');
+  expect(parsedLine).toEqual('59.1g (1/4 cup)  cold water');
 });
 test('handles unicode fractions', () => {
   const testCases = [
     [
       '1½ cups/180 grams all-purpose flour',
-      '187.5g (1.50 cups)/180 grams all-purpose flour',
+      '187.5g (1 1/2 cups)/180 grams all-purpose flour',
     ],
-    ['½ teaspoon baking soda', '2.3g (0.50 teaspoon) baking soda'],
-    ['½ teaspoon kosher salt', '3g (0.50 teaspoon) kosher salt'],
+    ['½ teaspoon baking soda', '2.3g (1/2 teaspoon) baking soda'],
+    ['½ teaspoon kosher salt', '3g (1/2 teaspoon) kosher salt'],
     [
       '10 tablespoons/140 grams unsalted butter (1¼ sticks), at room temperature',
       '141.9g (10 tablespoons)/140 grams unsalted butter (1 1/4 sticks), at room temperature',
     ],
     [
       '¾ cup/150 grams granulated sugar, ',
-      '148.5g (0.75 cup)/150 grams granulated sugar, ',
+      '148.5g (3/4 cup)/150 grams granulated sugar, ',
     ],
     ['1 large egg', '1 large egg'],
-    ['½ teaspoon vanilla extract', '2.2g (0.50 teaspoon) vanilla extract'],
+    ['½ teaspoon vanilla extract', '2.2g (1/2 teaspoon) vanilla extract'],
     ['1 tablespoon ground cinnamon', '7.8g (1 tablespoon) ground cinnamon'],
   ];
 
@@ -225,16 +225,16 @@ test('chicken salad ingredients', () => {
     '\n' +
     '';
   const expectedIngredients =
-    '110g (0.50 cup) mayonnaise\n' +
+    '110g (1/2 cup) mayonnaise\n' +
     '28.7g (2 tablespoons) sour cream\n' +
     '15.5g (1 tablespoon) lemon juice\n' +
-    '0.8g (0.13 teaspoon) salt\n' +
-    '0.3g (0.13 teaspoon) pepper\n' +
+    '0.8g (1/8 teaspoon) salt\n' +
+    '0.3g (1/8 teaspoon) pepper\n' +
     '595.2g (4 cups) shredded rotisserie chicken\n' +
-    '115g (1.25 cups) seedless red grapes, halved\n' +
-    '56g (0.50 cup) chopped pecans\n' +
+    '115g (1 1/4 cups) seedless red grapes, halved\n' +
+    '56g (1/2 cup) chopped pecans\n' +
     '1/2 cup chopped celery\n' +
-    '28.8g (0.25 cup) chopped sweet onion, optional';
+    '28.8g (1/4 cup) chopped sweet onion, optional';
   const result = convertRecipe(ingredientList, '', ingredientManager);
   // expect(result).toEqual(expectedIngredients);
   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
@@ -267,19 +267,19 @@ test('Brings ingredient amounts from list to prep steps', () => {
     'Step 1\n' +
     'Heat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt';
   const expectedIngredients =
-    '187.5g (1.50 cups)/180 grams all-purpose flour\n' +
+    '187.5g (1 1/2 cups)/180 grams all-purpose flour\n' +
     '3g (1 teaspoon) cream of tartar\n' +
-    '2.3g (0.50 teaspoon) baking soda\n' +
-    '3g (0.50 teaspoon) kosher salt';
+    '2.3g (1/2 teaspoon) baking soda\n' +
+    '3g (1/2 teaspoon) kosher salt';
   const expectedRecipe =
     '> Step 1 \n' +
     '>  Heat the oven to 375 degrees \n' +
     '>   In a medium bowl \n' +
     '>  - -  whisk together the \n' +
-    '>  - 187.5g (1.50 cups) flour\n' +
+    '>  - 187.5g (1 1/2 cups) flour\n' +
     '>  - 3g (1 teaspoon) cream of tartar\n' +
-    '>  - 2.3g (0.50 teaspoon) baking soda\n' +
-    '>  - 3g (0.50 teaspoon) salt';
+    '>  - 2.3g (1/2 teaspoon) baking soda\n' +
+    '>  - 3g (1/2 teaspoon) salt';
   const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
@@ -302,24 +302,24 @@ test('ingredients moved over and skip \'and\'', () => {
     'Step 1\n' +
     'Heat the oven to 375 degrees. In a medium bowl, whisk together the flour, cream of tartar, baking soda and salt';
   const expectedIngredients =
-    '187.5g (1.50 cups)/180 grams all-purpose flour\n' +
+    '187.5g (1 1/2 cups)/180 grams all-purpose flour\n' +
     '3g (1 teaspoon) cream of tartar\n' +
-    '2.3g (0.50 teaspoon) baking soda\n' +
-    '3g (0.50 teaspoon) kosher salt\n' +
+    '2.3g (1/2 teaspoon) baking soda\n' +
+    '3g (1/2 teaspoon) kosher salt\n' +
     '141.9g (10 tablespoons)/140 grams unsalted butter (1 1/4 sticks), at room temperature\n' +
-    '148.5g (0.75 cup)/150 grams granulated sugar, plus 2 tablespoons\n' +
+    '148.5g (3/4 cup)/150 grams granulated sugar, plus 2 tablespoons\n' +
     '1 large egg\n' +
-    '2.2g (0.50 teaspoon) vanilla extract\n' +
+    '2.2g (1/2 teaspoon) vanilla extract\n' +
     '7.8g (1 tablespoon) ground cinnamon\n';
   const expectedRecipe =
     '> Step 1 \n' +
     '>  Heat the oven to 375 degrees \n' +
     '>   In a medium bowl \n' +
     '>  - -  whisk together the \n' +
-    '>  - 187.5g (1.50 cups) flour\n' +
+    '>  - 187.5g (1 1/2 cups) flour\n' +
     '>  - 3g (1 teaspoon) cream of tartar\n' +
-    '>  - 2.3g (0.50 teaspoon) baking soda\n' +
-    '>  - 3g (0.50 teaspoon) salt';
+    '>  - 2.3g (1/2 teaspoon) baking soda\n' +
+    '>  - 3g (1/2 teaspoon) salt';
   const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
   // expect(result).toEqual(expectedIngredients);
   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
@@ -482,7 +482,7 @@ test('carne asada', () => {
     'Seasonings: In a 9x13 pan or large dish, add the soy sauce, garlic, lime juice, oil, sugar, cumin, onion powder, and chili powder. Use hand whisk to incorporate well. Set aside.';
   const expectedIngredients =
     '2-3 lbs skirt or flank steak (roughly trimmed)\n' +
-    '62g (0.25 cup) regular strength soy sauce\n' +
+    '62g (1/4 cup) regular strength soy sauce\n' +
     '6 cloves garlic (minced)\n' +
     '46.5g (3 TB) freshly squeezed lime juice\n' +
     '27g (2 TB) olive or canola oil\n' +
@@ -494,7 +494,7 @@ test('carne asada', () => {
   const expectedRecipe =
     '> Seasonings: In a 9x13 pan or large dish \n' +
     '>  - -  add the \n' +
-    '>  - 62g (0.25 cup) soy sauce\n' +
+    '>  - 62g (1/4 cup) soy sauce\n' +
     '>  - garlic\n' +
     '>  - 46.5g (3 TB) lime juice\n' +
     '>  - 27g (2 TB) oil\n' +
@@ -615,7 +615,7 @@ test('egg yolks and whites ', () => {
 //     '>  - -  add mochiko \n' +
 //     '>  - -  cocoa powder \n' +
 //     '>  - 198.00g (1 cup) sugar\n' +
-//     '>  - 4.60g (1  0.50 tsp) baking powder\n' +
+//     '>  - 4.60g (1  1/2 tsp) baking powder\n' +
 //     '>   Whisk together until evenly mixed \n' +
 //     '  \n' +
 //     '>  In a large bowl \n' +

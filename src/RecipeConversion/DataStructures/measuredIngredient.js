@@ -1,3 +1,4 @@
+import {convertDecimalsToFractions} from '../utilities/numberConversion';
 import {roundDecimalNumber} from '../utilities/stringHelpers';
 
 export class MeasuredIngredient {
@@ -10,7 +11,7 @@ export class MeasuredIngredient {
   ) {
     this.ingredient = ingredient;
     this.volumeInCups = isNaN(volumeInCups) ? null : volumeInCups;
-    this.originalString = originalString;
+    this.originalString = convertDecimalsToFractions(originalString);
     this.weightInGrams = isNaN(weightInGrams) ? null : weightInGrams;
     this.unitQuantity = unitQuantity;
   }

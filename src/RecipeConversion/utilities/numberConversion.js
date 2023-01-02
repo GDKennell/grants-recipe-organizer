@@ -79,12 +79,13 @@ function isApproxEqual(left, right) {
 }
 
 function decimalToFraction(decimal) {
-  if (isApproxEqual(decimal, 0.33) ) {
-    return '1/3';
+  const overrides = [[0.33, '1/3'], [0.66, '2/3'], [0.19, '3/16'], [0.06, '1/16'], [0.13, '1/8']];
+  for (const overrideArr of overrides) {
+    if (isApproxEqual(decimal, overrideArr[0])) {
+      return overrideArr[1];
+    }
   }
-  if (isApproxEqual(decimal, 0.66)) {
-    return '2/3';
-  }
+
   const gcd = function(a, b) {
     if (b < 0.0001) return a; // Since there is a limited precision we need to limit the value.
 
@@ -100,7 +101,7 @@ function decimalToFraction(decimal) {
 
   numerator /= divisor; // Should be 687
   denominator /= divisor; // Should be 2000
-  const allowedDenoms = [4, 3, 2, 8];
+  const allowedDenoms = [4, 3, 2, 8, 16];
   if (!allowedDenoms.includes(denominator)) {
     return null;
   }
