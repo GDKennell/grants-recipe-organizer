@@ -14,14 +14,17 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
   const {ingredientManager} = useIngredientsStore();
 
   const [unknownIngredients, setUnknownIngredients] = useState([]);
-
+  const [numIngLines, setNumIngLines] = useState(4);
   const ingredientTextAreaChange = (event) => {
     const textInput = removeExtraNewLines(event.target.value);
+    setNumIngLines(textInput.split('\n').length);
     ingredientsChangedFn(textInput);
+    updateUnknownIngredients();
   };
   const recipeTextAreaChange = (event) => {
     const textInput = event.target.value;
     recipeStepsChangedFn(textInput);
+    updateUnknownIngredients();
   };
 
 
@@ -49,7 +52,7 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
       <div className="form-outline mb-4">
         <textarea className="form-control textarea-autosize"
           id="textareaExample"
-          rows={4}
+          rows={Math.max(4, numIngLines)}
           placeholder="Input Ingredient List"
           value={initIngredientsText}
           onChange={ingredientTextAreaChange} />
