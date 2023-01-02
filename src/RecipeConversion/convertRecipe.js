@@ -14,11 +14,9 @@ export const INGREDIENTS_HEADER =
 export const RECIPES_HEADER =
   '\n\n=============\n====Recipe=====\n=============\n';
 export function convertRecipe(ingredientListStringIn, recipeStringIn, ingredientManager) {
-  console.log('parseIngredientList');
   const [ingredientsString, measuredIngredients] = parseIngredientList(
       ingredientListStringIn, ingredientManager,
   );
-  console.log('parseRecipe');
 
   const recipeString = parseRecipe(recipeStringIn, measuredIngredients, ingredientManager);
 

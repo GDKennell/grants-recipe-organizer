@@ -72,6 +72,71 @@ function unicodeFractionsToRegularFractions(strIn) {
   return str;
 }
 
+function isApproxEqual(left, right) {
+  const precision = 0.001;
+  return (right < left + precision &&
+    right > left - precision);
+}
+
+function decimalToFraction(decimal) {
+  if (isApproxEqual(decimal, 0.33) ) {
+    return '1/3';
+  }
+  if (isApproxEqual(decimal, 0.66)) {
+    return '2/3';
+  }
+  const gcd = function(a, b) {
+    if (b < 0.0001) return a; // Since there is a limited precision we need to limit the value.
+
+    return gcd(b, Math.floor(a % b)); // Discard any fractions due to limitations in precision.
+  };
+
+  const len = decimal.toString().length - 2;
+
+  let denominator = Math.pow(10, len);
+  let numerator = decimal * denominator;
+
+  const divisor = gcd(numerator, denominator); // Should be 5
+
+  numerator /= divisor; // Should be 687
+  denominator /= divisor; // Should be 2000
+  const allowedDenoms = [4, 3, 2, 8];
+  if (!allowedDenoms.includes(denominator)) {
+    return null;
+  }
+  return `${numerator}/${denominator}`;
+}
+
+export function convertDecimalsToFractions(strIn) {
+  const numberRegex = /[\d.]+/;
+  const match = strIn.match(numberRegex);
+  if (match == null ) {
+    return strIn;
+  }
+  const numString = match[0];
+  const number = parseFloat(numString);
+  if (isNaN(number)) {
+    return strIn;
+  }
+  let fullFractionString = '';
+  if (number >= 1.0) {
+    const fractionNum = number - Math.floor(number);
+    const fractionString = decimalToFraction(fractionNum);
+    if (fractionString) {
+      fullFractionString = `${Math.floor(number)} ${fractionString}`;
+    }
+  } else {
+    const fractionString = decimalToFraction(number);
+    if (fractionString) {
+      fullFractionString = `${fractionString}`;
+    }
+  }
+  if (fullFractionString) {
+    return strIn.replaceAll(numString, fullFractionString);
+  }
+  return strIn;
+}
+
 export function convertFractionsToDecimals(strIn) {
   const str = unicodeFractionsToRegularFractions(strIn);
   const slashIndex = str.indexOf('/');

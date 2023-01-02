@@ -69,10 +69,6 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingre
 }
 
 export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
-  console.log(`putIngredientsOnOwnLine`);
-  console.log(`"${debugString(recipeStringIn)}"`);
-  console.log(`"${ingredientManager.getAllIngredients.length}"`);
-
   let recipe = recipeStringIn;
   // check each word if it's start of an ingredient
   let [ingredientName, ingredientEndIndex] = findIngredientName(recipe, 0, ingredientManager);
@@ -98,7 +94,6 @@ export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
       ingredientStartIndex -= volumeString.length;
       ingredientName = volumeString + ' ' + ingredientName;
     }
-    console.log(`insertNewLinesAround "${ingredientName}", start at ${ingredientStartIndex}`);
     [recipe, ingredientEndIndex] = insertNewLinesAround(
         recipe,
         ingredientName,
@@ -108,7 +103,6 @@ export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
         recipe,
         ingredientEndIndex, ingredientManager,
     );
-    console.log(`findIngredientName(from ${ingredientEndIndex}) found "${ingredientName}" ending at ${ingredientEndIndex}`);
   }
 
   return recipe;
