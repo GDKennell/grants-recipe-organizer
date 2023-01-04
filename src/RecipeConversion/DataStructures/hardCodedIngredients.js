@@ -25,6 +25,14 @@ const Olive_oil = makeIngredientObject(
     ['Olive oil', 'oil', 'canola oil', 'vegetable oil', 'peanut oil'],
     216.0,
 );
+const Parm_reg = makeIngredientObject(
+    ['Parmigiano Reggiano',
+      'Parmigiano Reggiano cheese',
+      'Parmigiano-Reggiano',
+      'Parmigiano-Reggiano cheese',
+    ],
+    448,
+);
 const Five_Spice_mix = makeIngredientObject(
     ['5 Spice mix', 'Five Spice Mix', 'Five Spice'],
     120.0,
@@ -115,6 +123,7 @@ export const allHardCodedIngredients = [
   Shortening,
   Beer,
   Cream_Of_Tartar,
+  Parm_reg,
 ];
 
 // https://www.aqua-calc.com/calculate/food-volume-to-weight

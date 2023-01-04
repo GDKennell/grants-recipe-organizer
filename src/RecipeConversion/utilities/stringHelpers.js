@@ -139,6 +139,10 @@ export function strIndexOfWord(string, word, startIndex) {
   return index;
 }
 
+export function strIndexOf(haystack, needle, index) {
+  return haystack.toLocaleLowerCase().indexOf(needle, index);
+}
+
 export function debugString(string) {
   return string.replaceAll('\n', '\\n');
 }
@@ -171,7 +175,6 @@ function removeSpacesBeforeWord(recipeString, ingredientString, startIndex) {
 }
 
 
-
 export function insertNewLinesAround(
     recipe,
     ingredientString,
@@ -196,11 +199,11 @@ export function insertNewLinesAround(
     ingredientStart += newLine.length;
   }
   newRecipe = strInsert(newRecipe, lineStarter, ingredientStart);
-  const finalIngredientStart = newRecipe.indexOf(ingredientString, ingredientEndIndex);
+  const finalIngredientStart = strIndexOf(newRecipe, ingredientString, ingredientEndIndex);
   if (finalIngredientStart == -1) {
     console.error(`Failed to find ingredient after all: ${ingredientString}`);
   }
-  const ingredientEnd =finalIngredientStart + ingredientString.length;
+  const ingredientEnd = finalIngredientStart + ingredientString.length;
   newRecipe = strInsert(newRecipe, '\n' + NEW_LINE_MARKER, ingredientEnd);
   return [newRecipe, ingredientEnd];
 }

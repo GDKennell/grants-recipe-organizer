@@ -577,6 +577,29 @@ test('egg yolks and whites ', () => {
   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
 });
 
+
+test('broile \\n r ', () => {
+  const ingredientList =
+    '1/3 cup grated Parmigiano Reggiano, plus more for serving';
+  const prepSteps =
+    'Preheat the broiler and rack' + '\n' +
+    'In Parmigiano-Reggiano';
+  const expectedIngredients =
+  '147.8g (1/3 cup) grated Parmigiano Reggiano, plus more for serving';
+
+  const expectedRecipe =
+  '> Preheat the broiler and rack ' + '\n' +
+  '>  In ' + '\n' +
+  '> 147.8g (1/3 cup)  - Parmigiano-Reggiano';
+
+  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  // expect(result).toEqual(expectedRecipe);
+
+  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(0);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(0);
+});
+
+
 // https://kirbiecravings.com/mochi-brownies/#recipe
 
 // test('mochi brownies', () => {
