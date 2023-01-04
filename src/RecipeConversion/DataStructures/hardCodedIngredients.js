@@ -152,6 +152,8 @@ const shortIngredients = [
   'cream cheese 348.0',
   'cake flour 137.0',
   'egg yolk 0.0',
+  'ground turkey 120.0',
+  'turkey sausage 12.5',
 ];
 
 export function parseShortIngredient(shortIngredient) {

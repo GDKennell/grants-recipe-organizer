@@ -252,7 +252,14 @@ export function stringContains(haystack, needle) {
 }
 
 export function stringContainsWord(haystack, needle) {
-  const index = haystack.indexOf(needle);
+  let index = haystack.indexOf(needle);
+  const allowedPrefixChars = '0123456789 .(';
+  while (index != -1) {
+    if (index == 0 || allowedPrefixChars.includes(haystack[index - 1])) {
+      break;
+    }
+    index = haystack.indexOf(needle, index + 1);
+  }
   const endIndex = index + needle.length;
   return (
     index != -1 && (endIndex >= haystack.length || haystack[endIndex] == ' ')
