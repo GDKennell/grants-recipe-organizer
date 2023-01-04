@@ -621,6 +621,25 @@ test('turkey sausage ', () => {
 });
 
 
+// test('mozzerella ', () => {
+//   const ingredientList =
+//     '1.25 pounds Italian turkey sausage, removed from the casings (I use Shady Brook Farms) or plain or regular'+ '\n' +
+//     '1 cup shredded mozzarella (preferably whole milk but low-fat will work)';
+//   const prepSteps =
+//     'Add the turkey sausage, mozzarella, Parmigiano-Reggiano and bread crumbs.';
+//   const expectedIngredients =
+// '';
+//   const expectedRecipe =
+//   '';
+
+//   const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+//   expect(result).toEqual(expectedIngredients);
+
+//   expect(result.indexOf(expectedIngredients)).toBeGreaterThan(-1);
+//   expect(result.indexOf(expectedRecipe)).toBeGreaterThan(-1);
+// });
+
+
 // https://kirbiecravings.com/mochi-brownies/#recipe
 
 // test('mochi brownies', () => {
