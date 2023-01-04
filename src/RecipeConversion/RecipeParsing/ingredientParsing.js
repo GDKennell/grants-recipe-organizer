@@ -13,6 +13,7 @@ import {
   removeSpacesBeforePunctuation,
   strRemoveRange,
   sanitizePunctuation,
+  strIndexOfWord,
 } from '../utilities/stringHelpers';
 
 export function parseIngredientList(ingredientListStringIn, ingredientManager) {
@@ -76,6 +77,7 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
       unitStringStartIndex,
       unitStringEndIndex,
   );
+  const preparationAction = findPreparationAction(newLine);
 
   const prefix = newLine.substring(0, unitStringStartIndex);
   const suffix = newLine.substring(unitStringEndIndex);
@@ -85,6 +87,8 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
       weightInGrams,
       unitQuantity,
       oldUnitMeasurementString,
+      ingredientName,
+      preparationAction,
   );
   let finalString = prefix + finalIngredient.description() + suffix;
 
@@ -98,6 +102,22 @@ function postProcessIngredientLine(line) {
   let finalString = removeSpacesBeforePunctuation(line);
   finalString = removeLeadingWhiteSpace(finalString);
   return finalString;
+}
+
+function findPreparationAction(lineIn) {
+  const resultToSteps = {'melted': 'melt',
+    'chopped': 'chop',
+    'slice': 'slice',
+    'grated': 'grate',
+    'minced': 'mince',
+  };
+  const keys = Object.keys(resultToSteps);
+  for (const key of keys) {
+    if (strIndexOfWord(lineIn, key) != -1) {
+      return resultToSteps[key];
+    }
+  }
+  return null;
 }
 
 export function findIngredientName(lineIn, startIndex, ingredientManager) {

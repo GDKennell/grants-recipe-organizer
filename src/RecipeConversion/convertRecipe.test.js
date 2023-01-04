@@ -621,6 +621,32 @@ test('turkey sausage ', () => {
 });
 
 
+test('prep steps ', () => {
+  const ingredientList =
+  '3 ounces baby spinach, chopped ' + '\n' +
+  '3 scallions, white and green parts, finely sliced' + '\n' +
+  '3 garlic cloves, minced' + '\n' +
+  '1/2 cup melted butter' + '\n' +
+  '1/3 cup grated Parmigiano Reggiano, plus more for serving';
+  const prepSteps =
+    '';
+  const expectedIngredients =
+'';
+  const expectedRecipe =
+  '> Prep' + '\n' +
+  '>  - mince 3 garlic' + '\n' +
+  '>  - melt 113.5g (1/2 cup) melted butter' + '\n' +
+  '>  - grate 147.8g (1/3 cup) parmigiano reggiano';
+
+
+  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  // expect(result).toEqual(expectedRecipe);
+
+  expect(result.indexOf(expectedIngredients)).toBeGreaterThan(-1);
+  expect(result.indexOf(expectedRecipe)).toBeGreaterThan(-1);
+});
+
+
 // test('mozzerella ', () => {
 //   const ingredientList =
 //     '1.25 pounds Italian turkey sausage, removed from the casings (I use Shady Brook Farms) or plain or regular'+ '\n' +

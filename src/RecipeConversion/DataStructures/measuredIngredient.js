@@ -8,12 +8,16 @@ export class MeasuredIngredient {
       weightInGrams,
       unitQuantity,
       originalString,
+      ingredientName,
+      preparationAction,
   ) {
     this.ingredient = ingredient;
     this.volumeInCups = isNaN(volumeInCups) ? null : volumeInCups;
     this.originalString = convertDecimalsToFractions(originalString);
     this.weightInGrams = isNaN(weightInGrams) ? null : weightInGrams;
     this.unitQuantity = unitQuantity;
+    this.ingredientName = ingredientName;
+    this.preparationAction = preparationAction;
   }
   getWeightInGrams() {
     const convertedWeight =
@@ -30,5 +34,11 @@ export class MeasuredIngredient {
       );
     }
     return roundDecimalNumber(this.unitQuantity);
+  }
+  prepString() {
+    if (!this.preparationAction) {
+      return null;
+    }
+    return this.preparationAction + ' ' + this.description() + ' ' + this.ingredientName;
   }
 }

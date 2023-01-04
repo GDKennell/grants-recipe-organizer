@@ -4,7 +4,6 @@ import {removeSimpleLines} from './recipePostProcessing';
 import {findVolumeStringBefore} from './volumeParsing';
 
 import {
-  debugString,
   insertNewLinesAround,
   isLineAllWhitespace,
   stringContains,
@@ -15,7 +14,8 @@ import {convertFractionsToDecimals} from '../utilities/numberConversion';
 
 
 export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManager) {
-  let recipe = recipeStringIn.replaceAll('.', '\n');
+  let recipe = recipeStringIn;
+  recipe = recipe.replaceAll('.', '\n');
   recipe = recipe.replaceAll(',', ' ,');
   recipe = recipe.replaceAll('\n', ' \n ');
   recipe = convertFractionsToDecimals(recipe);
@@ -24,6 +24,7 @@ export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManag
 
   recipe = putIngredientsOnOwnLine(recipe, ingredientManager);
   recipe = addAndConvertIngredientUnits(recipe, measuredIngredients, ingredientManager);
+  recipe = prepStepsForIngredients(measuredIngredients) + recipe;
   recipe = removeSimpleLines(recipe);
   recipe = removeRedundantWords(recipe);
   recipe = moveCommaListsToBulletOnes(recipe);
@@ -66,6 +67,24 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingre
     finalString += newLine + '\n';
   }
   return finalString;
+}
+
+function prepStepsForIngredients(measuredIngredients) {
+  if (!measuredIngredients) {
+    return '';
+  }
+  let result = '';
+  const header = 'Prep';
+  for (const measuredIngredient of measuredIngredients) {
+    const prepStep = measuredIngredient.prepString();
+    if (prepStep) {
+      result += ` - ${prepStep}\n`;
+    }
+  }
+  if (result.length > 0) {
+    result = `${header}\n${result}`;
+  }
+  return result;
 }
 
 export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
