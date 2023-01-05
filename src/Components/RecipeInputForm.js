@@ -8,7 +8,7 @@ import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChangedFn, initIngredientsText, initRecipeText}) {
+export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChangedFn, titleChangedFn, initIngredientsText, initRecipeText, initTitleText}) {
   console.log(`RecipeInputForm render`);
 
   const {ingredientManager} = useIngredientsStore();
@@ -27,6 +27,10 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
     updateUnknownIngredients();
   };
 
+  const titleChanged = (event) => {
+    const textInput = event.target.value;
+    titleChangedFn(textInput);
+  };
 
   const updateUnknownIngredients = () => {
     const localUnknownIngredients = [];
@@ -49,6 +53,9 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
   return (
     <div>
       <h3 className="instructions"> Paste recipe below:</h3>
+      <input onChange={titleChanged} placeholder="Recipe Title" value={initTitleText}/>
+      <br/>
+      Ingredients:
       <div className="form-outline mb-4">
         <textarea className="form-control textarea-autosize"
           id="textareaExample"
@@ -59,7 +66,7 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
       </div>
 
       <UnkownIngredientsSection unknownIngredients={unknownIngredients}/>
-
+      Recipe:
       <div className="form-outline mb-4">
         <textarea className="form-control textarea-autosize"
           id="textareaExample"

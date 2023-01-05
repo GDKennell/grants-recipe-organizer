@@ -17,6 +17,7 @@ const outputTypeAutomatic='AutomaticRecipe';
 const outputTypeManualEdit='ManualEdit';
 const outputTypeBoth='both';
 
+const titleKey = 'titleKey';
 const ingredientKey = 'ingKey';
 const recipeKey = 'recKey';
 
@@ -31,6 +32,7 @@ function RecipeConversion() {
   const [outputType, setOutputType] = useState(outputTypeAutomatic);
   const [ingredientListText, setIngredientListText] = useState(JSON.parse(localStorage.getItem(ingredientKey)) || '');
   const [recipeText, setRecipeText] = useState(JSON.parse(localStorage.getItem(recipeKey)) || '');
+  const [recipeTitle, setRecipeTitle] = useState(JSON.parse(localStorage.getItem(titleKey)) || '');
 
   useEffect(() => {
     recipeChangedFn(ingredientListText, recipeText);
@@ -83,6 +85,11 @@ function RecipeConversion() {
     recipeChangedFn(ingredientListText, newRecipeSteps);
   };
 
+  const titleChangedFn = (newTitle) => {
+    setRecipeTitle(newTitle);
+    localStorage.setItem(titleKey, JSON.stringify(newTitle));
+  };
+
   const savePressed = () => {
     console.log(`Save recipe`);
   };
@@ -95,8 +102,10 @@ function RecipeConversion() {
         <RecipeDropDown recipes={allHardCodedRecipes} recipeSelected={recipeChangedFn} />
         <RecipeInputForm recipeStepsChangedFn={recipeStepsChangedFn}
           ingredientsChangedFn={ingredientsChangedFn}
+          titleChangedFn={titleChangedFn}
           initIngredientsText={ingredientListText}
-          initRecipeText={recipeText}/>
+          initRecipeText={recipeText}
+          initTitleText={recipeTitle}/>
         <h3 className="instructions"> Converted Recipe:</h3>
         <button onClick={savePressed}>Save Recipe</button>
         <div className='horz-collection'>
