@@ -23,6 +23,11 @@ code {
   display: flex;
   flex-direction: column;
 }
+
+.horz-collection {
+  display: flex;
+  flex-direction: row;
+}
 .title {
   text-align: center;
   margin-top: 20px;

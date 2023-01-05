@@ -105,19 +105,20 @@ function RecipeConversion() {
           initRecipeText={recipeText}/>
         <h3 className="instructions"> Converted Recipe:</h3>
         <button onClick={savePressed}>Save Recipe</button>
-        <button disabled={outputType == outputTypeManualEdit}
-          onClick={ () => {
-            setOutputType(outputTypeManualEdit);
-          }}>Manually Edited</button>
-        <button disabled={outputType == outputTypeAutomatic}
-          onClick={ () => {
-            setOutputType(outputTypeAutomatic);
-          }}>Auto Generated</button>
-        <button disabled={outputType == outputTypeBoth}
-          onClick={ () => {
-            setOutputType(outputTypeBoth);
-          }}>Both</button>
-
+        <div className='horz-collection'>
+          <button disabled={outputType == outputTypeManualEdit}
+            onClick={ () => {
+              setOutputType(outputTypeManualEdit);
+            }}>Manually Edited</button>
+          <button disabled={outputType == outputTypeAutomatic}
+            onClick={ () => {
+              setOutputType(outputTypeAutomatic);
+            }}>Auto Generated</button>
+          <button disabled={outputType == outputTypeBoth}
+            onClick={ () => {
+              setOutputType(outputTypeBoth);
+            }}>Both</button>
+        </div>
         <textarea
           className="main-recipe input-field"
           onChange={autoConvertedOutputTextChange}
