@@ -8,7 +8,7 @@ import {convertRecipe} from '../RecipeConversion/convertRecipe';
 // eslint-disable-next-line no-unused-vars
 import {allHardCodedRecipes, getRecipeByName} from '../RecipeConversion/DataStructures/hardCodedRecipes';
 import RecipeInputForm from '../Components/RecipeInputForm';
-import {ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
+import RecipeDropDown from '../Components/RecipeDropDown';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -48,6 +48,8 @@ function RecipeConversion() {
 
   const [outputNumRows, setOutputNumRows] = useState(minRows);
   const recipeChangedFn = (ingredientsText, recipeText) => {
+    setIngredientListText(ingredientsText);
+    setRecipeText(recipeText);
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientsText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
 
@@ -84,22 +86,13 @@ function RecipeConversion() {
   const savePressed = () => {
     console.log(`Save recipe`);
   };
-  const presetSelectChange = (arg) => {
-    const selectedName = arg.target.value;
-    const recipe = getRecipeByName(selectedName);
-    setIngredientListText(recipe[ingredientTextKey]);
-    setRecipeText(recipe[recipeTextKey]);
-  };
+
+
   return (
     <div className="App">
       <div className="root-container">
         <h1 className="title"> Recipe Converter </h1>
-        <select onChange={presetSelectChange}>
-          <option value="" disabled selected>Preset Recipe</option>
-          {allHardCodedRecipes.map((recipe) => {
-            return <option key={recipe[recipeNameKey]}> {recipe[recipeNameKey]}</option>;
-          })}
-        </select>
+        <RecipeDropDown recipes={allHardCodedRecipes} recipeSelected={recipeChangedFn} />
         <RecipeInputForm recipeStepsChangedFn={recipeStepsChangedFn}
           ingredientsChangedFn={ingredientsChangedFn}
           initIngredientsText={ingredientListText}

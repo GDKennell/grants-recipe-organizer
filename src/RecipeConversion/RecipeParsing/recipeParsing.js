@@ -95,7 +95,7 @@ export function putIngredientsOnOwnLine(recipeStringIn, ingredientManager) {
   // TODO: handle case where false positive of ingredient word and need to backtrack to the next word
   // e.g. we have ingredients "unbleached flour" and "milk"
   // And text contains "unbleached milk". must still find milk
-  const max = 10;
+  const max = 100;
   let num = 0;
   while (ingredientName != '') {
     if (num++ > max) {
