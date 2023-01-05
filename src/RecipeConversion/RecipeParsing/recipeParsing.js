@@ -82,7 +82,7 @@ function prepStepsForIngredients(measuredIngredients) {
     }
   }
   if (result.length > 0) {
-    result = `${header}\n${result}`;
+    result = `${header}\n${result}\n`;
   }
   return result;
 }
