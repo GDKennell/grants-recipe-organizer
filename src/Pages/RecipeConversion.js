@@ -35,8 +35,8 @@ function RecipeConversion() {
   const [recipeTitle, setRecipeTitle] = useState(JSON.parse(localStorage.getItem(titleKey)) || '');
 
   useEffect(() => {
-    recipeChangedFn(ingredientListText, recipeText);
-  }, [ingredientListText, recipeText]);
+    recipeChangedFn(recipeTitle, ingredientListText, recipeText);
+  }, [recipeTitle, ingredientListText, recipeText]);
 
   const autoConvertedOutputTextChange = (event) => {
     const textInput = event.target.value;
@@ -49,9 +49,11 @@ function RecipeConversion() {
   };
 
   const [outputNumRows, setOutputNumRows] = useState(minRows);
-  const recipeChangedFn = (ingredientsText, recipeText) => {
+  const recipeChangedFn = (title, ingredientsText, recipeText) => {
+    setRecipeTitle(title);
     setIngredientListText(ingredientsText);
     setRecipeText(recipeText);
+    localStorage.setItem(titleKey, JSON.stringify(title));
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientsText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
 
@@ -76,18 +78,18 @@ function RecipeConversion() {
 
   const ingredientsChangedFn = (newIngredientsText) => {
     setIngredientListText(newIngredientsText);
-    recipeChangedFn(newIngredientsText, recipeText);
+    recipeChangedFn(recipeTitle, newIngredientsText, recipeText);
   };
 
   const recipeStepsChangedFn = (newRecipeSteps) => {
     console.log(`recipeStepsChangedFn`);
     setRecipeText(newRecipeSteps);
-    recipeChangedFn(ingredientListText, newRecipeSteps);
+    recipeChangedFn(recipeTitle, ingredientListText, newRecipeSteps);
   };
 
   const titleChangedFn = (newTitle) => {
     setRecipeTitle(newTitle);
-    localStorage.setItem(titleKey, JSON.stringify(newTitle));
+    recipeChangedFn(newTitle, ingredientListText, recipeText);
   };
 
   const savePressed = () => {

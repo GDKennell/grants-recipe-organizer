@@ -7,7 +7,9 @@ export default function RecipeDropDown({recipes, recipeSelected}) {
   const presetSelectChange = (arg) => {
     const selectedName = arg.target.value;
     const recipe = getRecipeByName(selectedName);
-    recipeSelected(recipe[ingredientTextKey], recipe[recipeTextKey]);
+    recipeSelected(recipe[recipeNameKey],
+        recipe[ingredientTextKey],
+        recipe[recipeTextKey]);
   };
 
   return (
