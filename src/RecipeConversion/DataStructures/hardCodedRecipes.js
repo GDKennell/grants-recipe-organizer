@@ -1,15 +1,5 @@
-export const ingredientTextKey = 'ingredientTextKey';
-export const recipeTextKey = 'recipeTextKey';
-export const recipeNameKey = 'recipeNameKey';
+import {makeRecipe, recipeNameKey} from './Recipe';
 
-
-function makeRecipe(recipeName, ingredientText, recipeText) {
-  const obj = {};
-  obj[ingredientTextKey] = ingredientText;
-  obj[recipeTextKey] = recipeText;
-  obj[recipeNameKey] = recipeName;
-  return obj;
-}
 
 const pizzaDoughRecipe = makeRecipe( 'Pizza Dough',
     '2 1/2 cups warm water\n' +

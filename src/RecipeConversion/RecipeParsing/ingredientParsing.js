@@ -110,6 +110,8 @@ function findPreparationAction(lineIn) {
     'slice': 'slice',
     'grated': 'grate',
     'minced': 'mince',
+    'halved': 'chop in half',
+    'shredded': 'shred',
   };
   const keys = Object.keys(resultToSteps);
   for (const key of keys) {

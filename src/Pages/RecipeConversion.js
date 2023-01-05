@@ -6,8 +6,9 @@ import {convertRecipe} from '../RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
 
 // eslint-disable-next-line no-unused-vars
-import {allHardCodedRecipes, getRecipeByName, ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/hardCodedRecipes';
+import {allHardCodedRecipes, getRecipeByName} from '../RecipeConversion/DataStructures/hardCodedRecipes';
 import RecipeInputForm from '../Components/RecipeInputForm';
+import {ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
