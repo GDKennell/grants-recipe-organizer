@@ -18,11 +18,15 @@ export const ingredientStoreSlice = createSlice({
   name: 'ingredientStore',
   initialState: {
     ingredientList: allHardCodedIngredients,
+    userRecipesList: [],
   },
   reducers: {
     // {newIngredientList: [Ingredient]}
     replaceIngredientList: (state, action) => {
       state.ingredientList = [...action.payload.newIngredientList];
+    },
+    replaceUserRecipesList: (state, action) => {
+      state.userRecipesList = [...action.payload.newUserRecipes];
     },
     addNewIngredients: (state, action) => {
       for (const newIngredient of action.payload.newIngredients) {
@@ -64,6 +68,7 @@ export const {
   deleteIngredient,
   userSignedOut,
   ingredientUpdated,
+  replaceUserRecipesList,
 } = ingredientStoreSlice.actions;
 
 export default ingredientStoreSlice.reducer;

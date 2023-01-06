@@ -1,12 +1,19 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
-import {getRecipeByName} from '../RecipeConversion/DataStructures/hardCodedRecipes';
+import React, {useMemo} from 'react';
 import {ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
 
-export default function RecipeDropDown({recipes, recipeSelected}) {
+export default function RecipeDropDown({recipes, recipeSelected, listName}) {
+  const nameToRecipe = useMemo(() => {
+    const localDict = {};
+    for (const recipe of recipes) {
+      localDict[recipe[recipeNameKey]] = recipe;
+    }
+    return localDict;
+  }, [recipes]);
+
   const presetSelectChange = (arg) => {
     const selectedName = arg.target.value;
-    const recipe = getRecipeByName(selectedName);
+    const recipe = nameToRecipe[selectedName];
     recipeSelected(recipe[recipeNameKey],
         recipe[ingredientTextKey],
         recipe[recipeTextKey]);
@@ -14,7 +21,7 @@ export default function RecipeDropDown({recipes, recipeSelected}) {
 
   return (
     <select onChange={presetSelectChange}>
-      <option value="" disabled selected>Preset Recipe</option>
+      <option value="" disabled selected>{listName}...</option>
       {recipes.map((recipe) => {
         return <option key={recipe[recipeNameKey]}> {recipe[recipeNameKey]}</option>;
       })}

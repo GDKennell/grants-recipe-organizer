@@ -3,7 +3,7 @@ import {getFirestore} from 'firebase/firestore';
 import {useState, useEffect} from 'react';
 import {getAuth} from 'firebase/auth';
 import {getAnalytics} from 'firebase/analytics';
-import {fetchAllUserScopedIngredients, fetchIngredientsFromDb, fetchUserScopedIngredients, storeUserData} from '../Database';
+import {fetchAllUserScopedIngredients, fetchIngredientsFromDb, fetchUserRecipesFromDb, fetchUserScopedIngredients, storeUserData} from '../Database';
 import useIngredientsStore from './useIngredientsStore';
 import {isUserAdmin} from '../Helpers/FirebaseManager';
 
@@ -42,6 +42,7 @@ const useFirebase = () => {
     const auth = getAuth();
     auth.onAuthStateChanged(function(user) {
       setFirebaseUser(user);
+      fetchUserRecipesFromDb(localFirebaseDb, dispatch, user);
       if (user == null && globalUserId == null ||
         user.uid == globalUserId) {
         return;

@@ -1,7 +1,7 @@
 
 import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc, getDoc, setDoc} from 'firebase/firestore';
 import {ingredientsCollection, privateIngredientsCollection, privateRecipesCollection, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
-import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
+import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceIngredientList, replaceUserRecipesList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
 import {prepRecipeForDb, recipeFromDoc, recipeNameKey} from './RecipeConversion/DataStructures/Recipe';
@@ -130,13 +130,13 @@ export async function fetchAllUserScopedIngredients(db, dispatch, ingredientMana
   }
 }
 
-let dbFetchStarted = false;
+let dbIngredientFetchStarted = false;
 
 export async function fetchIngredientsFromDb(db, dispatch) {
-  if (dbFetchStarted) {
+  if (dbIngredientFetchStarted) {
     return;
   }
-  dbFetchStarted = true;
+  dbIngredientFetchStarted = true;
 
   try {
     // TODO: don't overwrite list if DB fetch fails
@@ -158,7 +158,32 @@ export async function fetchIngredientsFromDb(db, dispatch) {
       dispatch(replaceIngredientList({newIngredientList: localIngredients}));
     }
   } catch (e) {
-    console.error('Error fetching documents: ', e);
+    console.error('Error fetching ingredients: ', e);
+  }
+}
+
+let dbRecipesFetchStarted = false;
+export async function fetchUserRecipesFromDb(db, dispatch, user) {
+  if (!user) {
+    dispatch(replaceUserRecipesList({newUserRecipes: []}));
+    dbRecipesFetchStarted = false;
+  }
+  if (dbRecipesFetchStarted) {
+    return;
+  }
+  dbRecipesFetchStarted = true;
+
+  try {
+    const querySnapshot = await getDocs(collection(db, usersCollection, user.uid, privateRecipesCollection));
+    const localRecipes = [];
+    querySnapshot.forEach((doc) => {
+      localRecipes.push(recipeFromDoc(doc));
+    });
+    if (localRecipes.length > 0 ) {
+      dispatch(replaceUserRecipesList({newUserRecipes: localRecipes}));
+    }
+  } catch (e) {
+    console.error('Error fetching recipes: ', e);
   }
 }
 
@@ -257,6 +282,7 @@ export async function saveOrUpdateUserRecipe(recipeIn, db, user) {
     if (recipeId == null) {
       await addDoc(collection(db, usersCollection, user.uid, privateRecipesCollection), newRecipe);
       console.log(`Successfully added new recipe ${newRecipe[recipeNameKey]}`);
+      alert(`Successfully saved new recipe ${newRecipe[recipeNameKey]}`);
     } else {
       if (confirm(`Are you sure you want to overwrite saved recipe ${newRecipe[recipeNameKey]}?`)) {
         const docRef = doc(db, usersCollection, user.uid, privateRecipesCollection, recipeId);

@@ -17,8 +17,8 @@ export function makeRecipe(recipeName, ingredientText, recipeText, docId) {
 export function recipeFromDoc(doc) {
   return makeRecipe(
       doc.data()[recipeNameKey],
-      doc.data()[recipeNameKey],
-      doc.data()[recipeNameKey],
+      doc.data()[ingredientTextKey],
+      doc.data()[recipeTextKey],
       doc.id);
 }
 

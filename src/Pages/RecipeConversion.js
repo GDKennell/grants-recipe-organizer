@@ -29,7 +29,7 @@ function RecipeConversion() {
 
   const {firebaseDb, firebaseUser} = useFirebase();
   const saveEnabled = (firebaseUser != null);
-  const {ingredientManager} = useIngredientsStore();
+  const {ingredientManager, userRecipesList} = useIngredientsStore();
   const [autoConvertedOutputText, setAutoConvertedOutputText] = useState('');
   const [manualEditedOutputText, setManualEditedOutputText] = useState('');
   const [manualEditing, setManualEditing] = useState(false);
@@ -105,7 +105,12 @@ function RecipeConversion() {
     <div className="App">
       <div className="root-container">
         <h1 className="title"> Recipe Converter </h1>
-        <RecipeDropDown recipes={allHardCodedRecipes} recipeSelected={recipeChangedFn} />
+        <RecipeDropDown recipes={allHardCodedRecipes}
+          recipeSelected={recipeChangedFn}
+          listName="Preset Recipes"/>
+        <RecipeDropDown recipes={userRecipesList}
+          recipeSelected={recipeChangedFn}
+          listName="My Recipes" />
         <RecipeInputForm recipeStepsChangedFn={recipeStepsChangedFn}
           ingredientsChangedFn={ingredientsChangedFn}
           titleChangedFn={titleChangedFn}

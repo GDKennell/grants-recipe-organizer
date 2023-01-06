@@ -10,8 +10,10 @@ const useIngredientsStore = () => {
   const ingredientManager = useMemo(() => {
     return new IngredientManager(ingredientList);
   }, [ingredientList]);
+  const userRecipesList = useSelector((state) => state.ingredientStore.userRecipesList);
 
   return {ingredientManager: ingredientManager,
+    userRecipesList: userRecipesList,
     dispatch: dispatch};
 };
 
