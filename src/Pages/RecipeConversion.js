@@ -9,6 +9,9 @@ import {convertRecipe} from '../RecipeConversion/convertRecipe';
 import {allHardCodedRecipes, getRecipeByName} from '../RecipeConversion/DataStructures/hardCodedRecipes';
 import RecipeInputForm from '../Components/RecipeInputForm';
 import RecipeDropDown from '../Components/RecipeDropDown';
+import useFirebase from '../hooks/useFirebase';
+import {makeRecipe} from '../RecipeConversion/DataStructures/Recipe';
+import {saveOrUpdateUserRecipe} from '../Database';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,6 +28,8 @@ function RecipeConversion() {
   console.log(`RecipeConversion render`);
   const minRows = 5;
 
+  const {firebaseDb, firebaseUser} = useFirebase();
+  const saveEnabled = (firebaseUser != null);
   const {ingredientManager} = useIngredientsStore();
   const [autoConvertedOutputText, setAutoConvertedOutputText] = useState('');
   const [manualEditedOutputText, setManualEditedOutputText] = useState('');
@@ -93,7 +98,12 @@ function RecipeConversion() {
   };
 
   const savePressed = () => {
-    console.log(`Save recipe`);
+    if (recipeTitle.length == 0) {
+      alert('Please enter a recipe name to save');
+      return;
+    }
+    const newRecipe = makeRecipe(recipeTitle, ingredientListText, recipeText);
+    saveOrUpdateUserRecipe(newRecipe, firebaseDb, firebaseUser);
   };
 
 
@@ -109,7 +119,7 @@ function RecipeConversion() {
           initRecipeText={recipeText}
           initTitleText={recipeTitle}/>
         <h3 className="instructions"> Converted Recipe:</h3>
-        <button onClick={savePressed}>Save Recipe</button>
+        <button onClick={savePressed} disabled={!saveEnabled}>Save Recipe</button>
         <div className='horz-collection'>
           <button disabled={outputType == outputTypeManualEdit}
             onClick={ () => {

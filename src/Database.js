@@ -1,9 +1,10 @@
 
 import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc, getDoc, setDoc} from 'firebase/firestore';
-import {ingredientsCollection, privateIngredientsCollection, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
+import {ingredientsCollection, privateIngredientsCollection, privateRecipesCollection, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
 import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceIngredientList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
+import {prepRecipeForDb, recipeFromDoc, recipeNameKey} from './RecipeConversion/DataStructures/Recipe';
 import {cleanIngredientWord, objectsEqual} from './RecipeConversion/utilities/stringHelpers';
 
 
@@ -243,6 +244,32 @@ async function storeIngredientToDb(ingredient, db) {
       names: ingredient.names,
       gramsPerCup: ingredient.gramsPerCup,
     });
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+}
+
+export async function saveOrUpdateUserRecipe(recipeIn, db, user) {
+  const newRecipe = prepRecipeForDb(recipeIn);
+  try {
+    const querySnapshot = await getDocs(collection(db, usersCollection, user.uid, privateRecipesCollection ));
+    let recipeId = null;
+    querySnapshot.forEach((doc) => {
+      const dbRecipe = recipeFromDoc(doc);
+      if (dbRecipe[recipeNameKey] == newRecipe[recipeNameKey]) {
+        recipeId = doc.id;
+      }
+    });
+    if (recipeId == null) {
+      await addDoc(collection(db, usersCollection, user.uid, privateRecipesCollection), newRecipe);
+      console.log(`Successfully added new recipe ${newRecipe[recipeNameKey]}`);
+    } else {
+      if (confirm(`Are you sure you want to overwrite saved recipe ${newRecipe[recipeNameKey]}?`)) {
+        const docRef = doc(db, usersCollection, user.uid, privateRecipesCollection, recipeId);
+        await updateDoc(docRef, newRecipe);
+        console.log(`Successfully updated recipe ${newRecipe[recipeNameKey]}`);
+      }
+    }
   } catch (e) {
     console.error('Error adding document: ', e);
   }
