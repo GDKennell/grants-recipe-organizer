@@ -14,6 +14,7 @@ import {
   strRemoveRange,
   sanitizePunctuation,
   strIndexOfWord,
+  capitalizeWordsInString,
 } from '../utilities/stringHelpers';
 
 export function parseIngredientList(ingredientListStringIn, ingredientManager) {
@@ -69,6 +70,7 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
     const possibleIngredient = strRemoveRange(newLine, unitStringStartIndex, unitStringEndIndex);
     return [defaultLine, removeLeadingWhiteSpace(possibleIngredient), null];
   }
+  newLine = capitalizeWordsInString(newLine, ingredientName);
   const ingredient = ingredientManager.findIngredientByName(ingredientName);
 
   //  ------- Conversion & String Building ------------ //

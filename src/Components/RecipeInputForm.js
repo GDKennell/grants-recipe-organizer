@@ -59,7 +59,7 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
   return (
     <div>
       <h3 className="instructions"> Paste recipe below:</h3>
-      <input onChange={titleChanged} placeholder="Recipe Title" value={initTitleText}/>
+      <input onChange={titleChanged} placeholder="Recipe Title" value={initTitleText} className="input-field"/>
       <br/>
       Ingredients:
       <div className="form-outline mb-4">

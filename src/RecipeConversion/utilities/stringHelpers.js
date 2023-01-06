@@ -116,6 +116,16 @@ export function removeTrailingWhitespace(string) {
   return string.substring(0, lastIndex + 1);
 }
 
+// written by chat GPT lol.  magic
+function capitalizeWords(str) {
+  return str.split(' ').map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+}
+
+export function capitalizeWordsInString(string, words) {
+  const capitalized = capitalizeWords(words);
+  return string.replace(words, capitalized);
+}
+
 export function removeLeadingWhiteSpace(string) {
   let lastIndex = 0;
   while (lastIndex < string.length && isWhitespace(string[lastIndex])) {
