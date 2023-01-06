@@ -167,6 +167,7 @@ export async function fetchUserRecipesFromDb(db, dispatch, user) {
   if (!user) {
     dispatch(replaceUserRecipesList({newUserRecipes: []}));
     dbRecipesFetchStarted = false;
+    return;
   }
   if (dbRecipesFetchStarted) {
     return;

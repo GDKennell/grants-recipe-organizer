@@ -14,11 +14,19 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
   const [unknownIngredients, setUnknownIngredients] = useState([]);
   const [numIngLines, setNumIngLines] = useState(initIngredientsText.split('\n').length);
   const ingredientTextAreaChange = (event) => {
-    const textInput = removeExtraNewLines(event.target.value);
+    const textInput = event.target.value;
+    updateFromIngredients(textInput);
+  };
+  const updateFromIngredients = (ingredients) => {
+    const textInput = removeExtraNewLines(ingredients);
     setNumIngLines(textInput.split('\n').length);
     ingredientsChangedFn(textInput);
     updateUnknownIngredients();
   };
+  useEffect(() => {
+    updateFromIngredients(initIngredientsText);
+  }, [initIngredientsText]);
+
   const recipeTextAreaChange = (event) => {
     const textInput = event.target.value;
     recipeStepsChangedFn(textInput);

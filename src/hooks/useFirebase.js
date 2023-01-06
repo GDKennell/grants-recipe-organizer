@@ -42,13 +42,16 @@ const useFirebase = () => {
     const auth = getAuth();
     auth.onAuthStateChanged(function(user) {
       setFirebaseUser(user);
-      fetchUserRecipesFromDb(localFirebaseDb, dispatch, user);
-      if (user == null && globalUserId == null ||
-        user.uid == globalUserId) {
+      if (user == null) {
+        globalUserId = null;
+        return;
+      }
+      if (user.uid == globalUserId) {
         return;
       }
       globalUserId = (user == null) ? null : user.uid;
 
+      fetchUserRecipesFromDb(localFirebaseDb, dispatch, user);
       storeUserData(localFirebaseDb, user);
       if (isUserAdmin(user)) {
         fetchAllUserScopedIngredients(localFirebaseDb, dispatch, ingredientManager);

@@ -40,7 +40,7 @@ function RecipeConversion() {
 
   useEffect(() => {
     recipeChangedFn(recipeTitle, ingredientListText, recipeText);
-  }, [recipeTitle, ingredientListText, recipeText]);
+  }, [recipeTitle, ingredientListText, recipeText, ingredientManager]);
 
   const autoConvertedOutputTextChange = (event) => {
     const textInput = event.target.value;
@@ -108,9 +108,12 @@ function RecipeConversion() {
         <RecipeDropDown recipes={allHardCodedRecipes}
           recipeSelected={recipeChangedFn}
           listName="Preset Recipes"/>
+        {
+          (userRecipesList.length > 0) &&
         <RecipeDropDown recipes={userRecipesList}
           recipeSelected={recipeChangedFn}
           listName="My Recipes" />
+        }
         <RecipeInputForm recipeStepsChangedFn={recipeStepsChangedFn}
           ingredientsChangedFn={ingredientsChangedFn}
           titleChangedFn={titleChangedFn}
