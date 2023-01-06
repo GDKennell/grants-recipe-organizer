@@ -120,15 +120,11 @@ export async function fetchAllUserScopedIngredients(db, dispatch, ingredientMana
     return;
   }
   try {
-    let numUsers = 0;
     const usersQuerySnapshot = await getDocs(collection(db, usersCollection ));
     usersQuerySnapshot.forEach((userDoc) => {
-      console.log(`admin: Going to try to fetch data for ${userDoc.id} #${numUsers}`);
-      numUsers++;
       fetchUserScopedIngredients(db, userDoc.id, dispatch, ingredientManager);
       fetchUserName(db, userDoc.id);
     });
-    console.log(`admin: fetched data for ${numUsers} users`);
   } catch (e) {
     console.error('Error fetching user documents: ', e);
   }
@@ -141,7 +137,6 @@ export async function fetchIngredientsFromDb(db, dispatch) {
     return;
   }
   dbFetchStarted = true;
-  console.log(`Going to fetch`);
 
   try {
     // TODO: don't overwrite list if DB fetch fails
@@ -160,7 +155,6 @@ export async function fetchIngredientsFromDb(db, dispatch) {
       }
     });
     if (localIngredients.length > 0 ) {
-      console.log(`Successfully fetched : ${localIngredients.length} ingredients`);
       dispatch(replaceIngredientList({newIngredientList: localIngredients}));
     }
   } catch (e) {

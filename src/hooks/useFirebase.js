@@ -50,7 +50,6 @@ const useFirebase = () => {
 
       storeUserData(localFirebaseDb, user);
       if (isUserAdmin(user)) {
-        console.log(`Fetching for admin`);
         fetchAllUserScopedIngredients(localFirebaseDb, dispatch, ingredientManager);
       } else if (user) {
         fetchUserScopedIngredients(localFirebaseDb, user.uid, dispatch, ingredientManager);

@@ -9,8 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChangedFn, titleChangedFn, initIngredientsText, initRecipeText, initTitleText}) {
-  console.log(`RecipeInputForm render`);
-
   const {ingredientManager} = useIngredientsStore();
 
   const [unknownIngredients, setUnknownIngredients] = useState([]);

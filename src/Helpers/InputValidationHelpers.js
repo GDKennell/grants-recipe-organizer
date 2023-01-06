@@ -4,11 +4,9 @@ import {isValidNumberString, removeAllWhitespace} from '../RecipeConversion/util
 export function isIngredientValid(namesText, gramsPerCupText) {
   const gramsPerCupValue = parseFloat(gramsPerCupText);
   if (!isValidNumberString(gramsPerCupText)) {
-    console.log('! isValidNumberString ');
     return false;
   }
   if (isNaN(gramsPerCupValue)) {
-    console.log('isNaN');
     return false;
   }
   if (removeAllWhitespace(namesText).length == 0) {

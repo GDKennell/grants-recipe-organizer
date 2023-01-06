@@ -25,7 +25,6 @@ const ingredientKey = 'ingKey';
 const recipeKey = 'recKey';
 
 function RecipeConversion() {
-  console.log(`RecipeConversion render`);
   const minRows = 5;
 
   const {firebaseDb, firebaseUser} = useFirebase();
@@ -62,14 +61,9 @@ function RecipeConversion() {
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientsText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
 
-    console.log(`recipeChangedFn, converting "${ingredientsText}" "${recipeText}"`);
-
     const newValue = convertRecipe(ingredientsText, recipeText, ingredientManager);
-    console.log(`Converted `);
     setAutoConvertedOutputText((oldConvertedText) => {
       if (oldConvertedText != newValue) {
-        console.log(`updated, maybe overwrtie `);
-
         if (!manualEditing || confirm('Do you want to overwrite your manual edits?')) {
           setManualEditedOutputText(newValue);
           setManualEditing(false);
