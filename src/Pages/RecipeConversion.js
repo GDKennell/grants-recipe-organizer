@@ -136,19 +136,28 @@ function RecipeConversion() {
               setOutputType(outputTypeBoth);
             }}>Both</button>
         </div>
-        <textarea
-          className="main-recipe input-field"
-          onChange={autoConvertedOutputTextChange}
-          rows={outputNumRows}
-          value={outputType == outputTypeAutomatic ? autoConvertedOutputText : manualEditedOutputText }
-        ></textarea>
-        {(outputType == outputTypeBoth) &&
-        <textarea
-          className="main-recipe input-field"
-          onChange={autoConvertedOutputTextChange}
-          rows={outputNumRows}
-          value={ autoConvertedOutputText }
-        ></textarea>}
+        <div className="recipe-output-container">
+          <div>
+            <b>{outputType == outputTypeAutomatic ? 'Auto-generated' : 'Manually Edited'}</b>
+            <textarea
+              className="main-recipe input-field"
+              onChange={autoConvertedOutputTextChange}
+              rows={outputNumRows}
+              value={outputType == outputTypeAutomatic ? autoConvertedOutputText : manualEditedOutputText }
+            ></textarea>
+          </div>
+          {(outputType == outputTypeBoth) &&
+                <div>
+                  <b>Auto-generated</b>
+                  <textarea
+                    className="main-recipe input-field"
+                    onChange={autoConvertedOutputTextChange}
+                    rows={outputNumRows}
+                    value={ autoConvertedOutputText }
+                  ></textarea>
+                </div>
+          }
+        </div>
 
       </div>
     </div>

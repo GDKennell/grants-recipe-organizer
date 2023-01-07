@@ -52,3 +52,20 @@ code {
   white-space: pre-line;
   text-align: left;
 }
+
+
+.recipe-output-container {
+  display: flex;
+}
+
+.recipe-output-container > div {
+  flex: 1;
+}
+
+/* On screens that are 600px wide or less, make the flex direction column instead of row */
+@media (max-width: 700px) {
+  .recipe-output-container {
+    flex-direction: column;
+  }
+}
+
