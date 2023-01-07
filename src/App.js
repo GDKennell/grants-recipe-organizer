@@ -23,11 +23,12 @@ export const loginPageRoute = 'loginPage';
 export const myIngredientsPageRoute = 'myIngredientsPage';
 export const recipeConversionRoute = 'recipeConversion';
 
-export const allRoutes = [adminPanelRoute,
+export const allRoutes = [recipeConversionRoute,
   ingredientPageRoute,
-  loginPageRoute,
   myIngredientsPageRoute,
-  recipeConversionRoute];
+  loginPageRoute,
+  adminPanelRoute,
+];
 
 export const routeToTitle = {};
 routeToTitle[adminPanelRoute] = 'Admin Panel';

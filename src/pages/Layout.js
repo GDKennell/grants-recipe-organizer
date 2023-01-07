@@ -1,5 +1,5 @@
 import React from 'react';
-import {Outlet} from 'react-router-dom';
+import {Link, Outlet} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 import {allRoutes, routeToTitle} from '../App';
@@ -21,24 +21,13 @@ export default function Layout() {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {allRoutes.map((routeName) =>
                 <li key={routeName} className="nav-item">
-                  <a className="nav-link active" aria-current="page" href={`/${routeName}`}>{routeToTitle[routeName]}</a>
+                  <Link className="nav-link active" aria-current="page" to={`/${routeName}`}>{routeToTitle[routeName]}</Link>
                 </li>,
               )}
             </ul>
           </div>
         </div>
       </nav>
-
-      {/*
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          {allRoutes.map((routeName) => <li key={routeName}>
-            <Link to={`/${routeName}`}>{routeName}</Link>
-          </li>)}
-        </ul> */}
-
       <Outlet />
     </>
   );
