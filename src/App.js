@@ -1,95 +1,55 @@
 import React from 'react';
-import {useEffect, useState} from 'react';
-import AdminPanel from './MainPages/AdminPanel';
+import {useEffect} from 'react';
 import './App.css';
 // import useIngredientsStore from './hooks/useIngredientsStore';
 import {isUserAdmin} from './Helpers/FirebaseManager';
 import useFirebase from './hooks/useFirebase';
-import IngredientPage from './MainPages/IngredientPage';
-import LoginPage from './MainPages/LoginPage';
-import MyIngredientsPage from './MainPages/MyIngredientsPage';
-import RecipeConversion from './MainPages/RecipeConversion';
 
-import Button from 'react-bootstrap/Button';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
-const PageType = {
-  RECIPE_CONVERSION: 0,
-  INGREDIENTS_PAGE: 1,
-  LOGIN_PAGE: 2,
-  MY_INGREDIENTS_PAGE: 3,
-  ADMIN_PANEL: 4,
+// import Button from 'react-bootstrap/Button';
+import RecipeConversion from './pages/RecipeConversion';
+import AdminPanel from './pages/AdminPanel';
+import IngredientPage from './pages/IngredientPage';
+import LoginPage from './pages/LoginPage';
+import MyIngredientsPage from './pages/MyIngredientsPage';
+import Layout from './pages/Layout';
+import Home from './pages/Home';
+import NoPage from './pages/NoPage';
 
-};
+export const adminPanelRoute = 'adminPanel';
+export const ingredientPageRoute = 'ingredientPage';
+export const loginPageRoute = 'loginPage';
+export const myIngredientsPageRoute = 'myIngredientsPage';
+export const recipeConversionRoute = 'recipeConversion';
 
-
-function getCurrentComponent(pageType) {
-  switch (pageType) {
-    case PageType.RECIPE_CONVERSION:
-      return <RecipeConversion />;
-    case PageType.INGREDIENTS_PAGE:
-      return <IngredientPage />;
-    case PageType.LOGIN_PAGE:
-      return <LoginPage/>;
-    case PageType.MY_INGREDIENTS_PAGE:
-      return <MyIngredientsPage/>;
-    case PageType.ADMIN_PANEL:
-      return <AdminPanel/>;
-  }
-  return <div />;
-}
-
-const nameforPageType = (pageType) => {
-  switch (pageType) {
-    case PageType.RECIPE_CONVERSION:
-      return 'Recipe Conversion';
-    case PageType.INGREDIENTS_PAGE:
-      return 'All Ingredients';
-    case PageType.LOGIN_PAGE:
-      return 'Login';
-    case PageType.MY_INGREDIENTS_PAGE:
-      return 'My Ingredients';
-    case PageType.ADMIN_PANEL:
-      return 'Admin Panel';
-  }
-};
-const defaultPageTypes = [PageType.RECIPE_CONVERSION,
-  PageType.INGREDIENTS_PAGE,
-  PageType.MY_INGREDIENTS_PAGE,
-  PageType.LOGIN_PAGE];
-
+export const allRoutes = [adminPanelRoute,
+  ingredientPageRoute,
+  loginPageRoute,
+  myIngredientsPageRoute,
+  recipeConversionRoute];
 
 function App() {
-  const [showingPage, setShowingPage] = useState(PageType.RECIPE_CONVERSION);
-
   const {firebaseUser} = useFirebase();
-  const [pageTypes, setPageTypes] = useState(defaultPageTypes);
-
   useEffect(() => {
     const userIsAdmin = isUserAdmin(firebaseUser);
-    let newPageTypes = pageTypes;
-    if (userIsAdmin && !newPageTypes.includes(PageType.ADMIN_PANEL)) {
-      newPageTypes.push(PageType.ADMIN_PANEL);
-    } else if (!userIsAdmin && newPageTypes.includes(PageType.ADMIN_PANEL)) {
-      newPageTypes = pageTypes.filter((type) => {
-        return type !=PageType.ADMIN_PANEL;
-      });
-    }
-    setPageTypes(newPageTypes);
+    console.log(`user admin: ${userIsAdmin}`);
   }, [firebaseUser]);
+
   return (
-    <div className="App">
-      <br/>
-      {pageTypes.map((type) => {
-        return <Button
-          key={nameforPageType(type)}
-          onClick={ () => {
-            setShowingPage(type);
-          }} >
-          {nameforPageType(type)}
-        </Button>;
-      }) }
-      {getCurrentComponent(showingPage)}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path={adminPanelRoute} element={<AdminPanel />} />
+          <Route path={ingredientPageRoute} element={<IngredientPage />} />
+          <Route path={loginPageRoute} element={<LoginPage />} />
+          <Route path={myIngredientsPageRoute} element={<MyIngredientsPage />} />
+          <Route path={recipeConversionRoute} element={<RecipeConversion />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
