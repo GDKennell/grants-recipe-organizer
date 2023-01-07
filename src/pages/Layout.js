@@ -3,8 +3,6 @@ import {Link, Outlet} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 import {allRoutes, routeToTitle} from '../App';
-// import {Outlet, Link} from 'react-router-dom';
-// import {allRoutes} from '../App';
 
 // Docs for all Bootstrap Navbar stuff:
 // https://getbootstrap.com/docs/5.3/components/navbar/
@@ -13,7 +11,7 @@ export default function Layout() {
     <>
       <nav className="navbar navbar-expand-md bg-body-tertiary">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">Navbar</a>
+          <a className="navbar-brand" href="#">Recipe Converter</a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
