@@ -6,7 +6,7 @@ import {convertRecipe} from '../RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
 
 // eslint-disable-next-line no-unused-vars
-import {allHardCodedRecipes, getRecipeByName} from '../RecipeConversion/DataStructures/hardCodedRecipes';
+import {allHardCodedRecipes} from '../RecipeConversion/DataStructures/hardCodedRecipes';
 import RecipeInputForm from '../Components/RecipeInputForm';
 import RecipeDropDown from '../Components/RecipeDropDown';
 import useFirebase from '../hooks/useFirebase';
@@ -53,7 +53,7 @@ function RecipeConversion() {
   };
 
   const [outputNumRows, setOutputNumRows] = useState(minRows);
-  const recipeChangedFn = (title, ingredientsText, recipeText) => {
+  const recipeChangedFn = (title, ingredientsText, recipeText, recipeManualEditText) => {
     setRecipeTitle(title);
     setIngredientListText(ingredientsText);
     setRecipeText(recipeText);
@@ -73,6 +73,9 @@ function RecipeConversion() {
       return newValue;
     });
     setOutputNumRows(Math.max(minRows, newValue.split('\n').length));
+    if (recipeManualEditText) {
+      setManualEditedOutputText(recipeManualEditText);
+    }
   };
 
   const ingredientsChangedFn = (newIngredientsText) => {
@@ -96,7 +99,7 @@ function RecipeConversion() {
       alert('Please enter a recipe name to save');
       return;
     }
-    const newRecipe = makeRecipe(recipeTitle, ingredientListText, recipeText);
+    const newRecipe = makeRecipe(recipeTitle, ingredientListText, recipeText, manualEditedOutputText);
     saveOrUpdateUserRecipe(newRecipe, firebaseDb, firebaseUser);
   };
 
@@ -138,7 +141,7 @@ function RecipeConversion() {
         </div>
         <div className="recipe-output-container">
           <div>
-            <b>{outputType == outputTypeAutomatic ? 'Auto-generated' : 'Manually Edited'}</b>
+            {(outputType == outputTypeBoth) && <b>Manually Edited</b>}
             <textarea
               className="main-recipe input-field"
               onChange={autoConvertedOutputTextChange}

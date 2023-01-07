@@ -288,7 +288,7 @@ export async function saveOrUpdateUserRecipe(recipeIn, db, user) {
       if (confirm(`Are you sure you want to overwrite saved recipe ${newRecipe[recipeNameKey]}?`)) {
         const docRef = doc(db, usersCollection, user.uid, privateRecipesCollection, recipeId);
         await updateDoc(docRef, newRecipe);
-        console.log(`Successfully updated recipe ${newRecipe[recipeNameKey]}`);
+        alert(`Successfully updated recipe ${newRecipe[recipeNameKey]}`);
       }
     }
   } catch (e) {

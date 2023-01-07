@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, {useMemo} from 'react';
-import {ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
+import {ingredientTextKey, recipeManualEditTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
 
 export default function RecipeDropDown({recipes, recipeSelected, listName}) {
   const nameToRecipe = useMemo(() => {
@@ -16,7 +16,8 @@ export default function RecipeDropDown({recipes, recipeSelected, listName}) {
     const recipe = nameToRecipe[selectedName];
     recipeSelected(recipe[recipeNameKey],
         recipe[ingredientTextKey],
-        recipe[recipeTextKey]);
+        recipe[recipeTextKey],
+        recipe[recipeManualEditTextKey]);
   };
 
   return (

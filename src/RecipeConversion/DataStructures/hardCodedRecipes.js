@@ -2,12 +2,14 @@ import {makeRecipe, recipeNameKey} from './Recipe';
 
 
 const pizzaDoughRecipe = makeRecipe( 'Pizza Dough',
+    // Ingredients
     '2 1/2 cups warm water\n' +
 '1/4 cup sugar\n' +
 '3 teaspoons instant yeast\n' +
 '1/4 cup vegetable oil\n' +
 '6 cups all-purpose flour\n' +
 '2 teaspoons salt',
+    // Steps
     'In the bowl of a stand mixer, combine the water, sugar and yeast. Allow the mixture to sit for a few minutes until frothy. Add in the vegetable oil.\n' +
 '\n' +
 'In a bowl, combine the flour and the salt. Add the flour to the yeast mixture, ½ cup at a time, mixing well between additions. Continue adding the flour until the dough can be pulled away from the sides of the bowl with a spatula, but the dough will still be quite sticky. You may need to add in a little bit more or less flour, but the key is to remember that the dough will still be sticky and will stick to your fingers when you try to pull it apart.\n' +
@@ -23,6 +25,7 @@ const pizzaDoughRecipe = makeRecipe( 'Pizza Dough',
 'Prepare your pizza with your desired toppings and bake until the crust is golden, 8-10 minutes.');
 
 const chickenSaladRecipe = makeRecipe('Chicken Salad',
+    // Ingredients
     '1/2 cup mayonnaise\n' +
 '2 tablespoons sour cream\n' +
 '1 tablespoon lemon juice\n' +
@@ -34,6 +37,7 @@ const chickenSaladRecipe = makeRecipe('Chicken Salad',
 '1/2 cup chopped celery\n' +
 '1/4 cup chopped sweet onion, optional\n' +
 'Lettuce leaves or whole wheat bread slices, optional\n',
+    // Steps
     'Step 1: Make Your Sauce\n' +
 '\n' +
 'Start by mixing the first five ingredients together for a creamy sauce. The sour cream and lemon juice add a tangy kick to this chunky chicken salad. Whisk together the mayonnaise, sour cream, lemon juice, salt and pepper until fully combined, tasting as you go, then set aside.\n' +
@@ -50,6 +54,7 @@ const chickenSaladRecipe = makeRecipe('Chicken Salad',
 );
 
 const gochujangCookiesRecipe = makeRecipe('Gochujang cookies',
+    // Ingredients
     '½ cup (8 tablespoons)/115 grams unsalted butter, very soft\n' +
 '2 packed tablespoons dark brown sugar\n' +
 '1 heaping tablespoon gochujang\n' +
@@ -60,6 +65,7 @@ const gochujangCookiesRecipe = makeRecipe('Gochujang cookies',
 '1 teaspoon vanilla extract\n' +
 '½ teaspoon baking soda\n' +
 '1½ cups/185 grams all-purpose flour\n',
+    // Steps
     '1. Step 1\n' +
 'In a small bowl, stir together 1 tablespoon butter, the brown sugar and gochujang until smooth. Set aside for later, at room temperature.\n' +
 '2. Step 2\n' +
@@ -78,8 +84,4 @@ export const allHardCodedRecipes = [pizzaDoughRecipe, chickenSaladRecipe, gochuj
 const nameToRecipe = {};
 for (const recipe of allHardCodedRecipes) {
   nameToRecipe[recipe[recipeNameKey]] = recipe;
-}
-
-export function getRecipeByName(name) {
-  return nameToRecipe[name];
 }
