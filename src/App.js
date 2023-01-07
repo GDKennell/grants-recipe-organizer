@@ -29,6 +29,14 @@ export const allRoutes = [adminPanelRoute,
   myIngredientsPageRoute,
   recipeConversionRoute];
 
+export const routeToTitle = {};
+routeToTitle[adminPanelRoute] = 'Admin Panel';
+routeToTitle[ingredientPageRoute] = 'Ingredients DB';
+routeToTitle[loginPageRoute] = 'Login';
+routeToTitle[myIngredientsPageRoute] = 'My Ingredients';
+routeToTitle[recipeConversionRoute] = 'Recipe Conversion';
+
+
 function App() {
   const {firebaseUser} = useFirebase();
   useEffect(() => {
