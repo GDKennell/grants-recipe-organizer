@@ -1,14 +1,14 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import AdminPanel from './Pages/AdminPanel';
+import AdminPanel from './MainPages/AdminPanel';
 import './App.css';
 // import useIngredientsStore from './hooks/useIngredientsStore';
 import {isUserAdmin} from './Helpers/FirebaseManager';
 import useFirebase from './hooks/useFirebase';
-import IngredientPage from './Pages/IngredientPage';
-import LoginPage from './Pages/LoginPage';
-import MyIngredientsPage from './Pages/MyIngredientsPage';
-import RecipeConversion from './Pages/RecipeConversion';
+import IngredientPage from './MainPages/IngredientPage';
+import LoginPage from './MainPages/LoginPage';
+import MyIngredientsPage from './MainPages/MyIngredientsPage';
+import RecipeConversion from './MainPages/RecipeConversion';
 
 import Button from 'react-bootstrap/Button';
 
