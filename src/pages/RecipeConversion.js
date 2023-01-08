@@ -131,6 +131,7 @@ function RecipeConversion() {
           recipeSelected={recipeChangedFn}
           listName="My Recipes" />
         }
+
         <RecipeInputForm recipeStepsChangedFn={recipeStepsChangedFn}
           ingredientsChangedFn={ingredientsChangedFn}
           titleChangedFn={titleChangedFn}
@@ -138,17 +139,23 @@ function RecipeConversion() {
           initRecipeText={recipeText}
           initTitleText={recipeTitle}/>
         <h3 className="instructions"> Converted Recipe:</h3>
-        <button onClick={savePressed} disabled={!saveEnabled}>Save Recipe</button>
         <div className='horz-collection'>
-          <button disabled={outputType == outputTypeManualEdit}
+          <button className='btn btn-primary'
+            onClick={savePressed} disabled={!saveEnabled}>Save Recipe</button>
+        </div>
+        <div className='horz-collection'>
+          <button className='btn btn-primary'
+            disabled={outputType == outputTypeManualEdit}
             onClick={ () => {
               setOutputType(outputTypeManualEdit);
             }}>Manually Edited</button>
-          <button disabled={outputType == outputTypeAutomatic}
+          <button className='btn btn-primary'
+            disabled={outputType == outputTypeAutomatic}
             onClick={ () => {
               setOutputType(outputTypeAutomatic);
             }}>Auto Generated</button>
-          <button disabled={outputType == outputTypeBoth}
+          <button className='btn btn-primary'
+            disabled={outputType == outputTypeBoth}
             onClick={ () => {
               setOutputType(outputTypeBoth);
             }}>Both</button>
@@ -157,7 +164,7 @@ function RecipeConversion() {
           <div>
             {(outputType == outputTypeBoth) && <b>Manually Edited</b>}
             <textarea
-              className="main-recipe input-field"
+              className="form-control textarea-autosize"
               onChange={autoConvertedOutputTextChange}
               rows={outputNumRows}
               value={outputType == outputTypeAutomatic ? autoConvertedOutputText : manualEditedOutputText }
@@ -167,7 +174,7 @@ function RecipeConversion() {
                 <div>
                   <b>Auto-generated</b>
                   <textarea
-                    className="main-recipe input-field"
+                    className="form-control textarea-autosize"
                     onChange={autoConvertedOutputTextChange}
                     rows={outputNumRows}
                     value={ autoConvertedOutputText }

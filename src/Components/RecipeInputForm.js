@@ -57,7 +57,7 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
 
 
   return (
-    <div className='padded-container'>
+    <div >
       <div className='mb-3'>
         <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label">
           Recipe Name</label>

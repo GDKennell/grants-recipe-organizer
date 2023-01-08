@@ -22,6 +22,16 @@ code {
   position: absolute;
   display: flex;
   flex-direction: column;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+.std-container {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  width: 100%;
 }
 
 .horz-collection {
@@ -41,8 +51,7 @@ code {
 }
 
 .input-field {
-  width: 90%;
-  margin-left: 20px;
+  flex: 1;
   left: 0;
 }
 
