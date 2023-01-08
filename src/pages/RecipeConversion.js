@@ -10,8 +10,9 @@ import {allHardCodedRecipes} from '../RecipeConversion/DataStructures/hardCodedR
 import RecipeInputForm from '../Components/RecipeInputForm';
 import RecipeDropDown from '../Components/RecipeDropDown';
 import useFirebase from '../hooks/useFirebase';
-import {makeRecipe} from '../RecipeConversion/DataStructures/Recipe';
+import {ingredientTextKey, makeRecipe, recipeManualEditTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
 import {saveOrUpdateUserRecipe} from '../Database';
+import {useLocation} from 'react-router-dom';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,6 +28,19 @@ const recipeKey = 'recKey';
 function RecipeConversion() {
   const minRows = 5;
 
+  const location = useLocation();
+  const linkedRecipe = location.state && location.state.linkedRecipe;
+  // console.log(`RecipeConversion render. state: ${JSON.stringify(location.state)}`);
+  useEffect(() => {
+    if (!linkedRecipe) {
+      return;
+    }
+    recipeChangedFn(linkedRecipe[recipeNameKey],
+        linkedRecipe[ingredientTextKey],
+        linkedRecipe[recipeTextKey],
+        linkedRecipe[recipeManualEditTextKey]);
+  }, [linkedRecipe]);
+
   const {firebaseDb, firebaseUser} = useFirebase();
   const saveEnabled = (firebaseUser != null);
   const {ingredientManager, userRecipesList} = useIngredientsStore();
@@ -38,13 +52,14 @@ function RecipeConversion() {
   const [recipeText, setRecipeText] = useState(JSON.parse(localStorage.getItem(recipeKey)) || '');
   const [recipeTitle, setRecipeTitle] = useState(JSON.parse(localStorage.getItem(titleKey)) || '');
 
-  useEffect(() => {
-    recipeChangedFn(recipeTitle, ingredientListText, recipeText);
-  }, [recipeTitle, ingredientListText, recipeText, ingredientManager]);
+  // useEffect(() => {
+  //   console.log(`useeffect anth changed -> recipeChangedFn`);
+
+  //   recipeChangedFn(recipeTitle, ingredientListText, recipeText);
+  // }, [ingredientManager]);
 
   const autoConvertedOutputTextChange = (event) => {
     const textInput = event.target.value;
-    console.log(`converted text changed`);
     setManualEditedOutputText(textInput);
     setManualEditing(textInput != autoConvertedOutputText);
     setOutputType((oldType) => {
@@ -84,7 +99,6 @@ function RecipeConversion() {
   };
 
   const recipeStepsChangedFn = (newRecipeSteps) => {
-    console.log(`recipeStepsChangedFn`);
     setRecipeText(newRecipeSteps);
     recipeChangedFn(recipeTitle, ingredientListText, newRecipeSteps);
   };

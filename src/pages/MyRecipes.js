@@ -1,10 +1,11 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+import {recipeConversionRoute} from '../App';
 import useIngredientsStore from '../hooks/useIngredientsStore';
 import {recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
 
 export default function MyRecipes() {
   const {userRecipesList} = useIngredientsStore();
-  console.log(`${userRecipesList}`);
   return (
     <table className="table">
       <thead>
@@ -22,10 +23,13 @@ export default function MyRecipes() {
             <td>private</td>
             <td>{recipe[recipeNameKey]}</td>
             <td>
-              <button>Share</button>
+              <Link className="nav-link active"
+                aria-current="page"
+                to={`/${recipeConversionRoute}`}
+                state={{linkedRecipe: recipe}}>Edit</Link>
             </td>
             <td>
-              <button>Edit</button>
+              <button>Share</button>
             </td>
             <td>
               <button>Delete</button>

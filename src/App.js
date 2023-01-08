@@ -23,7 +23,7 @@ const ingredientPageRoute = 'ingredientPage';
 const myRecipesRoute = 'myRecipes';
 const loginPageRoute = 'loginPage';
 const myIngredientsPageRoute = 'myIngredientsPage';
-const recipeConversionRoute = 'recipeConversion';
+export const recipeConversionRoute = 'recipeConversion';
 
 const adminRoutes = [recipeConversionRoute,
   myRecipesRoute,
