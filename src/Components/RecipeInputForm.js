@@ -5,7 +5,7 @@ import {parseIngredientListLine} from '../RecipeConversion/RecipeParsing/ingredi
 import {removeAllWhitespace, removeExtraNewLines} from '../RecipeConversion/utilities/stringHelpers';
 import UnkownIngredientsSection from './UnkownIngredientsSection';
 import '../App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 
 export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChangedFn, titleChangedFn, initIngredientsText, initRecipeText, initTitleText}) {
@@ -57,12 +57,13 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
 
 
   return (
-    <div>
-      <h3 className="instructions"> Paste recipe below:</h3>
-      <input onChange={titleChanged} placeholder="Recipe Title" value={initTitleText} className="input-field"/>
-      <br/>
-      Ingredients:
-      <div className="form-outline mb-4">
+    <div className='padded-container'>
+      <div className='mb-3'>
+        <label htmlFor="exampleFormControlInput1" className="form-label">
+          Recipe Name</label>
+        <input onChange={titleChanged} className="form-control" placeholder="Recipe Title" value={initTitleText}/>
+      </div>
+      <div className='mb-3'>
         <textarea className="form-control textarea-autosize"
           id="textareaExample"
           rows={Math.max(4, numIngLines)}
@@ -73,7 +74,7 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
 
       <UnkownIngredientsSection unknownIngredients={unknownIngredients}/>
       Recipe:
-      <div className="form-outline mb-4">
+      <div className="mb-3">
         <textarea className="form-control textarea-autosize"
           id="textareaExample"
           rows={4}
