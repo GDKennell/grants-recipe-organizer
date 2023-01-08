@@ -29,10 +29,10 @@ export default function MyRecipes() {
                 state={{linkedRecipe: recipe}}>Edit</Link>
             </td>
             <td>
-              <button>Share</button>
+              <button className="btn btn-primary">Share</button>
             </td>
             <td>
-              <button>Delete</button>
+              <button className="btn btn-primary">Delete</button>
             </td>
           </tr>,
         )}
