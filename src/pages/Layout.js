@@ -9,7 +9,7 @@ import {allRoutes, routeToTitle} from '../App';
 export default function Layout() {
   return (
     <>
-      <nav className="navbar navbar-expand-md bg-body-tertiary">
+      <nav className="navbar navbar-expand-md bg-secondary">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">Recipe Converter</a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
