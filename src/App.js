@@ -16,14 +16,17 @@ import MyIngredientsPage from './pages/MyIngredientsPage';
 import Layout from './pages/Layout';
 import Home from './pages/Home';
 import NoPage from './pages/NoPage';
+import MyRecipes from './pages/MyRecipes';
 
-export const adminPanelRoute = 'adminPanel';
-export const ingredientPageRoute = 'ingredientPage';
-export const loginPageRoute = 'loginPage';
-export const myIngredientsPageRoute = 'myIngredientsPage';
-export const recipeConversionRoute = 'recipeConversion';
+const adminPanelRoute = 'adminPanel';
+const ingredientPageRoute = 'ingredientPage';
+const myRecipesRoute = 'myRecipes';
+const loginPageRoute = 'loginPage';
+const myIngredientsPageRoute = 'myIngredientsPage';
+const recipeConversionRoute = 'recipeConversion';
 
 const adminRoutes = [recipeConversionRoute,
+  myRecipesRoute,
   ingredientPageRoute,
   myIngredientsPageRoute,
   loginPageRoute,
@@ -31,6 +34,7 @@ const adminRoutes = [recipeConversionRoute,
 ];
 
 const normalUserRoutes = [recipeConversionRoute,
+  myRecipesRoute,
   ingredientPageRoute,
   myIngredientsPageRoute,
   loginPageRoute,
@@ -48,6 +52,7 @@ routeToTitle[ingredientPageRoute] = 'Ingredients DB';
 routeToTitle[loginPageRoute] = 'Login';
 routeToTitle[myIngredientsPageRoute] = 'My Ingredients';
 routeToTitle[recipeConversionRoute] = 'Recipe Conversion';
+routeToTitle[myRecipesRoute] = 'My Recipes';
 
 
 function App() {
@@ -72,6 +77,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path={adminPanelRoute} element={<AdminPanel />} />
           <Route path={ingredientPageRoute} element={<IngredientPage />} />
+          <Route path={myRecipesRoute} element={<MyRecipes />} />
           <Route path={loginPageRoute} element={<LoginPage />} />
           <Route path={myIngredientsPageRoute} element={<MyIngredientsPage />} />
           <Route path={recipeConversionRoute} element={<RecipeConversion />} />
