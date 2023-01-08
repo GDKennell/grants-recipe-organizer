@@ -59,11 +59,13 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
   return (
     <div className='padded-container'>
       <div className='mb-3'>
-        <label htmlFor="exampleFormControlInput1" className="form-label">
+        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label">
           Recipe Name</label>
         <input onChange={titleChanged} className="form-control" placeholder="Recipe Title" value={initTitleText}/>
       </div>
       <div className='mb-3'>
+        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label">
+          Ingredient List</label>
         <textarea className="form-control textarea-autosize"
           id="textareaExample"
           rows={Math.max(4, numIngLines)}
@@ -73,8 +75,10 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
       </div>
 
       <UnkownIngredientsSection unknownIngredients={unknownIngredients}/>
-      Recipe:
       <div className="mb-3">
+        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label">
+          Recipe Steps</label>
+
         <textarea className="form-control textarea-autosize"
           id="textareaExample"
           rows={4}

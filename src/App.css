@@ -44,4 +44,10 @@
     border-width: 1px;
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
+    text-align: left;
 }
+
+.grant-form-label {
+  margin-bottom: 0.5rem;
+}
+
