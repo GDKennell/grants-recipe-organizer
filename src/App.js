@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useEffect} from 'react';
 import './App.css';
 // import useIngredientsStore from './hooks/useIngredientsStore';
@@ -23,12 +23,24 @@ export const loginPageRoute = 'loginPage';
 export const myIngredientsPageRoute = 'myIngredientsPage';
 export const recipeConversionRoute = 'recipeConversion';
 
-export const allRoutes = [recipeConversionRoute,
+const adminRoutes = [recipeConversionRoute,
   ingredientPageRoute,
   myIngredientsPageRoute,
   loginPageRoute,
   adminPanelRoute,
 ];
+
+const normalUserRoutes = [recipeConversionRoute,
+  ingredientPageRoute,
+  myIngredientsPageRoute,
+  loginPageRoute,
+];
+
+const notSignedInRoutes = [recipeConversionRoute,
+  ingredientPageRoute,
+  loginPageRoute,
+];
+
 
 export const routeToTitle = {};
 routeToTitle[adminPanelRoute] = 'Admin Panel';
@@ -39,16 +51,24 @@ routeToTitle[recipeConversionRoute] = 'Recipe Conversion';
 
 
 function App() {
+  const [allRoutes, setAllRoutes] = useState(notSignedInRoutes);
+
   const {firebaseUser} = useFirebase();
   useEffect(() => {
-    const userIsAdmin = isUserAdmin(firebaseUser);
-    console.log(`user admin: ${userIsAdmin}`);
+    if (isUserAdmin(firebaseUser)) {
+      setAllRoutes(adminRoutes);
+    } else if (firebaseUser) {
+      setAllRoutes(normalUserRoutes);
+    } else {
+      setAllRoutes(notSignedInRoutes);
+    }
   }, [firebaseUser]);
+
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Layout allRoutes={allRoutes}/>}>
           <Route index element={<Home />} />
           <Route path={adminPanelRoute} element={<AdminPanel />} />
           <Route path={ingredientPageRoute} element={<IngredientPage />} />

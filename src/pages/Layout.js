@@ -1,12 +1,13 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {Link, Outlet} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
-import {allRoutes, routeToTitle} from '../App';
+import {routeToTitle} from '../App';
 
 // Docs for all Bootstrap Navbar stuff:
 // https://getbootstrap.com/docs/5.3/components/navbar/
-export default function Layout() {
+export default function Layout({allRoutes}) {
   return (
     <>
       <nav className="navbar navbar-expand-md bg-secondary">
