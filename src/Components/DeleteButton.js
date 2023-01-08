@@ -13,6 +13,6 @@ export default function DeleteButton({ingredient}) {
   };
 
   return (
-    <button onClick={deleteClicked}> Delete </button>
+    <button className='btn btn-primary' onClick={deleteClicked}> Delete </button>
   );
 }

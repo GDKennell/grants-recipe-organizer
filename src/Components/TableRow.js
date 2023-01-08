@@ -99,34 +99,43 @@ export default function TableRow({rowData,
 
   return (
     <tr >
-      { isAdmin && <td style= {{border: '1px solid'}}>
+      { isAdmin && <td >
         {userName}
       </td>}
-      <td style= {{border: '1px solid'}}>
+      <td >
         {
       isEditing ?
       <input value={namesText} onChange={namesTextChaned} /> :
      <div>{namesText}</div>
         }
       </td>
-      <td style= {{border: '1px solid'}}>
+      <td >
         {
       isEditing ?
       <input value={gramsPerCupText} onChange={gramsPerCupChanged} /> :
       <div>{gramsPerCupText}</div>
         }
       </td>
-      {editableIngredientsExist && <td style= {{border: '1px solid'}}>
+      {editableIngredientsExist && <td >
         {isEditable && <DeleteButton ingredient={rowData}/>}
       </td>}
-      {editableIngredientsExist && <td style= {{border: '1px solid'}}>
-        {isEditable && !isEditing && <button onClick={editPressed} disabled={!editEnabled}>Edit</button>}
-        {isEditable && isEditing && <button onClick={savePressed} disabled={!saveEnabled}>Save</button>}
-        {isEditable && isEditing && <button onClick={cancelPressed}>Cancel</button>}
+      {editableIngredientsExist && <td >
+        {isEditable && !isEditing &&
+        <button className='btn btn-primary'
+          onClick={editPressed}
+          disabled={!editEnabled}>Edit</button>}
+        {isEditable && isEditing &&
+        <button className='btn btn-primary'
+          onClick={savePressed}
+          disabled={!saveEnabled}>Save</button>}
+        {isEditable && isEditing &&
+        <button className='btn btn-primary'
+          onClick={cancelPressed}>Cancel</button>}
       </td>}
-      <td style= {{border: '1px solid'}}>
+      <td >
         {canPromote &&
-        <button onClick={promotePressed} disabled={!promoteEnabled}>Promote</button>
+        <button className='btn btn-primary'
+          onClick={promotePressed} disabled={!promoteEnabled}>Promote</button>
         }
       </td>
 

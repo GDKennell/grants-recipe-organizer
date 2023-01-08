@@ -13,17 +13,19 @@ export default function Table({data}) {
     setEditingRowKey(key);
   };
 
-  const headerData = {names: ['Ingredient Name(s)'], gramsPerCup: 'Grams per Cup', userId: null};
   return (
-    <table style= {{border: '1px solid'}}>
+    <table className="table">
+      <thead>
+        <tr>
+          <th scope="col">User Name</th>
+          <th scope="col">Ingredient Name(s)</th>
+          <th scope="col">Grams per Cup</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+
       <tbody>
-        <TableRow rowData={headerData}
-          key = {'heyimakeygoshdarnit'}
-          firebaseUser={firebaseUser}
-          ingredientManager={ingredientManager}
-          editingRowKey={editingRowKey}
-          isHeader={true}
-          startedEditingFn={startedEditingFn}/>
         {data.map((rowData) =>
           <TableRow rowData={rowData}
             key={rowData.key}
