@@ -23,7 +23,7 @@ export default function MyRecipes() {
             <td>private</td>
             <td>{recipe[recipeNameKey]}</td>
             <td>
-              <Link className="nav-link active"
+              <Link className="btn btn-primary"
                 aria-current="page"
                 to={`/${recipeConversionRoute}`}
                 state={{linkedRecipe: recipe}}>Edit</Link>
