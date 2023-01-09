@@ -1,6 +1,6 @@
 
 import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc, getDoc, setDoc} from 'firebase/firestore';
-import {ingredientsCollection, privateIngredientsCollection, privateRecipesCollection, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
+import {globalRecipesCollection, ingredientsCollection, privateIngredientsCollection, privateRecipesCollection, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
 import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceIngredientList, replaceUserRecipesList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
@@ -269,27 +269,63 @@ async function storeIngredientToDb(ingredient, db) {
   }
 }
 
-export async function saveOrUpdateUserRecipe(recipeIn, db, user) {
+export async function findRecipeDocIdByName(recipeCollection, recipeName ) {
+  const querySnapshot = await getDocs(recipeCollection);
+  let recipeId = null;
+  querySnapshot.forEach((doc) => {
+    const dbRecipe = recipeFromDoc(doc);
+    if (dbRecipe[recipeNameKey] == recipeName) {
+      recipeId = doc.id;
+    }
+  });
+  return recipeId;
+}
+
+async function recipeDoc(recipeId, db, user) {
+  let docRef;
+  if (user) {
+    docRef = doc(db, usersCollection, user.uid, privateRecipesCollection, recipeId);
+  } else {
+    docRef = doc(db, globalRecipesCollection, recipeId);
+  }
+  return docRef;
+}
+
+async function updateExistingRecipe(recipeId, recipeIn, db, user) {
+  if (!confirm(`Are you sure you want to overwrite saved recipe ${recipeIn[recipeNameKey]}?`)) {
+    return;
+  }
+  const docRef = await recipeDoc(recipeId, db, user);
+  try {
+    await updateDoc(docRef, recipeIn);
+  } catch (e) {
+    console.error('Error updating document: ', e);
+  }
+
+  alert(`Successfully updated recipe ${recipeIn[recipeNameKey]}`);
+}
+
+async function addNewRecipe(recipeIn, recipeCollection, db, user) {
+  try {
+    await addDoc(recipeCollection, recipeIn);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+  console.log(`Successfully added new recipe ${recipeIn[recipeNameKey]}`);
+  alert(`Successfully saved new recipe ${recipeIn[recipeNameKey]}`);
+}
+
+export async function saveOrUpdateRecipe(recipeIn, db, user) {
   const newRecipe = prepRecipeForDb(recipeIn);
   try {
-    const querySnapshot = await getDocs(collection(db, usersCollection, user.uid, privateRecipesCollection ));
-    let recipeId = null;
-    querySnapshot.forEach((doc) => {
-      const dbRecipe = recipeFromDoc(doc);
-      if (dbRecipe[recipeNameKey] == newRecipe[recipeNameKey]) {
-        recipeId = doc.id;
-      }
-    });
+    const recipeCollection = (user == null) ? collection(db, globalRecipesCollection) :
+        collection(db, usersCollection, user.uid, privateRecipesCollection );
+
+    const recipeId = await findRecipeDocIdByName(recipeCollection, newRecipe[recipeNameKey]);
     if (recipeId == null) {
-      await addDoc(collection(db, usersCollection, user.uid, privateRecipesCollection), newRecipe);
-      console.log(`Successfully added new recipe ${newRecipe[recipeNameKey]}`);
-      alert(`Successfully saved new recipe ${newRecipe[recipeNameKey]}`);
+      await addNewRecipe(newRecipe, recipeCollection, db, user);
     } else {
-      if (confirm(`Are you sure you want to overwrite saved recipe ${newRecipe[recipeNameKey]}?`)) {
-        const docRef = doc(db, usersCollection, user.uid, privateRecipesCollection, recipeId);
-        await updateDoc(docRef, newRecipe);
-        alert(`Successfully updated recipe ${newRecipe[recipeNameKey]}`);
-      }
+      await updateExistingRecipe(newRecipe, newRecipe, db, user);
     }
   } catch (e) {
     console.error('Error adding document: ', e);

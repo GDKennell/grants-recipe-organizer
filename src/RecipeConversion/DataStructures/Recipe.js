@@ -28,5 +28,8 @@ export function recipeFromDoc(doc) {
 export function prepRecipeForDb(recipe) {
   const localRecipe = recipe;
   delete localRecipe[recipeDocIdKey];
+  if (recipe[recipeManualEditTextKey] == null) {
+    delete localRecipe[recipeManualEditTextKey];
+  }
   return localRecipe;
 }

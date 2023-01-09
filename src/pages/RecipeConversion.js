@@ -11,7 +11,7 @@ import RecipeInputForm from '../Components/RecipeInputForm';
 import RecipeDropDown from '../Components/RecipeDropDown';
 import useFirebase from '../hooks/useFirebase';
 import {ingredientTextKey, makeRecipe, recipeManualEditTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
-import {saveOrUpdateUserRecipe} from '../Database';
+import {saveOrUpdateRecipe} from '../Database';
 import {useLocation} from 'react-router-dom';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -114,7 +114,7 @@ function RecipeConversion() {
       return;
     }
     const newRecipe = makeRecipe(recipeTitle, ingredientListText, recipeText, manualEditedOutputText);
-    saveOrUpdateUserRecipe(newRecipe, firebaseDb, firebaseUser);
+    saveOrUpdateRecipe(newRecipe, firebaseDb, firebaseUser);
   };
 
 
