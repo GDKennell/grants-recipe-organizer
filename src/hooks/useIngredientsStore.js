@@ -11,9 +11,11 @@ const useIngredientsStore = () => {
     return new IngredientManager(ingredientList);
   }, [ingredientList]);
   const userRecipesList = useSelector((state) => state.ingredientStore.userRecipesList);
+  const globalRecipesList = useSelector((state) => state.ingredientStore.globalRecipesList);
 
   return {ingredientManager: ingredientManager,
     userRecipesList: userRecipesList,
+    globalRecipesList: globalRecipesList,
     dispatch: dispatch};
 };
 

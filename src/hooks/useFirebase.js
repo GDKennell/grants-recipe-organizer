@@ -3,9 +3,10 @@ import {getFirestore} from 'firebase/firestore';
 import {useState, useEffect} from 'react';
 import {getAuth} from 'firebase/auth';
 import {getAnalytics} from 'firebase/analytics';
-import {fetchAllUserScopedIngredients, fetchIngredientsFromDb, fetchUserRecipesFromDb, fetchUserScopedIngredients, storeUserData} from '../Database';
+import {fetchAllUserScopedIngredients, fetchIngredientsFromDb, fetchRecipesFromDb, fetchUserScopedIngredients, storeUserData} from '../Database';
 import useIngredientsStore from './useIngredientsStore';
 import {isUserAdmin} from '../Helpers/FirebaseManager';
+import {replaceUserRecipesList} from '../features/ingredientStore/ingredientStoreSlice';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -38,6 +39,7 @@ const useFirebase = () => {
     setFirebaseApp(globalFirebaseApp);
     setFirebaseDb(localFirebaseDb);
     setFirebaseAnalytics(localFirebaseAnalytics);
+    fetchRecipesFromDb(localFirebaseDb, dispatch, null);
 
     const auth = getAuth();
     auth.onAuthStateChanged(function(user) {
@@ -50,8 +52,11 @@ const useFirebase = () => {
         return;
       }
       globalUserId = (user == null) ? null : user.uid;
-
-      fetchUserRecipesFromDb(localFirebaseDb, dispatch, user);
+      if (user) {
+        fetchRecipesFromDb(localFirebaseDb, dispatch, user);
+      } else {
+        dispatch(replaceUserRecipesList({newUserRecipes: []}));
+      }
       storeUserData(localFirebaseDb, user);
       if (isUserAdmin(user)) {
         fetchAllUserScopedIngredients(localFirebaseDb, dispatch, ingredientManager);

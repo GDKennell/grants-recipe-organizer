@@ -6,7 +6,6 @@ import {convertRecipe} from '../RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
 
 // eslint-disable-next-line no-unused-vars
-import {allHardCodedRecipes} from '../RecipeConversion/DataStructures/hardCodedRecipes';
 import RecipeInputForm from '../Components/RecipeInputForm';
 import RecipeDropDown from '../Components/RecipeDropDown';
 import useFirebase from '../hooks/useFirebase';
@@ -43,7 +42,7 @@ function RecipeConversion() {
 
   const {firebaseDb, firebaseUser} = useFirebase();
   const saveEnabled = (firebaseUser != null);
-  const {ingredientManager, userRecipesList} = useIngredientsStore();
+  const {ingredientManager, userRecipesList, globalRecipesList} = useIngredientsStore();
   const [autoConvertedOutputText, setAutoConvertedOutputText] = useState('');
   const [manualEditedOutputText, setManualEditedOutputText] = useState('');
   const [manualEditing, setManualEditing] = useState(false);
@@ -122,7 +121,7 @@ function RecipeConversion() {
     <div className="App">
       <div className="root-container">
         <h1 className="title"> Recipe Converter </h1>
-        <RecipeDropDown recipes={allHardCodedRecipes}
+        <RecipeDropDown recipes={globalRecipesList}
           recipeSelected={recipeChangedFn}
           listName="Preset Recipes"/>
         {

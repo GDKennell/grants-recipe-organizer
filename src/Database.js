@@ -1,14 +1,14 @@
 
 import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc, getDoc, setDoc} from 'firebase/firestore';
 import {globalRecipesCollection, ingredientsCollection, privateIngredientsCollection, privateRecipesCollection, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
-import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceIngredientList, replaceUserRecipesList} from './features/ingredientStore/ingredientStoreSlice';
+import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceGlobalRecipesList, replaceIngredientList, replaceUserRecipesList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
 import {prepRecipeForDb, recipeFromDoc, recipeNameKey} from './RecipeConversion/DataStructures/Recipe';
 import {cleanIngredientWord, objectsEqual} from './RecipeConversion/utilities/stringHelpers';
 
 
-function isValidIngredientDoc(doc ) {
+function isValidIngredientDoc(doc) {
   if (doc.data().names == undefined || doc.data().names.length == 0) {
     return false;
   }
@@ -162,26 +162,29 @@ export async function fetchIngredientsFromDb(db, dispatch) {
   }
 }
 
-let dbRecipesFetchStarted = false;
-export async function fetchUserRecipesFromDb(db, dispatch, user) {
-  if (!user) {
-    dispatch(replaceUserRecipesList({newUserRecipes: []}));
-    dbRecipesFetchStarted = false;
+
+let userIdFetched = null;
+let globalFetched = false;
+export async function fetchRecipesFromDb(db, dispatch, user) {
+  if (user && userIdFetched == user.uid ||
+    !user && globalFetched) {
     return;
   }
-  if (dbRecipesFetchStarted) {
-    return;
-  }
-  dbRecipesFetchStarted = true;
+  userIdFetched = user ? user.uid : userIdFetched;
+  globalFetched = !user ? true : globalFetched;
 
   try {
-    const querySnapshot = await getDocs(collection(db, usersCollection, user.uid, privateRecipesCollection));
+    const recipeCollection = (user == null) ? collection(db, globalRecipesCollection) :
+        collection(db, usersCollection, user.uid, privateRecipesCollection );
+    const querySnapshot = await getDocs(recipeCollection);
     const localRecipes = [];
     querySnapshot.forEach((doc) => {
       localRecipes.push(recipeFromDoc(doc));
     });
-    if (localRecipes.length > 0 ) {
+    if (localRecipes.length > 0 && user) {
       dispatch(replaceUserRecipesList({newUserRecipes: localRecipes}));
+    } else if (localRecipes.length > 0 ) {
+      dispatch(replaceGlobalRecipesList({newGlobalRecipes: localRecipes}));
     }
   } catch (e) {
     console.error('Error fetching recipes: ', e);
@@ -301,7 +304,6 @@ async function updateExistingRecipe(recipeId, recipeIn, db, user) {
   } catch (e) {
     console.error('Error updating document: ', e);
   }
-
   alert(`Successfully updated recipe ${recipeIn[recipeNameKey]}`);
 }
 
