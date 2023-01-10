@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useState} from 'react';
 import '../App.css';
 import useIngredientsStore from '../hooks/useIngredientsStore';
-import {convertRecipe} from '../RecipeConversion/convertRecipe';
+import {combineIngredientsAndRecipe, convertRecipe} from '../RecipeConversion/convertRecipe';
 // Import the functions you need from the SDKs you need
 
 // eslint-disable-next-line no-unused-vars
@@ -75,7 +75,8 @@ function RecipeConversion() {
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientsText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
 
-    const newValue = convertRecipe(ingredientsText, recipeText, ingredientManager);
+    const {ingredientsString, recipeString} = convertRecipe(ingredientsText, recipeText, ingredientManager);
+    const newValue = combineIngredientsAndRecipe(ingredientsString, recipeString);
     setAutoConvertedOutputText((oldConvertedText) => {
       if (oldConvertedText != newValue) {
         if (!manualEditing || confirm('Do you want to overwrite your manual edits?')) {

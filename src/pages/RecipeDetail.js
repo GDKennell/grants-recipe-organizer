@@ -4,7 +4,7 @@ import {useLocation} from 'react-router-dom';
 import {fetchSingleRecipeFromDb} from '../Database';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
-import {getStepsFromRecipe, ingredientTextKey, recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
+import {getIngredientsFromRecipe, getStepsFromRecipe, recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
 
 function parseRecipeDetailPath(path) {
   const components = path.split('/');
@@ -41,7 +41,7 @@ export default function RecipeDetail() {
     <div className="col-12">
       <h3>Ingredients:</h3>
       <ul>
-        {recipe[ingredientTextKey].split('\n').map(
+        {getIngredientsFromRecipe(recipe, ingredientManager).split('\n').map(
             (line) => <li key={line}>{line}</li>)}
       </ul>
     </div>

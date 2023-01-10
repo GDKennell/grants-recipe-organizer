@@ -1,4 +1,5 @@
 import {
+  combineIngredientsAndRecipe,
   convertRecipe,
 } from './convertRecipe';
 import {expect, test} from '@jest/globals';
@@ -252,7 +253,8 @@ test('chicken salad ingredients', () => {
     '56g (1/2 cup) chopped Pecans\n' +
     '1/2 cup chopped celery\n' +
     '28.8g (1/4 cup) chopped sweet Onion, optional';
-  const result = convertRecipe(ingredientList, '', ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, '', ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedIngredients);
   expectSubstring(result, expectedIngredients);
 });
@@ -297,7 +299,8 @@ test('Brings ingredient amounts from list to prep steps', () => {
     '>  - 3g (1 teaspoon) cream of tartar\n' +
     '>  - 2.3g (1/2 teaspoon) baking soda\n' +
     '>  - 3g (1/2 teaspoon) salt';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   expectSubstring(result, expectedIngredients);
   expectSubstring(result, expectedRecipe);
 });
@@ -337,7 +340,8 @@ test('ingredients moved over and skip \'and\'', () => {
     '>  - 3g (1 teaspoon) cream of tartar\n' +
     '>  - 2.3g (1/2 teaspoon) baking soda\n' +
     '>  - 3g (1/2 teaspoon) salt';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedIngredients);
   expectSubstring(result, expectedIngredients);
   expectSubstring(result, expectedRecipe);
@@ -384,7 +388,8 @@ test('weird line breaks', () => {
     '>   Step 3 \n' +
     '>   Profit';
 
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual("");
   expectSubstring(result, expectedRecipe);
 });
@@ -403,7 +408,8 @@ test('cream vs sour cream', () => {
     '>  until fully combined \n' +
     '>  - -  tasting as you go \n' +
     '>  - -  set aside';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   expectSubstring(result, expectedRecipe);
 });
 
@@ -423,7 +429,8 @@ test('new line before ingredient', () => {
     '>  until fully combined \n' +
     '>  - -  tasting as you go \n' +
     '>  - -  set aside';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual("");
   expectSubstring(result, expectedRecipe);
 });
@@ -447,7 +454,8 @@ test('skip the next and thens', () => {
     '>  start wrapping the twine around the roll back toward the starting point \n' +
     '>   Space each wrap ⅓ inch (1 cm) apart \n' +
     '>   Make sure you wrap the roll as tightly as possible';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   expectSubstring(result, expectedRecipe);
 });
 
@@ -471,7 +479,8 @@ test('b oil bug', () => {
     '>  in';
 
   const expectedRecipeSnippet = 'Bring the liquid to a boil';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
 
   expectSubstring(result, expectedRecipeSnippet);
 });
@@ -488,7 +497,8 @@ test('recipe ingredients with \'comma and \' last one', () => {
     '>  - soy sauce\n' +
     '>  - water\n' +
     '>  - sugar';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   expectSubstring(result, expectedRecipe);
 });
 
@@ -520,7 +530,8 @@ test('carne asada', () => {
     '>  - 5.3g (2 tsp) chili powder\n' +
     '>   Use hand whisk to incorporate well \n' +
     '>   Set aside';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedIngredients);
 
 
@@ -534,7 +545,8 @@ test('fluid ounces ', () => {
   const expectedIngredients = '366g (12 fl oz) whole Milk';
   const expectedRecipe =
     ' In a large bowl \n>  - -  add \n>  - melted butter\n>  - eggs\n>  - 366g (12 fl oz) milk';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedIngredients);
 
   expectSubstring(result, expectedIngredients);
@@ -563,7 +575,8 @@ test('countable eggs', () => {
     '>  streaks remain \n' +
     '>   Add in dry ingredients \n' +
     '>   Mix until evenly blended';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedIngredients);
 
 
@@ -588,7 +601,8 @@ test('egg yolks and whites ', () => {
     '>  - egg whites\n' +
     '>   Refrigerate the \n' +
     '>  - egg whites';
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedIngredients);
 
   expectSubstring(result, expectedIngredients);
@@ -610,7 +624,8 @@ test('broile \\n r ', () => {
   '>  In ' + '\n' +
   '> 147.8g (1/3 cup)  - Parmigiano-Reggiano';
 
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedRecipe);
 
   expectSubstring(result, expectedIngredients);
@@ -631,7 +646,8 @@ test('turkey sausage ', () => {
   const expectedRecipe =
   '';
 
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedIngredients);
 
   expectSubstring(result, expectedIngredients);
@@ -657,7 +673,8 @@ test('prep steps ', () => {
   '>  - grate 147.8g (1/3 cup) parmigiano reggiano';
 
 
-  const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   // expect(result).toEqual(expectedRecipe);
 
   expectSubstring(result, expectedIngredients);
@@ -676,7 +693,8 @@ test('prep steps ', () => {
 //   const expectedRecipe =
 //   '';
 
-//   const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+//   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+// const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
 //   expect(result).toEqual(expectedIngredients);
 
 // expectSubstring(result, expectedIngredients);
@@ -744,7 +762,8 @@ test('prep steps ', () => {
 //     '>   A toothpick inserted should come out mostly clean \n' +
 //     '>   Let mochi cool completely before slicing and serving\n';
 
-//   const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+//   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+// const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
 // expectSubstring(result, expectedIngredients);
 // expectSubstring(result, expectedRecipe);
 
@@ -816,7 +835,8 @@ test('prep steps ', () => {
 //     '\n';
 //   const expectedIngredients = '';
 //   const expectedRecipe = '';
-//   const result = convertRecipe(ingredientList, prepSteps, ingredientManager);
+//   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+// const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
 //   // expect(result).toEqual(expectedIngredients);
 
 // expectSubstring(result, expectedIngredients);

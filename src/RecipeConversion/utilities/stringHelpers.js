@@ -167,18 +167,6 @@ function newLineBeforeWord(recipeString, ingredientString, startIndex) {
   }
   return false;
 }
-export function removeWordAndPrefix(string, word) {
-  // Find the index of the first instance of needle in haystack
-  const index = string.indexOf(word);
-
-  // If word was not found in string, return the original string string
-  if (index === -1) {
-    return string;
-  }
-
-  // Return the string string with the characters before word and word itself removed
-  return string.substring(index + word.length);
-}
 
 function removeSpacesBeforeWord(recipeString, ingredientString, startIndex) {
   let numSpaces = 0;
