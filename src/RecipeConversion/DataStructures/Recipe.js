@@ -1,3 +1,5 @@
+import {convertRecipe, RECIPES_HEADER} from '../convertRecipe';
+import {removeWordAndPrefix} from '../utilities/stringHelpers';
 
 export const ingredientTextKey = 'ingredientTextKey';
 export const recipeTextKey = 'recipeTextKey';
@@ -32,4 +34,16 @@ export function prepRecipeForDb(recipe) {
     delete localRecipe[recipeManualEditTextKey];
   }
   return localRecipe;
+}
+
+export function getStepsFromRecipe(recipe, ingredientManager) {
+  const manual = recipe[recipeManualEditTextKey];
+  if (manual && manual.length > 0) {
+    return manual;
+  }
+  const converted = convertRecipe(recipe[ingredientTextKey],
+      recipe[recipeTextKey],
+      ingredientManager);
+  const recipeSteps = removeWordAndPrefix(converted, RECIPES_HEADER );
+  return recipeSteps;
 }

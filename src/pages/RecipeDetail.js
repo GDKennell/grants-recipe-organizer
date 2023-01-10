@@ -3,7 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import {fetchSingleRecipeFromDb} from '../Database';
 import useFirebase from '../hooks/useFirebase';
-import {ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
+import useIngredientsStore from '../hooks/useIngredientsStore';
+import {getStepsFromRecipe, ingredientTextKey, recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
 
 function parseRecipeDetailPath(path) {
   const components = path.split('/');
@@ -12,6 +13,7 @@ function parseRecipeDetailPath(path) {
 
 export default function RecipeDetail() {
   const location = useLocation();
+  const {ingredientManager} = useIngredientsStore();
   const {firebaseDb} = useFirebase();
   const {userId, recipeId} = parseRecipeDetailPath(location.pathname);
 
@@ -47,7 +49,7 @@ export default function RecipeDetail() {
   <div className="row mt-5">
     <div className="col-12 display-linebreak">
       <h3>Steps:</h3>
-      {recipe[recipeTextKey]}
+      {getStepsFromRecipe(recipe, ingredientManager)}
     </div>
   </div>
 </div>}
