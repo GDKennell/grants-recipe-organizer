@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import {fetchSingleRecipeFromDb} from '../Database';
 import useFirebase from '../hooks/useFirebase';
-import {recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
+import {ingredientTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
 
 function parseRecipeDetailPath(path) {
   const components = path.split('/');
@@ -28,6 +28,29 @@ export default function RecipeDetail() {
 
 
   return (
-    <div> {recipe ? recipe[recipeNameKey] : 'Loading ...'}</div>
+    <div> {!recipe ? 'Loading ...' :
+<div className="container mt-5">
+  <div className="row">
+    <div className="col-12">
+      <h1 className="text-center">{recipe[recipeNameKey] }</h1>
+    </div>
+  </div>
+  <div className="row mt-5">
+    <div className="col-12">
+      <h3>Ingredients:</h3>
+      <ul>
+        {recipe[ingredientTextKey].split('\n').map(
+            (line) => <li key={line}>{line}</li>)}
+      </ul>
+    </div>
+  </div>
+  <div className="row mt-5">
+    <div className="col-12 display-linebreak">
+      <h3>Steps:</h3>
+      {recipe[recipeTextKey]}
+    </div>
+  </div>
+</div>}
+    </div>
   );
 }
