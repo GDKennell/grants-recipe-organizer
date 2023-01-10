@@ -1,10 +1,11 @@
 
 import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc, getDoc, setDoc} from 'firebase/firestore';
-import {globalRecipesCollection, ingredientsCollection, privateIngredientsCollection, privateRecipesCollection, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
+import {useId} from 'react';
+import {globalRecipesCollection, ingredientsCollection, privateIngredientsCollection, privateRecipesCollection, publicUserId, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
 import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceGlobalRecipesList, replaceIngredientList, replaceUserRecipesList} from './features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
 import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
-import {prepRecipeForDb, recipeFromDoc, recipeNameKey} from './RecipeConversion/DataStructures/Recipe';
+import {prepRecipeForDb, recipeDocIdKey, recipeFromDoc, recipeNameKey} from './RecipeConversion/DataStructures/Recipe';
 import {cleanIngredientWord, objectsEqual} from './RecipeConversion/utilities/stringHelpers';
 
 
@@ -165,6 +166,17 @@ export async function fetchIngredientsFromDb(db, dispatch) {
 
 let userIdFetched = null;
 let globalFetched = false;
+
+// Key: `${userId}/${recipeId}`
+// Value: Recipe object
+const userAndRecipeIdToRecipe = {};
+function storeRecipe(userId, recipeId, recipe) {
+  userAndRecipeIdToRecipe[`${userId}/${recipeId}`] = recipe;
+}
+function getCachedRecipe(userId, recipeId) {
+  return userAndRecipeIdToRecipe[`${userId}/${recipeId}`];
+}
+
 export async function fetchRecipesFromDb(db, dispatch, user) {
   if (user && userIdFetched == user.uid ||
     !user && globalFetched) {
@@ -179,7 +191,10 @@ export async function fetchRecipesFromDb(db, dispatch, user) {
     const querySnapshot = await getDocs(recipeCollection);
     const localRecipes = [];
     querySnapshot.forEach((doc) => {
-      localRecipes.push(recipeFromDoc(doc));
+      const recipe = recipeFromDoc(doc);
+      localRecipes.push(recipe);
+      const userId = user ? user.uid : publicUserId;
+      storeRecipe(userId, recipe[recipeDocIdKey], recipe);
     });
     if (localRecipes.length > 0 && user) {
       dispatch(replaceUserRecipesList({newUserRecipes: localRecipes}));
@@ -189,6 +204,22 @@ export async function fetchRecipesFromDb(db, dispatch, user) {
   } catch (e) {
     console.error('Error fetching recipes: ', e);
   }
+}
+
+export async function fetchSingleRecipeFromDb(db, userId, recipeId) {
+  console.log(`fetchSingleRecipeFromDb(${db}, ${userId}, ${recipeId}`);
+  const cachedRecipe = getCachedRecipe(useId, recipeId);
+  if (cachedRecipe) {
+    console.log(`Got cached: ${JSON.stringify(cachedRecipe)}`);
+    return cachedRecipe;
+  }
+  const recipeDocRef = doc(db, usersCollection, userId, privateRecipesCollection, recipeId);
+  const recipeDoc = await getDoc(recipeDocRef);
+
+  const recipe = recipeFromDoc(recipeDoc);
+  console.log(`Recipe from doc: ${JSON.stringify(recipe)}`);
+  storeRecipe(useId, recipeId, recipe);
+  return recipe;
 }
 
 export async function updateIngredient(oldIngredient,

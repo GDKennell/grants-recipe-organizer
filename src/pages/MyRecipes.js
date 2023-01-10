@@ -15,8 +15,7 @@ export default function MyRecipes() {
     if (recipeId && userId) {
       const path = `/${userId}/${recipeDetailRoute}/${recipe[recipeDocIdKey]}`;
       return <Link aria-current="page"
-        to={path}
-        state={{linkedRecipe: recipe}}> {recipe[recipeNameKey]}</Link>;
+        to={path}> {recipe[recipeNameKey]}</Link>;
     }
     return recipe[recipeNameKey];
   };
