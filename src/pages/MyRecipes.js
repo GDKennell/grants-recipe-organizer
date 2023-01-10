@@ -1,11 +1,25 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {recipeConversionRoute} from '../App';
+import {recipeConversionRoute, recipeDetailRoute} from '../App';
+import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
-import {recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
+import {recipeDocIdKey, recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
 
 export default function MyRecipes() {
   const {userRecipesList} = useIngredientsStore();
+  const {firebaseUser} = useFirebase();
+
+  const linkForRecipe = (recipe) => {
+    const recipeId = recipe[recipeDocIdKey];
+    const userId = firebaseUser ? firebaseUser.uid : null;
+    if (recipeId && userId) {
+      const path = `/${userId}/${recipeDetailRoute}/${recipe[recipeDocIdKey]}`;
+      return <Link aria-current="page"
+        to={path}
+        state={{linkedRecipe: recipe}}> {recipe[recipeNameKey]}</Link>;
+    }
+    return recipe[recipeNameKey];
+  };
   return (
     <table className="table">
       <thead>
@@ -21,7 +35,9 @@ export default function MyRecipes() {
         {userRecipesList.map((recipe) =>
           <tr key={recipe[recipeNameKey]}>
             <td>private</td>
-            <td>{recipe[recipeNameKey]}</td>
+            <td>
+              {linkForRecipe(recipe)}
+            </td>
             <td>
               <Link className="btn btn-primary"
                 aria-current="page"

@@ -17,6 +17,7 @@ import Layout from './pages/Layout';
 import Home from './pages/Home';
 import NoPage from './pages/NoPage';
 import MyRecipes from './pages/MyRecipes';
+import RecipeDetail from './pages/RecipeDetail';
 
 const adminPanelRoute = 'adminPanel';
 const ingredientPageRoute = 'ingredientPage';
@@ -24,6 +25,7 @@ const myRecipesRoute = 'myRecipes';
 const loginPageRoute = 'loginPage';
 const myIngredientsPageRoute = 'myIngredientsPage';
 export const recipeConversionRoute = 'recipeConversion';
+export const recipeDetailRoute = 'recipes';
 
 const adminRoutes = [recipeConversionRoute,
   myRecipesRoute,
@@ -81,6 +83,7 @@ function App() {
           <Route path={loginPageRoute} element={<LoginPage />} />
           <Route path={myIngredientsPageRoute} element={<MyIngredientsPage />} />
           <Route path={recipeConversionRoute} element={<RecipeConversion />} />
+          <Route path={`/:userId/${recipeDetailRoute}/:recipeId`} element={<RecipeDetail/>} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
