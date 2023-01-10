@@ -14,7 +14,6 @@ import IngredientPage from './pages/IngredientPage';
 import LoginPage from './pages/LoginPage';
 import MyIngredientsPage from './pages/MyIngredientsPage';
 import Layout from './pages/Layout';
-import Home from './pages/Home';
 import NoPage from './pages/NoPage';
 import MyRecipes from './pages/MyRecipes';
 import RecipeDetail from './pages/RecipeDetail';
@@ -76,7 +75,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout allRoutes={allRoutes}/>}>
-          <Route index element={<Home />} />
+          <Route index element={<RecipeConversion />} />
           <Route path={adminPanelRoute} element={<AdminPanel />} />
           <Route path={ingredientPageRoute} element={<IngredientPage />} />
           <Route path={myRecipesRoute} element={<MyRecipes />} />
