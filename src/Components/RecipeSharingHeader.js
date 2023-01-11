@@ -3,16 +3,23 @@
 import React from 'react';
 import {recipeIsPublicKey, recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
 import {Button} from 'react-bootstrap';
+import {makeRecipePrivate, makeRecipePublic} from '../Database/DatabaseRecipes';
+import useFirebase from '../hooks/useFirebase';
 
 export default function RecipeSharingHeader({recipe}) {
   const isPublic = recipe[recipeIsPublicKey];
+  const {firebaseDb, firebaseUser} = useFirebase();
   const title = recipe[recipeNameKey];
   const handlePublicToggle = () => {
-    console.log(`${isPublic}`);
+    if (isPublic) {
+      makeRecipePrivate(recipe, firebaseDb, firebaseUser);
+    } else {
+      makeRecipePublic(recipe, firebaseDb, firebaseUser);
+    }
   };
 
   const handleCopyLink = () => {
-    // Logic to copy the shareable link to the recipe
+    alert('Copy your own link you fool');
   };
 
 
@@ -24,7 +31,7 @@ export default function RecipeSharingHeader({recipe}) {
       </div>
       {isPublic ? (
         <>
-          <Button variant="secondary" onClick={handlePublicToggle}>
+          <Button variant="secondary" onClick={handlePublicToggle} >
             Make Private
           </Button>
           <Button variant="secondary" onClick={handleCopyLink}>
