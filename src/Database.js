@@ -210,14 +210,12 @@ export async function fetchSingleRecipeFromDb(db, userId, recipeId) {
   console.log(`fetchSingleRecipeFromDb(${db}, ${userId}, ${recipeId}`);
   const cachedRecipe = getCachedRecipe(useId, recipeId);
   if (cachedRecipe) {
-    console.log(`Got cached: ${JSON.stringify(cachedRecipe)}`);
     return cachedRecipe;
   }
   const recipeDocRef = doc(db, usersCollection, userId, privateRecipesCollection, recipeId);
   const recipeDoc = await getDoc(recipeDocRef);
 
   const recipe = recipeFromDoc(recipeDoc);
-  console.log(`Recipe from doc: ${JSON.stringify(recipe)}`);
   storeRecipe(useId, recipeId, recipe);
   return recipe;
 }

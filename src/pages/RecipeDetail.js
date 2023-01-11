@@ -1,19 +1,20 @@
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
+import SeparatedRecipeView from '../Components/SeparatedRecipeView';
+import UnifiedRecipeView from '../Components/UnifiedRecipeView';
 import {fetchSingleRecipeFromDb} from '../Database';
 import useFirebase from '../hooks/useFirebase';
-import useIngredientsStore from '../hooks/useIngredientsStore';
-import {getIngredientsFromRecipe, getStepsFromRecipe, recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
+import {hasManualEdits} from '../RecipeConversion/DataStructures/Recipe';
 
 function parseRecipeDetailPath(path) {
   const components = path.split('/');
   return {userId: components[1], recipeId: components[3]};
 }
 
+
 export default function RecipeDetail() {
   const location = useLocation();
-  const {ingredientManager} = useIngredientsStore();
   const {firebaseDb} = useFirebase();
   const {userId, recipeId} = parseRecipeDetailPath(location.pathname);
 
@@ -31,28 +32,10 @@ export default function RecipeDetail() {
 
   return (
     <div> {!recipe ? 'Loading ...' :
-<div className="container mt-5">
-  <div className="row">
-    <div className="col-12">
-      <h1 className="text-center">{recipe[recipeNameKey] }</h1>
-    </div>
-  </div>
-  <div className="row mt-5">
-    <div className="col-12">
-      <h3>Ingredients:</h3>
-      <ul>
-        {getIngredientsFromRecipe(recipe, ingredientManager).split('\n').map(
-            (line) => <li key={line}>{line}</li>)}
-      </ul>
-    </div>
-  </div>
-  <div className="row mt-5">
-    <div className="col-12 display-linebreak">
-      <h3>Steps:</h3>
-      {getStepsFromRecipe(recipe, ingredientManager)}
-    </div>
-  </div>
-</div>}
+    hasManualEdits(recipe) ?
+    <UnifiedRecipeView recipe={recipe}/> :
+    <SeparatedRecipeView recipe={recipe}/>
+    }
     </div>
   );
 }

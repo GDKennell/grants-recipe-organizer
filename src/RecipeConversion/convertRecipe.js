@@ -16,12 +16,11 @@ export const RECIPES_HEADER =
  */
 
 export function convertRecipe(ingredientListStringIn, recipeStringIn, ingredientManager) {
-  const [ingredientsString, measuredIngredients] = parseIngredientList(
+  const {ingredientsString, measuredIngredients} = parseIngredientList(
       ingredientListStringIn, ingredientManager,
   );
 
   const recipeString = parseRecipe(recipeStringIn, measuredIngredients, ingredientManager);
-
   return {ingredientsString: ingredientsString, recipeString: recipeString};
 }
 

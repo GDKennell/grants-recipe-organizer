@@ -57,3 +57,7 @@ export function getStepsFromRecipe(recipe, ingredientManager) {
       ingredientManager);
   return recipeString;
 }
+
+export function hasManualEdits(recipe) {
+  return recipe[recipeManualEditTextKey] != null && recipe[recipeManualEditTextKey].length > 0;
+}

@@ -28,8 +28,8 @@ export function parseIngredientList(ingredientListStringIn, ingredientManager) {
       measuredIngredients.push(measuredIngredient);
     }
   }
-  const finalString = newLines.join('\n');
-  return [finalString, measuredIngredients];
+  const ingredientsString = newLines.join('\n');
+  return {ingredientsString: ingredientsString, measuredIngredients: measuredIngredients};
 }
 
 /**
