@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import SeparatedRecipeView from '../Components/SeparatedRecipeView';
 import UnifiedRecipeView from '../Components/UnifiedRecipeView';
-import {fetchSingleRecipeFromDb} from '../Database';
+import {fetchSingleRecipeFromDb} from '../Database/DatabaseRecipes';
 import useFirebase from '../hooks/useFirebase';
 import {hasManualEdits} from '../RecipeConversion/DataStructures/Recipe';
 

@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from 'react';
-import {getNameForUserId, promoteIngredient, updateIngredient} from '../Database';
 import {isNewIngredientValid} from '../Helpers/InputValidationHelpers';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
@@ -9,6 +8,7 @@ import {sanitizeIngredientName} from '../RecipeConversion/utilities/stringHelper
 import {isIngredientOwned} from '../RecipeConversion/DataStructures/ingredient';
 import DeleteButton from './DeleteButton';
 import {isUserAdmin} from '../Helpers/FirebaseManager';
+import {getNameForUserId, updateIngredient, promoteIngredient} from '../Database/DatabaseIngredients';
 
 export default function TableRow({rowData,
   firebaseUser,

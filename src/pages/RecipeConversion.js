@@ -10,8 +10,8 @@ import RecipeInputForm from '../Components/RecipeInputForm';
 import RecipeDropDown from '../Components/RecipeDropDown';
 import useFirebase from '../hooks/useFirebase';
 import {ingredientTextKey, makeRecipe, recipeManualEditTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
-import {saveOrUpdateRecipe} from '../Database';
 import {useLocation} from 'react-router-dom';
+import {saveOrUpdateRecipe} from '../Database/DatabaseRecipes';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 

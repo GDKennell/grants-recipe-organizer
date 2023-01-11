@@ -3,10 +3,12 @@ import {getFirestore} from 'firebase/firestore';
 import {useState, useEffect} from 'react';
 import {getAuth} from 'firebase/auth';
 import {getAnalytics} from 'firebase/analytics';
-import {fetchAllUserScopedIngredients, fetchIngredientsFromDb, fetchRecipesFromDb, fetchUserScopedIngredients, storeUserData} from '../Database';
 import useIngredientsStore from './useIngredientsStore';
 import {isUserAdmin} from '../Helpers/FirebaseManager';
 import {replaceUserRecipesList} from '../features/ingredientStore/ingredientStoreSlice';
+import {fetchAllUserScopedIngredients, fetchUserScopedIngredients, fetchIngredientsFromDb} from '../Database/DatabaseIngredients';
+import {fetchRecipesFromDb} from '../Database/DatabaseRecipes';
+import {storeUserData} from '../Database/Database';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional

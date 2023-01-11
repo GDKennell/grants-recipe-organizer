@@ -1,5 +1,5 @@
 import React from 'react';
-import {deleteIngredientFromDb} from '../Database';
+import {deleteIngredientFromDb} from '../Database/DatabaseIngredients';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
 

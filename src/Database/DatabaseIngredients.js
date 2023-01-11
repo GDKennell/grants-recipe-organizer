@@ -1,13 +1,9 @@
-
-import {collection, getDocs, deleteDoc, doc, addDoc, updateDoc, getDoc, setDoc} from 'firebase/firestore';
-import {useId} from 'react';
-import {globalRecipesCollection, ingredientsCollection, privateIngredientsCollection, privateRecipesCollection, publicUserId, userEmailKey, userNameKey, usersCollection} from './DatabaseConstants';
-import {addNewIngredients, deleteIngredient, ingredientUpdated, replaceGlobalRecipesList, replaceIngredientList, replaceUserRecipesList} from './features/ingredientStore/ingredientStoreSlice';
-import {allHardCodedIngredients} from './RecipeConversion/DataStructures/hardCodedIngredients';
-import {ingredientFromDoc, makeIngredientObject} from './RecipeConversion/DataStructures/ingredient';
-import {prepRecipeForDb, recipeDocIdKey, recipeFromDoc, recipeNameKey} from './RecipeConversion/DataStructures/Recipe';
-import {cleanIngredientWord, objectsEqual} from './RecipeConversion/utilities/stringHelpers';
-
+import {addDoc, collection, deleteDoc, doc, getDocs, updateDoc} from 'firebase/firestore';
+import {ingredientsCollection, privateIngredientsCollection, userNameKey, usersCollection} from '../DatabaseConstants';
+import {addNewIngredients, replaceIngredientList, ingredientUpdated, deleteIngredient} from '../features/ingredientStore/ingredientStoreSlice';
+import {allHardCodedIngredients} from '../RecipeConversion/DataStructures/hardCodedIngredients';
+import {ingredientFromDoc, makeIngredientObject} from '../RecipeConversion/DataStructures/ingredient';
+import {cleanIngredientWord} from '../RecipeConversion/utilities/stringHelpers';
 
 function isValidIngredientDoc(doc) {
   if (doc.data().names == undefined || doc.data().names.length == 0) {
@@ -19,51 +15,25 @@ function isValidIngredientDoc(doc) {
   return true;
 }
 
+
+const userIdToName = {};
+export function getNameForUserId(userId, fallback) {
+  return (!userId) ? fallback : userIdToName[userId];
+}
+
+async function fetchUserName(db, userId) {
+  const userDocRef = doc(db, usersCollection, userId);
+  const userDocSnap = await getDoc(userDocRef);
+  const userName = userDocSnap.data()[userNameKey];
+  userIdToName[userId] = userName;
+}
+
+
 async function deleteGlobalIngredient(db, id) {
   try {
     await deleteDoc(doc(db, ingredientsCollection, id));
   } catch (e) {
     console.error('Error deleting documents: ', e);
-  }
-}
-
-function metadataFromUser(user) {
-  const obj = {};
-  obj[userEmailKey] = user.email;
-  obj[userNameKey] = user.displayName;
-  return obj;
-}
-function userMetadataFromDoc(doc) {
-  const obj = {};
-  obj[userEmailKey] = doc.data()[userEmailKey];
-  obj[userNameKey] = doc.data()[userNameKey];
-  return obj;
-}
-
-function docMatchesUser(doc, user) {
-  return objectsEqual(metadataFromUser(user), userMetadataFromDoc(doc));
-}
-
-export async function storeUserData(db, user) {
-  if (!user) {
-    return;
-  }
-  const userDocRef = doc(db, usersCollection, user.uid);
-  const userDocSnap = await getDoc(userDocRef);
-
-  if (userDocSnap.exists()) {
-    if (!docMatchesUser(userDocSnap, user)) {
-      console.log(`User exists but wrong data: ${userMetadataFromDoc(userDocSnap)}`);
-      await updateDoc(userDocRef, metadataFromUser(user));
-    }
-  } else {
-    const docData = metadataFromUser(user);
-    setDoc(userDocRef, docData).then(() => {
-      console.log('Document has been added successfully');
-    })
-        .catch((error) => {
-          console.error(error);
-        });
   }
 }
 
@@ -90,17 +60,6 @@ export async function fetchUserScopedIngredients(db, userId, dispatch, ingredien
   }
 }
 
-const userIdToName = {};
-export function getNameForUserId(userId, fallback) {
-  return (!userId) ? fallback : userIdToName[userId];
-}
-
-async function fetchUserName(db, userId) {
-  const userDocRef = doc(db, usersCollection, userId);
-  const userDocSnap = await getDoc(userDocRef);
-  const userName = userDocSnap.data()[userNameKey];
-  userIdToName[userId] = userName;
-}
 
 export async function promoteIngredient(db, dispatch, ingredient) {
   const newIngredient = makeIngredientObject(ingredient.names, ingredient.gramsPerCup, /* isGlobal */ true, /* userId */ null, /* id*/ null);
@@ -163,62 +122,6 @@ export async function fetchIngredientsFromDb(db, dispatch) {
   }
 }
 
-
-let userIdFetched = null;
-let globalFetched = false;
-
-// Key: `${userId}/${recipeId}`
-// Value: Recipe object
-const userAndRecipeIdToRecipe = {};
-function storeRecipe(userId, recipeId, recipe) {
-  userAndRecipeIdToRecipe[`${userId}/${recipeId}`] = recipe;
-}
-function getCachedRecipe(userId, recipeId) {
-  return userAndRecipeIdToRecipe[`${userId}/${recipeId}`];
-}
-
-export async function fetchRecipesFromDb(db, dispatch, user) {
-  if (user && userIdFetched == user.uid ||
-    !user && globalFetched) {
-    return;
-  }
-  userIdFetched = user ? user.uid : userIdFetched;
-  globalFetched = !user ? true : globalFetched;
-
-  try {
-    const recipeCollection = (user == null) ? collection(db, globalRecipesCollection) :
-        collection(db, usersCollection, user.uid, privateRecipesCollection );
-    const querySnapshot = await getDocs(recipeCollection);
-    const localRecipes = [];
-    querySnapshot.forEach((doc) => {
-      const recipe = recipeFromDoc(doc);
-      localRecipes.push(recipe);
-      const userId = user ? user.uid : publicUserId;
-      storeRecipe(userId, recipe[recipeDocIdKey], recipe);
-    });
-    if (localRecipes.length > 0 && user) {
-      dispatch(replaceUserRecipesList({newUserRecipes: localRecipes}));
-    } else if (localRecipes.length > 0 ) {
-      dispatch(replaceGlobalRecipesList({newGlobalRecipes: localRecipes}));
-    }
-  } catch (e) {
-    console.error('Error fetching recipes: ', e);
-  }
-}
-
-export async function fetchSingleRecipeFromDb(db, userId, recipeId) {
-  console.log(`fetchSingleRecipeFromDb(${db}, ${userId}, ${recipeId}`);
-  const cachedRecipe = getCachedRecipe(useId, recipeId);
-  if (cachedRecipe) {
-    return cachedRecipe;
-  }
-  const recipeDocRef = doc(db, usersCollection, userId, privateRecipesCollection, recipeId);
-  const recipeDoc = await getDoc(recipeDocRef);
-
-  const recipe = recipeFromDoc(recipeDoc);
-  storeRecipe(useId, recipeId, recipe);
-  return recipe;
-}
 
 export async function updateIngredient(oldIngredient,
     newIngredient,
@@ -301,67 +204,6 @@ async function storeIngredientToDb(ingredient, db) {
   }
 }
 
-export async function findRecipeDocIdByName(recipeCollection, recipeName ) {
-  const querySnapshot = await getDocs(recipeCollection);
-  let recipeId = null;
-  querySnapshot.forEach((doc) => {
-    const dbRecipe = recipeFromDoc(doc);
-    if (dbRecipe[recipeNameKey] == recipeName) {
-      recipeId = doc.id;
-    }
-  });
-  return recipeId;
-}
-
-async function recipeDoc(recipeId, db, user) {
-  let docRef;
-  if (user) {
-    docRef = doc(db, usersCollection, user.uid, privateRecipesCollection, recipeId);
-  } else {
-    docRef = doc(db, globalRecipesCollection, recipeId);
-  }
-  return docRef;
-}
-
-async function updateExistingRecipe(recipeId, recipeIn, db, user) {
-  if (!confirm(`Are you sure you want to overwrite saved recipe ${recipeIn[recipeNameKey]}?`)) {
-    return;
-  }
-  const docRef = await recipeDoc(recipeId, db, user);
-  try {
-    await updateDoc(docRef, recipeIn);
-  } catch (e) {
-    console.error('Error updating document: ', e);
-  }
-  alert(`Successfully updated recipe ${recipeIn[recipeNameKey]}`);
-}
-
-async function addNewRecipe(recipeIn, recipeCollection, db, user) {
-  try {
-    await addDoc(recipeCollection, recipeIn);
-  } catch (e) {
-    console.error('Error adding document: ', e);
-  }
-  console.log(`Successfully added new recipe ${recipeIn[recipeNameKey]}`);
-  alert(`Successfully saved new recipe ${recipeIn[recipeNameKey]}`);
-}
-
-export async function saveOrUpdateRecipe(recipeIn, db, user) {
-  const newRecipe = prepRecipeForDb(recipeIn);
-  try {
-    const recipeCollection = (user == null) ? collection(db, globalRecipesCollection) :
-        collection(db, usersCollection, user.uid, privateRecipesCollection );
-
-    const recipeId = await findRecipeDocIdByName(recipeCollection, newRecipe[recipeNameKey]);
-    if (recipeId == null) {
-      await addNewRecipe(newRecipe, recipeCollection, db, user);
-    } else {
-      await updateExistingRecipe(newRecipe, newRecipe, db, user);
-    }
-  } catch (e) {
-    console.error('Error adding document: ', e);
-  }
-}
 
 export async function writeToDb(db) {
   const allDbNames = [];
@@ -390,3 +232,4 @@ export async function writeToDb(db) {
     console.error('Error reading documents: ', e);
   }
 }
+

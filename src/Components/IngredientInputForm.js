@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import useIngredientsStore from '../hooks/useIngredientsStore';
-import {addNewIngredient} from '../Database';
 import useFirebase from '../hooks/useFirebase';
 import {isNewIngredientValid} from '../Helpers/InputValidationHelpers';
+import {addNewIngredient} from '../Database/DatabaseIngredients';
 
 // eslint-disable-next-line react/prop-types
 export default function IngredientInputForm({startText}) {
