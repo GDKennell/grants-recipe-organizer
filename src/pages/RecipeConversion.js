@@ -113,7 +113,7 @@ function RecipeConversion() {
       alert('Please enter a recipe name to save');
       return;
     }
-    const newRecipe = makeRecipe(recipeTitle, ingredientListText, recipeText, manualEditedOutputText);
+    const newRecipe = makeRecipe(recipeTitle, ingredientListText, recipeText, manualEditedOutputText, /* isPublic */ false);
     saveOrUpdateRecipe(newRecipe, firebaseDb, firebaseUser);
   };
 
