@@ -14,6 +14,21 @@ function isPreExistingIngredient(ingredient, existingList) {
   return false;
 }
 
+function sortRecipesByName(recipes) {
+  recipes.sort(function(a, b) {
+    const nameA = a.recipeNameKey.toUpperCase();
+    const nameB = b.recipeNameKey.toUpperCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
+  return recipes;
+}
+
 
 export const ingredientStoreSlice = createSlice({
   name: 'ingredientStore',
@@ -29,15 +44,18 @@ export const ingredientStoreSlice = createSlice({
     },
     replaceUserRecipesList: (state, action) => {
       state.userRecipesList = [...action.payload.newUserRecipes];
+      state.userRecipesList = sortRecipesByName(state.userRecipesList);
     },
     replaceGlobalRecipesList: (state, action) => {
       state.globalRecipesList = [...action.payload.newGlobalRecipes];
+      state.globalRecipesList = sortRecipesByName(state.globalRecipesList);
     },
     recipeChanged: (state, action)=> {
       const changedRecipe = action.payload.changedRecipe;
       state.userRecipesList = state.userRecipesList.filter(
           (recipe) => !recipesMatch(recipe, changedRecipe));
       state.userRecipesList.push(changedRecipe);
+      state.userRecipesList = sortRecipesByName(state.userRecipesList);
     },
     addNewIngredients: (state, action) => {
       for (const newIngredient of action.payload.newIngredients) {
