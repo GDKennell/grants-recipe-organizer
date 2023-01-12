@@ -42,7 +42,10 @@ function RecipeConversion() {
 
   const {firebaseDb, firebaseUser} = useFirebase();
   const saveEnabled = (firebaseUser != null);
-  const {ingredientManager, userRecipesList, globalRecipesList} = useIngredientsStore();
+  const {ingredientManager,
+    userRecipesList,
+    globalRecipesList,
+    dispatch} = useIngredientsStore();
   const [autoConvertedOutputText, setAutoConvertedOutputText] = useState('');
   const [manualEditedOutputText, setManualEditedOutputText] = useState('');
   const [manualEditing, setManualEditing] = useState(false);
@@ -114,7 +117,7 @@ function RecipeConversion() {
       return;
     }
     const newRecipe = makeRecipe(recipeTitle, ingredientListText, recipeText, manualEditedOutputText, /* isPublic */ false);
-    saveOrUpdateRecipe(newRecipe, firebaseDb, firebaseUser);
+    saveOrUpdateRecipe(newRecipe, firebaseDb, firebaseUser, dispatch);
   };
 
 

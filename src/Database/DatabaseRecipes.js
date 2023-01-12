@@ -1,7 +1,7 @@
 import {collection, getDocs, doc, getDoc, updateDoc, addDoc} from 'firebase/firestore';
 import {useId} from 'react';
 import {globalRecipesCollection, usersCollection, privateRecipesCollection, publicUserId} from '../DatabaseConstants';
-import {replaceUserRecipesList, replaceGlobalRecipesList} from '../features/ingredientStore/ingredientStoreSlice';
+import {replaceUserRecipesList, replaceGlobalRecipesList, recipeChanged} from '../features/ingredientStore/ingredientStoreSlice';
 import {recipeFromDoc, recipeDocIdKey, recipeNameKey, prepRecipeForDb, recipeIsPublicKey} from '../RecipeConversion/DataStructures/Recipe';
 
 let userIdFetched = null;
@@ -82,7 +82,7 @@ async function recipeDoc(recipeId, db, user) {
   return docRef;
 }
 
-async function updateExistingRecipe(recipeId, recipeIn, db, user) {
+async function updateExistingRecipe(recipeId, recipeIn, db, user, dispatch) {
   if (!confirm(`Are you sure you want to overwrite saved recipe "${recipeIn[recipeNameKey]}"?`)) {
     return;
   }
@@ -90,6 +90,7 @@ async function updateExistingRecipe(recipeId, recipeIn, db, user) {
   const docRef = await recipeDoc(recipeId, db, user);
   try {
     console.log(`Updating recipe with ${JSON.stringify(newRecipe)}`);
+    dispatch(recipeChanged({changedRecipe: recipeIn}));
     await updateDoc(docRef, newRecipe);
     alert(`Successfully updated recipe ${newRecipe[recipeNameKey]}`);
   } catch (e) {
@@ -97,22 +98,22 @@ async function updateExistingRecipe(recipeId, recipeIn, db, user) {
   }
 }
 
-export async function makeRecipePublic(recipe, db, user) {
+export async function makeRecipePublic(recipe, db, user, dispatch) {
   if (!confirm(`Are you sure you want make "${recipe[recipeNameKey]}" public?`)) {
     return;
   }
   const newRecipe = recipe;
   newRecipe[recipeIsPublicKey] = true;
-  await updateExistingRecipe(newRecipe[recipeDocIdKey], newRecipe, db, user);
+  await updateExistingRecipe(newRecipe[recipeDocIdKey], newRecipe, db, user, dispatch);
 }
 
-export async function makeRecipePrivate(recipe, db, user) {
+export async function makeRecipePrivate(recipe, db, user, dispatch) {
   if (!confirm(`Are you sure you want make "${recipe[recipeNameKey]}" private?`)) {
     return;
   }
   const newRecipe = recipe;
   newRecipe[recipeIsPublicKey] = false;
-  await updateExistingRecipe(newRecipe[recipeDocIdKey], newRecipe, db, user);
+  await updateExistingRecipe(newRecipe[recipeDocIdKey], newRecipe, db, user, dispatch);
 }
 
 async function addNewRecipe(recipeIn, recipeCollection, db, user) {
@@ -125,7 +126,7 @@ async function addNewRecipe(recipeIn, recipeCollection, db, user) {
   alert(`Successfully saved new recipe ${recipeIn[recipeNameKey]}`);
 }
 
-export async function saveOrUpdateRecipe(recipeIn, db, user) {
+export async function saveOrUpdateRecipe(recipeIn, db, user, dispatch) {
   const newRecipe = prepRecipeForDb(recipeIn);
   try {
     const recipeCollection = (user == null) ? collection(db, globalRecipesCollection) :
@@ -135,7 +136,7 @@ export async function saveOrUpdateRecipe(recipeIn, db, user) {
     if (recipeId == null) {
       await addNewRecipe(newRecipe, recipeCollection, db, user);
     } else {
-      await updateExistingRecipe(newRecipe, newRecipe, db, user);
+      await updateExistingRecipe(newRecipe, newRecipe, db, user, dispatch);
     }
   } catch (e) {
     console.error('Error adding document: ', e);

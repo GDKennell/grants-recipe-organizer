@@ -64,3 +64,8 @@ export function getStepsFromRecipe(recipe, ingredientManager) {
 export function hasManualEdits(recipe) {
   return recipe[recipeManualEditTextKey] != null && recipe[recipeManualEditTextKey].length > 0;
 }
+
+export function recipesMatch(left, right) {
+  return left[recipeDocIdKey] == right[recipeDocIdKey] ||
+   left[recipeNameKey] == right[recipeNameKey];
+}

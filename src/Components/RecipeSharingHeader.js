@@ -5,16 +5,18 @@ import {recipeIsPublicKey, recipeNameKey} from '../RecipeConversion/DataStructur
 import {Button} from 'react-bootstrap';
 import {makeRecipePrivate, makeRecipePublic} from '../Database/DatabaseRecipes';
 import useFirebase from '../hooks/useFirebase';
+import useIngredientsStore from '../hooks/useIngredientsStore';
 
 export default function RecipeSharingHeader({recipe}) {
   const isPublic = recipe[recipeIsPublicKey];
+  const {dispatch} = useIngredientsStore();
   const {firebaseDb, firebaseUser} = useFirebase();
   const title = recipe[recipeNameKey];
   const handlePublicToggle = () => {
     if (isPublic) {
-      makeRecipePrivate(recipe, firebaseDb, firebaseUser);
+      makeRecipePrivate(recipe, firebaseDb, firebaseUser, dispatch);
     } else {
-      makeRecipePublic(recipe, firebaseDb, firebaseUser);
+      makeRecipePublic(recipe, firebaseDb, firebaseUser, dispatch);
     }
   };
 
