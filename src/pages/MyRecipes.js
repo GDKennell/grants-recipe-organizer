@@ -3,7 +3,8 @@ import {Link} from 'react-router-dom';
 import {recipeConversionRoute, recipeDetailRoute} from '../App';
 import useFirebase from '../hooks/useFirebase';
 import useIngredientsStore from '../hooks/useIngredientsStore';
-import {recipeDocIdKey, recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
+import {recipeDocIdKey, recipeIsPublicKey, recipeNameKey} from '../RecipeConversion/DataStructures/Recipe';
+
 
 export default function MyRecipes() {
   const {userRecipesList} = useIngredientsStore();
@@ -33,7 +34,7 @@ export default function MyRecipes() {
       <tbody>
         {userRecipesList.map((recipe) =>
           <tr key={recipe[recipeNameKey]}>
-            <td>private</td>
+            <td>{recipe[recipeIsPublicKey] ? <b>public</b> : <i>private</i>}</td>
             <td>
               {linkForRecipe(recipe)}
             </td>

@@ -30,7 +30,7 @@ export default function RecipeSharingHeader({recipe}) {
         <h1 className="mb-0 text-center">{title}</h1>
       </div>
       {isPublic ? (
-        <>
+        < >
           <Button variant="secondary" onClick={handlePublicToggle} >
             Make Private
           </Button>

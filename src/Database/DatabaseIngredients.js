@@ -1,4 +1,4 @@
-import {addDoc, collection, deleteDoc, doc, getDocs, updateDoc} from 'firebase/firestore';
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc} from 'firebase/firestore';
 import {ingredientsCollection, privateIngredientsCollection, userNameKey, usersCollection} from '../DatabaseConstants';
 import {addNewIngredients, replaceIngredientList, ingredientUpdated, deleteIngredient} from '../features/ingredientStore/ingredientStoreSlice';
 import {allHardCodedIngredients} from '../RecipeConversion/DataStructures/hardCodedIngredients';
