@@ -86,13 +86,15 @@ async function updateExistingRecipe(recipeId, recipeIn, db, user) {
   if (!confirm(`Are you sure you want to overwrite saved recipe "${recipeIn[recipeNameKey]}"?`)) {
     return;
   }
+  const newRecipe = prepRecipeForDb(recipeIn);
   const docRef = await recipeDoc(recipeId, db, user);
   try {
-    await updateDoc(docRef, recipeIn);
+    console.log(`Updating recipe with ${JSON.stringify(newRecipe)}`);
+    await updateDoc(docRef, newRecipe);
+    alert(`Successfully updated recipe ${newRecipe[recipeNameKey]}`);
   } catch (e) {
     console.error('Error updating document: ', e);
   }
-  alert(`Successfully updated recipe ${recipeIn[recipeNameKey]}`);
 }
 
 export async function makeRecipePublic(recipe, db, user) {

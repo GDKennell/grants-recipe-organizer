@@ -31,7 +31,7 @@ export function recipeFromDoc(doc) {
 export function prepRecipeForDb(recipe) {
   const localRecipe = recipe;
   delete localRecipe[recipeDocIdKey];
-  if (localRecipe[recipeManualEditTextKey] == null) {
+  if (!localRecipe[recipeManualEditTextKey]) {
     delete localRecipe[recipeManualEditTextKey];
   }
   localRecipe[recipeIsPublicKey] = localRecipe[recipeIsPublicKey] || false;
