@@ -81,3 +81,13 @@ code {
 .display-linebreak {
   white-space: pre-line;
 }
+
+
+/*********************************
+  ****** Ingredient Input Form
+  *******************************
+ */
+
+.grams-per-cup-input {
+  width: 60px
+}

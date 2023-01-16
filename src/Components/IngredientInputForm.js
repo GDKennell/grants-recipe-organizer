@@ -42,17 +42,17 @@ export default function IngredientInputForm({startText}) {
     });
   };
   return (
-    <div>
-            Add new ingredient ( <a href="https://www.aqua-calc.com/calculate/food-volume-to-weight" target="_blank" rel="noreferrer">look up grams per cup here </a> )
-      <br/>
-      <label>          Ingredient:
+    <tr>
+      <td>
         <input type="text" onChange={handleIngredientChange} value={ingredientNamesText}/>
-      </label>
-      <label>          Grams per Cup:
-        <input type="text" onChange={handleGramsPerCupChange} value={gramsPerCupText}/>
-      </label>
-      <button onClick={handleSubmit} disabled={!fieldsAreValid}> Submit </button>
-    </div>
+      </td>
+      <td>
+        <input className='grams-per-cup-input' type="text" onChange={handleGramsPerCupChange} value={gramsPerCupText} />
+      </td>
+      <td>
+        <button onClick={handleSubmit} disabled={!fieldsAreValid}> Submit </button>
+      </td>
+    </tr>
   );
 }
 
