@@ -69,6 +69,10 @@ function RecipeConversion() {
     });
   };
 
+  useEffect(() => {
+    recipeChangedFn(recipeTitle, ingredientListText, recipeText, manualEditedOutputText);
+  }, [ingredientManager]);
+
   const [outputNumRows, setOutputNumRows] = useState(minRows);
   const recipeChangedFn = (title, ingredientsText, recipeText, recipeManualEditText) => {
     setRecipeTitle(title);
