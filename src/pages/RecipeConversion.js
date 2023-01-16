@@ -141,7 +141,7 @@ function RecipeConversion() {
           initIngredientsText={ingredientListText}
           initRecipeText={recipeText}
           initTitleText={recipeTitle}/>
-        <h3 className="instructions"> Converted Recipe:</h3>
+        <h3 className="section-header"> Converted Recipe:</h3>
         <div className='horz-collection'>
           <button className='btn btn-primary'
             onClick={savePressed} disabled={!saveEnabled}>Save Recipe</button>

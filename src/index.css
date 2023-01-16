@@ -91,3 +91,12 @@ code {
 .grams-per-cup-input {
   width: 60px
 }
+
+.section-header {
+  text-align: left;
+  width: 100%;
+  font-weight: bold;
+  padding-top: 10px;
+  font-size: medium;
+  text-decoration: underline;
+}

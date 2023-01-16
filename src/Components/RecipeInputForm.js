@@ -59,12 +59,12 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
   return (
     <div >
       <div className='mb-3'>
-        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label">
+        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label section-header">
           Recipe Name</label>
         <input onChange={titleChanged} className="form-control" placeholder="Recipe Title" value={initTitleText}/>
       </div>
       <div className='mb-3'>
-        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label">
+        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label section-header">
           Ingredient List</label>
         <textarea className="form-control textarea-autosize"
           id="textareaExample"
@@ -76,7 +76,7 @@ export default function RecipeInputForm({ingredientsChangedFn, recipeStepsChange
 
       <UnkownIngredientsSection unknownIngredients={unknownIngredients}/>
       <div className="mb-3">
-        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label">
+        <label htmlFor="exampleFormControlInput1" className="form-label grant-form-label section-header">
           Recipe Steps</label>
 
         <textarea className="form-control textarea-autosize"
