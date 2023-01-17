@@ -85,6 +85,10 @@ export class IngredientManager {
     return this.ingredientList;
   }
 
+  get key() {
+    return this.allIngredientNameStrings.join('---');
+  }
+
   getUserScopedIngredients(firebaseUser) {
     if (firebaseUser == null || firebaseUser.uid == null) {
       return [];

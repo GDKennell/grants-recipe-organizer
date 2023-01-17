@@ -24,6 +24,9 @@ const titleKey = 'titleKey';
 const ingredientKey = 'ingKey';
 const recipeKey = 'recKey';
 
+
+let ingMgrKey = '';
+
 function RecipeConversion() {
   const minRows = 5;
 
@@ -70,6 +73,10 @@ function RecipeConversion() {
   };
 
   useEffect(() => {
+    if (ingredientManager.key == ingMgrKey) {
+      return;
+    }
+    ingMgrKey = ingredientManager.key;
     recipeChangedFn(recipeTitle, ingredientListText, recipeText, manualEditedOutputText);
   }, [ingredientManager]);
 
