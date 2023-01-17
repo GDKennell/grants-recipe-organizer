@@ -154,6 +154,7 @@ const shortIngredients = [
   'egg yolk 0.0',
   'ground turkey 120.0',
   'turkey sausage 12.5',
+  'white beans 28.0',
 ];
 
 export function parseShortIngredient(shortIngredient) {

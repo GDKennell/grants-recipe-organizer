@@ -661,6 +661,9 @@ test('prep steps ', () => {
   '3 scallions, white and green parts, finely sliced' + '\n' +
   '3 garlic cloves, minced' + '\n' +
   '1/2 cup melted butter' + '\n' +
+  '1 30oz can white beans, drained and rinsed' + '\n' +
+  '1 30oz can white beans, drained' + '\n' +
+  '1 30oz can white beans, rinsed' + '\n' +
   '1/3 cup grated Parmigiano Reggiano, plus more for serving';
   const prepSteps =
     '';
@@ -670,6 +673,9 @@ test('prep steps ', () => {
   '> Prep' + '\n' +
   '>  - mince 3 garlic' + '\n' +
   '>  - melt 113.5g (1/2 cup) melted butter' + '\n' +
+  '>  - drain and rinse 28.3g (1 30oz) white beans' + '\n' +
+  '>  - drain 28.3g (1 30oz) white beans' + '\n' +
+  '>  - rinse 28.3g (1 30oz) white beans' + '\n' +
   '>  - grate 147.8g (1/3 cup) parmigiano reggiano';
 
 

@@ -114,6 +114,9 @@ function findPreparationAction(lineIn) {
     'minced': 'mince',
     'halved': 'chop in half',
     'shredded': 'shred',
+    'drained and rinsed': 'drain and rinse',
+    'drained': 'drain',
+    'rinsed': 'rinse',
   };
   const keys = Object.keys(resultToSteps);
   for (const key of keys) {
