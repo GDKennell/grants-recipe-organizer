@@ -509,7 +509,7 @@ test('carne asada', () => {
     'Seasonings: In a 9x13 pan or large dish, add the soy sauce, garlic, lime juice, oil, sugar, cumin, onion powder, and chili powder. Use hand whisk to incorporate well. Set aside.';
   const expectedIngredients =
   '62g (1/4 cup) regular strength Soy Sauce' + '\n' +
-  '6 Cloves garlic (minced)' + '\n' +
+  '6 cloves Garlic (minced)' + '\n' +
   '46.5g (3 TB) freshly squeezed Lime Juice' + '\n' +
   '27g (2 TB) olive or Canola Oil' + '\n' +
   '12.4g (1 TB) Sugar' + '\n' +
@@ -521,7 +521,7 @@ test('carne asada', () => {
     '> Seasonings: In a 9x13 pan or large dish \n' +
     '>  - -  add the \n' +
     '>  - 62g (1/4 cup) soy sauce\n' +
-    '>  - garlic\n' +
+    '>  - 6 garlic\n' +
     '>  - 46.5g (3 TB) lime juice\n' +
     '>  - 27g (2 TB) oil\n' +
     '>  - 12.4g (1 TB) sugar\n' +
@@ -678,6 +678,49 @@ test('prep steps ', () => {
   '>  - rinse 28.3g (1 30oz) white beans' + '\n' +
   '>  - grate 147.8g (1/3 cup) parmigiano reggiano';
 
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
+  // expect(result).toEqual(expectedRecipe);
+
+  expectSubstring(result, expectedIngredients);
+  expectSubstring(result, expectedRecipe);
+});
+
+
+test('cloves vs cloves of garlic', () => {
+  const ingredientList =
+  '6 cloves garlic' + '\n' +
+  '2 tbsp cloves' + '\n';
+  const prepSteps =
+    '';
+
+  const expectedIngredients =
+  '6 cloves Garlic' + '\n' +
+  '13g (2 tbsp) Cloves' + '\n';
+  const expectedRecipe =
+  '';
+
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
+  // expect(result).toEqual(expectedRecipe);
+
+  expectSubstring(result, expectedIngredients);
+  expectSubstring(result, expectedRecipe);
+});
+
+test('prep steps - sliced garlic ', () => {
+  const ingredientList =
+  '6 cloves garlic, Thinly Sliced' + '\n' +
+  '1 onion finely Chopped' + '\n';
+
+  const prepSteps =
+    '';
+  const expectedIngredients =
+'';
+  const expectedRecipe =
+  '> Prep' + '\n' +
+  '>  - thinly slice 6 garlic' + '\n' +
+  '>  - finely chop 1 onion';
 
   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
   const result = combineIngredientsAndRecipe(ingredientsString, recipeString);

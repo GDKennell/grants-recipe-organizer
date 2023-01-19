@@ -15,6 +15,7 @@ import {
   sanitizePunctuation,
   strIndexOfWord,
   capitalizeWordsInString,
+  wordBefore,
 } from '../utilities/stringHelpers';
 
 export function parseIngredientList(ingredientListStringIn, ingredientManager) {
@@ -107,9 +108,11 @@ function postProcessIngredientLine(line) {
 }
 
 function findPreparationAction(lineIn) {
+  const line = lineIn.toLocaleLowerCase();
+  const modifiers = ['thinly', 'finely'];
   const resultToSteps = {'melted': 'melt',
     'chopped': 'chop',
-    'slice': 'slice',
+    'sliced': 'slice',
     'grated': 'grate',
     'minced': 'mince',
     'halved': 'chop in half',
@@ -119,18 +122,39 @@ function findPreparationAction(lineIn) {
     'rinsed': 'rinse',
   };
   const keys = Object.keys(resultToSteps);
+  let foundWord = null;
+  let foundWordIndex = 0;
   for (const key of keys) {
-    if (strIndexOfWord(lineIn, key) != -1) {
-      return resultToSteps[key];
+    if (strIndexOfWord(line, key) != -1) {
+      foundWord = resultToSteps[key];
+      foundWordIndex = strIndexOfWord(line, key);
+      break;
     }
   }
-  return null;
+  if (foundWord) {
+    const [previousWord] = wordBefore(line, foundWordIndex);
+    if (modifiers.includes(previousWord.toLocaleLowerCase())) {
+      foundWord = `${previousWord} ${foundWord}`;
+    }
+  }
+  return foundWord;
+}
+
+function specialCaseSkipIngredientWord(word, lineIn) {
+  const words = lineIn
+      .toLocaleLowerCase()
+      .split(' ');
+
+  if (words.includes('garlic') && (word == 'clove' || word == 'cloves')) {
+    return true;
+  }
+  return false;
 }
 
 export function findIngredientName(lineIn, startIndex, ingredientManager) {
   const words = lineIn
       .toLocaleLowerCase()
-      .substring(startIndex + 1)
+      .substring(startIndex)
       .split(' ');
   let testString = '';
   let ingredientFound = '';
@@ -144,7 +168,7 @@ export function findIngredientName(lineIn, startIndex, ingredientManager) {
     let word = startWord;
     let innerIndex = startWordIndex + 1;
 
-    while (ingredientManager.isIngredientWord(word)) {
+    while (ingredientManager.isIngredientWord(word) && !specialCaseSkipIngredientWord(word, lineIn)) {
       if (ingredientManager.isIngredientName(testString)) {
         ingredientFound = testString;
       }
