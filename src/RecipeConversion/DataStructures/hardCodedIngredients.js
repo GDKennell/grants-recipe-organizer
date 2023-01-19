@@ -155,13 +155,17 @@ const shortIngredients = [
   'ground turkey 120.0',
   'turkey sausage 12.5',
   'white beans 28.0',
+  'beans 12345',
+  'green chiles 12345',
+  'spaghetti 12345',
+  'Cheddar cheese 12345',
 ];
 
 export function parseShortIngredient(shortIngredient) {
   const words = shortIngredient.split(' ');
   const gramsPerCupString = words[words.length - 1];
   const gramsPerCupStringStart = shortIngredient.indexOf(gramsPerCupString);
-  const nameString = shortIngredient.substring(0, gramsPerCupStringStart - 1);
+  const nameString = shortIngredient.substring(0, gramsPerCupStringStart - 1).toLocaleLowerCase();
   return makeIngredientObject(
       [nameString, nameString + 's'],
       parseFloat(gramsPerCupString),

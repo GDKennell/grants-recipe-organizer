@@ -687,15 +687,68 @@ test('prep steps ', () => {
 });
 
 
+test('countable unit measures', () => {
+  const ingredientList =
+  '1 30-oz can beans' + '\n' +
+  '2 12oz cans green chiles' + '\n' +
+  '6 cloves garlic' + '\n' +
+  '1 (16 ounce) package spaghetti' + '\n' +
+  '1 stick butter' + '\n' +
+  '1 80oz package shredded Cheddar cheese';
+
+  const prepSteps =
+  'In a big ol pot, add the beans, green chiles, and spaghetti.' + '\n' +
+  'In a second pot, melt the butter and cheddar cheese, and throw in the garlic cause why not';
+
+  const expectedIngredients =
+  '1 30-oz can Beans' + '\n' +
+  '2 12oz cans Green Chiles' + '\n' +
+  '6 cloves Garlic' + '\n' +
+  '1 (16 ounce) package Spaghetti' + '\n' +
+  '1 stick Butter' + '\n' +
+  '1 80oz package shredded Cheddar Cheese';
+  const expectedRecipe =
+  '=============' + '\n' +
+  '====Recipe=====' + '\n' +
+  '=============' + '\n' +
+  '> Prep' + '\n' +
+  '>  - shred 1 80oz package Cheddar Cheese' + '\n' +
+  '' + '\n' +
+  '> In a big ol pot ' + '\n' +
+  '>  - -  add the ' + '\n' +
+  '>  - 30-oz can beans' + '\n' +
+  '>  - 2 12oz cans Green Chiles' + '\n' +
+  '>  - 1 (16 ounce) package Spaghetti' + '\n' +
+  '  ' + '\n' +
+  '>  In a second pot ' + '\n' +
+  '>  - -  melt the ' + '\n' +
+  '>  - 1 stick Butter' + '\n' +
+  '>  - 1 80oz package Cheddar Cheese' + '\n' +
+  ' ' + '\n' +
+  '>  - -  and throw in the ' + '\n' +
+  '>  - 6 cloves Garlic' + '\n' +
+  '>  cause why not';
+
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
+  // expect(result).toEqual(expectedRecipe);
+
+  expectSubstring(result, expectedIngredients);
+  expectSubstring(result, expectedRecipe);
+});
+
+
 test('cloves vs cloves of garlic', () => {
   const ingredientList =
   '6 cloves garlic' + '\n' +
+  '2 garlic cloves ' + '\n' +
   '2 tbsp cloves' + '\n';
   const prepSteps =
     '';
 
   const expectedIngredients =
   '6 cloves Garlic' + '\n' +
+  '2 cloves Garlic' + '\n' +
   '13g (2 tbsp) Cloves' + '\n';
   const expectedRecipe =
   '';
