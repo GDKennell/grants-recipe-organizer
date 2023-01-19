@@ -6,8 +6,10 @@ import {
 import {
   findVolumeByName,
   findWeightByName,
+  genericUnitMeasure,
   getAllVolumeNameStrings,
   getAllWeightNameStrings,
+  UnitQuantity,
 } from '../DataStructures/unitMeasure';
 
 export function findVolumeStringBefore(
@@ -64,25 +66,21 @@ function findUnitQuantityBefore(line, startCharIndex) {
 
 export function findUnitMeasureString(line) {
   let unitStringStartIndex = -1;
-  let volumeInCups = null;
-  let weightInGrams = null;
   let unitQuantity = null;
   let unitStringendIndex = -1;
-  [unitStringStartIndex, volumeInCups, unitStringendIndex] =
+  [unitStringStartIndex, unitQuantity, unitStringendIndex] =
     findVolumeString(line);
 
-  if (isNaN(volumeInCups)) {
-    [unitStringStartIndex, weightInGrams, unitStringendIndex] =
+  if (!unitQuantity) {
+    [unitStringStartIndex, unitQuantity, unitStringendIndex] =
       findWeightString(line);
   }
-  if (isNaN(volumeInCups) && isNaN(weightInGrams)) {
+  if (!unitQuantity) {
     [unitStringStartIndex, unitQuantity, unitStringendIndex] =
       findUnitQuantityString(line);
   }
   return [
     unitStringStartIndex,
-    volumeInCups,
-    weightInGrams,
     unitQuantity,
     unitStringendIndex,
   ];
@@ -95,7 +93,8 @@ function findUnitQuantityString(line) {
       const quantity = parseFloat(word);
       const numberStartIndex = line.indexOf(word);
       const numberEndIndex = numberStartIndex + word.length;
-      return [numberStartIndex, quantity, numberEndIndex];
+      const unitQuantity = new UnitQuantity(genericUnitMeasure, quantity);
+      return [numberStartIndex, unitQuantity, numberEndIndex];
     }
   }
   return [-1, null, -1];
@@ -108,9 +107,8 @@ export function findWeightString(line) {
         findWeightByName,
         getAllWeightNameStrings,
     );
-  const weight = unitType;
-  const weightInGrams = unitAmount * weight.ratioToGram;
-  return [unitStringStartIndex, weightInGrams, unitStringEndIndex];
+  const unitQuantity = unitType ? new UnitQuantity(unitType, unitAmount) : null;
+  return [unitStringStartIndex, unitQuantity, unitStringEndIndex];
 }
 
 export function findVolumeString(line) {
@@ -120,9 +118,8 @@ export function findVolumeString(line) {
         findVolumeByName,
         getAllVolumeNameStrings,
     );
-  const volume = unitType;
-  const volumeInCups = unitAmount * volume.ratioToCup;
-  return [unitStringStartIndex, volumeInCups, unitStringEndIndex];
+  const unitQuantity = unitType ? new UnitQuantity(unitType, unitAmount) : null;
+  return [unitStringStartIndex, unitQuantity, unitStringEndIndex];
 }
 
 export function findGenericUnitMeasureString(
@@ -143,7 +140,7 @@ export function findGenericUnitMeasureString(
     }
   }
   if (unitType == null) {
-    return [-1, null, -1];
+    return [-1, -1, null, -1];
   }
   const unitStringEndIndex = unitNamePos + unitTypeString.length;
 

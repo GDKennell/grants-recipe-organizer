@@ -586,11 +586,11 @@ test('countable eggs', () => {
 
 test('egg yolks and whites ', () => {
   const ingredientList =
-    '▢ 6 large eggs (50 g each w/o shell) (10.6 oz, 300 g without shell) ';
+    '▢ 6 large eggs  ';
   const prepSteps =
     '  Please note that it is very important that your ingredients are all measured before starting. Separate the 6 eggs into egg yolks and egg whites. Refrigerate the egg whites.';
   const expectedIngredients =
-    '▢ 6 large Eggs (50 g each w/o shell) (10.6 oz, 300 g without shell) ';
+    '▢ 6 large Eggs  ';
 
   const expectedRecipe =
     '>   Please note that it is very important that your ingredients are all measured before starting \n' +

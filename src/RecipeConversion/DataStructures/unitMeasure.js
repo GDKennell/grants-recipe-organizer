@@ -1,5 +1,14 @@
 import {stringContainsWord} from '../utilities/stringHelpers';
 
+
+export class UnitQuantity {
+  constructor(unitMeasure, quantity) {
+    this.unitMeasure = unitMeasure;
+    this.quantity = quantity;
+  }
+}
+
+
 export class UnitMeasure {
   /**
    * @param {string[]} names
@@ -12,19 +21,26 @@ export class UnitMeasure {
     this.ratioToGram = ratioToGram;
   }
 
-  isVolumeMeasure() {
+  get isVolumeMeasure() {
     return this.ratioToCup != null;
   }
 
-  isWeightMeasure() {
+  get isWeightMeasure() {
     return this.ratioToGram != null;
   }
 
-  isUnitMeasure() {
-    return !this.isVolumeMeasure() && !this.isWeightMeasure();
+  get isUnitMeasure() {
+    return !this.isVolumeMeasure && !this.isWeightMeasure;
   }
 }
 
+export const genericUnitMeasure = new UnitMeasure(/* names */ null,
+/* ratioToCup*/ null,
+    /* ratioToGram*/ null);
+
+/** ***********************
+ * Volume Measures
+ *************************/
 const cupMeasure = new UnitMeasure(['cup'], 1.0, null);
 const teaspoonMeasure = new UnitMeasure(['tsp', 'teaspoon'], 0.0208333, null);
 const tablespoonMeasure = new UnitMeasure(
@@ -38,6 +54,38 @@ const fluidOunceMeasure = new UnitMeasure(
     0.125,
     null,
 );
+
+const allVolumeMeasurements = [
+  cupMeasure,
+  teaspoonMeasure,
+  tablespoonMeasure,
+  pintMeasure,
+  fluidOunceMeasure,
+];
+
+let allVolumeNameStrings = allVolumeMeasurements.flatMap((m) => m.names);
+allVolumeNameStrings = allVolumeNameStrings.flatMap((str) => [str, str + 's']);
+
+const nameToVolume = {};
+for (const volume of allVolumeMeasurements) {
+  for (const name of volume.names) {
+    nameToVolume[name] = volume;
+    nameToVolume[name + 's'] = volume;
+  }
+}
+
+
+export function findVolumeByName(name) {
+  return nameToVolume[name.toLocaleLowerCase()];
+}
+
+export function getAllVolumeNameStrings() {
+  return allVolumeNameStrings;
+}
+
+/** ***********************
+ * Weight Measures
+ *************************/
 
 const gramMeasure = new UnitMeasure(['g', 'gram'], null, 1.0);
 const poundMeasure = new UnitMeasure(['lb', 'pound'], null, 453.5924);
@@ -55,37 +103,12 @@ const allUnitMeasurements = [
   ounceMeasure,
 ];
 
-const allVolumeMeasurements = [
-  cupMeasure,
-  teaspoonMeasure,
-  tablespoonMeasure,
-  pintMeasure,
-  fluidOunceMeasure,
-];
-
-let allUnitMeasureNameStrings = allUnitMeasurements.flatMap((m) => m.names);
-allUnitMeasureNameStrings = allUnitMeasureNameStrings.flatMap((str) => [
-  str,
-  str + 's',
-]);
-
 const allWeightMeasurements = [
   gramMeasure,
   poundMeasure,
   kiloMeasure,
   ounceMeasure,
 ];
-
-let allVolumeNameStrings = allVolumeMeasurements.flatMap((m) => m.names);
-allVolumeNameStrings = allVolumeNameStrings.flatMap((str) => [str, str + 's']);
-
-const nameToVolume = {};
-for (const volume of allVolumeMeasurements) {
-  for (const name of volume.names) {
-    nameToVolume[name] = volume;
-    nameToVolume[name + 's'] = volume;
-  }
-}
 
 let allWeightNameStrings = allWeightMeasurements.flatMap((m) => m.names);
 allWeightNameStrings = allWeightNameStrings.flatMap((str) => [str, str + 's']);
@@ -97,6 +120,27 @@ for (const weight of allWeightMeasurements) {
     nameToWeight[name + 's'] = weight;
   }
 }
+
+
+export function findWeightByName(name) {
+  return nameToWeight[name.toLocaleLowerCase()];
+}
+
+export function getAllWeightNameStrings() {
+  return allWeightNameStrings;
+}
+
+/** ***********************
+ * Generic Unit Measures
+ *************************/
+
+
+let allUnitMeasureNameStrings = allUnitMeasurements.flatMap((m) => m.names);
+allUnitMeasureNameStrings = allUnitMeasureNameStrings.flatMap((str) => [
+  str,
+  str + 's',
+]);
+
 
 export function containsUnitMeasurement(line) {
   const lowerLine = line.toLocaleLowerCase();
@@ -114,18 +158,3 @@ export function containsUnitMeasurement(line) {
   return false;
 }
 
-export function findVolumeByName(name) {
-  return nameToVolume[name.toLocaleLowerCase()];
-}
-
-export function getAllVolumeNameStrings() {
-  return allVolumeNameStrings;
-}
-
-export function findWeightByName(name) {
-  return nameToWeight[name.toLocaleLowerCase()];
-}
-
-export function getAllWeightNameStrings() {
-  return allWeightNameStrings;
-}

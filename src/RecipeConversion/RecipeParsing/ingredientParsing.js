@@ -51,8 +51,6 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
 
   const [
     unitStringStartIndex,
-    volumeInCups,
-    weightInGrams,
     unitQuantity,
     unitStringEndIndex,
   ] = findUnitMeasureString(newLine);
@@ -86,8 +84,6 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
   const suffix = newLine.substring(unitStringEndIndex);
   const finalIngredient = new MeasuredIngredient(
       ingredient,
-      volumeInCups,
-      weightInGrams,
       unitQuantity,
       oldUnitMeasurementString,
       ingredientName,
