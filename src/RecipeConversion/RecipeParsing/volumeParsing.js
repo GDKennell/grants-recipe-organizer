@@ -1,6 +1,5 @@
 import {
   stringContainsWord,
-  stringContains,
   wordBefore,
   isValidNumberString,
 } from '../utilities/stringHelpers';

@@ -136,7 +136,7 @@ function findPreparationAction(lineIn) {
   return foundWord;
 }
 
- function specialCaseSkipIngredientWord(word, lineIn) {
+function specialCaseSkipIngredientWord(word, lineIn) {
   const words = lineIn
       .toLocaleLowerCase()
       .split(' ');
