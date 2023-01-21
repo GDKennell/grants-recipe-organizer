@@ -694,27 +694,27 @@ test('countable unit measures', () => {
   '6 cloves Garlic' + '\n' +
   '1 package Spaghetti' + '\n' +
   '1 stick Butter' + '\n' +
-  '1 package shredded Cheddar Cheese';
+  '1 package shredded Cheddar cheese';
   const expectedRecipe =
   '=============' + '\n' +
   '====Recipe=====' + '\n' +
   '=============' + '\n' +
   '> Prep' + '\n' +
-  '>  - shred 1 80oz package Cheddar Cheese' + '\n' +
+  '>  - shred 1 package cheddar cheese' + '\n' +
   '' + '\n' +
   '> In a big ol pot ' + '\n' +
   '>  - -  add the ' + '\n' +
   '>  - 1 can beans' + '\n' +
-  '>  - 2 cans Green Chiles' + '\n' +
-  '>  - 1 package Spaghetti' + '\n' +
+  '>  - 2 cans green chiles' + '\n' +
+  '>  - 1 package spaghetti' + '\n' +
   '  ' + '\n' +
   '>  In a second pot ' + '\n' +
   '>  - -  melt the ' + '\n' +
-  '>  - 1 stick Butter' + '\n' +
-  '>  - 1 package Cheddar Cheese' + '\n' +
+  '>  - 1 stick butter' + '\n' +
+  '>  - 1 package cheddar cheese' + '\n' +
   ' ' + '\n' +
   '>  - -  and throw in the ' + '\n' +
-  '>  - 6 cloves Garlic' + '\n' +
+  '>  - 6 cloves garlic' + '\n' +
   '>  cause why not';
 
   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
