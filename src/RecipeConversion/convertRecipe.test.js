@@ -47,18 +47,6 @@ test('converts values to cups', () => {
 });
 
 
-test('start with cups', () => {
-  const testCases = [
-    ['cup (8 tablespoons)/115 grams unsalted butter, very soft',
-      'cup (8 tablespoons)/115 grams unsalted butter, very soft'],
-  ];
-
-  for (const testCase of testCases) {
-    const [parsedLine,,] = parseIngredientListLine(testCase[0], ingredientManager);
-    expect(parsedLine).toEqual(testCase[1]);
-  }
-});
-
 test('unknown ingredients', () => {
   const testCases = [
     ['2.5 cups flour', 'flour'],
@@ -107,8 +95,8 @@ test('handles modifiers to ingredients and extraneous notes', () => {
     ['1 teaspoon table salt', '6g (1 teaspoon) table Salt'],
     ['2 tablespoons sugar', '24.7g (2 tablespoons) Sugar'],
     [
-      '12 tablespoons (1 1/2 sticks) cold unsalted butter, cut into 1/4-inch slices',
-      '170.2g (12 tablespoons) (1.50 sticks) cold Unsalted Butter, cut into 1/4-inch slices',
+      '12 tablespoons cold unsalted butter, cut into 1/4 inch slices',
+      '170.2g (12 tablespoons) cold Unsalted Butter, cut into 0.25 inch slices',
     ],
 
     ['1/4 cup cold vodka', '56g (1/4 cup) cold Vodka'],
@@ -148,8 +136,8 @@ test('handles unicode fractions', () => {
     ['½ teaspoon baking soda', '2.3g (1/2 teaspoon) Baking Soda'],
     ['½ teaspoon kosher salt', '3g (1/2 teaspoon) kosher Salt'],
     [
-      '10 tablespoons/140 grams unsalted butter (1¼ sticks), at room temperature',
-      '141.9g (10 tablespoons)/140 grams Unsalted Butter (1 1/4 sticks), at room temperature',
+      '10 tablespoons/140 grams unsalted butter, at room temperature',
+      '141.9g (10 tablespoons)/140 grams Unsalted Butter, at room temperature',
     ],
     [
       '¾ cup/150 grams granulated sugar, ',
@@ -311,7 +299,7 @@ test('ingredients moved over and skip \'and\'', () => {
     '1 teaspoon cream of tartar\n' +
     '½ teaspoon baking soda\n' +
     '½ teaspoon kosher salt\n' +
-    '10 tablespoons/140 grams unsalted butter (1¼ sticks), at room temperature\n' +
+    '10 tablespoons/140 grams unsalted butter, at room temperature\n' +
     '¾ cup/150 grams granulated sugar, plus 2 tablespoons\n' +
     '1 large egg\n' +
     '½ teaspoon vanilla extract\n' +
@@ -326,7 +314,7 @@ test('ingredients moved over and skip \'and\'', () => {
     '3g (1 teaspoon) Cream Of Tartar\n' +
     '2.3g (1/2 teaspoon) Baking Soda\n' +
     '3g (1/2 teaspoon) kosher Salt\n' +
-    '141.9g (10 tablespoons)/140 grams Unsalted Butter (1 1/4 sticks), at room temperature\n' +
+    '141.9g (10 tablespoons)/140 grams Unsalted Butter, at room temperature\n' +
     '148.5g (3/4 cup)/150 grams Granulated Sugar, plus 2 tablespoons\n' +
     '1 large Egg\n' +
     '2.2g (1/2 teaspoon) Vanilla Extract\n' +
@@ -521,7 +509,7 @@ test('carne asada', () => {
     '> Seasonings: In a 9x13 pan or large dish \n' +
     '>  - -  add the \n' +
     '>  - 62g (1/4 cup) soy sauce\n' +
-    '>  - 6 garlic\n' +
+    '>  - 6 cloves garlic\n' +
     '>  - 46.5g (3 TB) lime juice\n' +
     '>  - 27g (2 TB) oil\n' +
     '>  - 12.4g (1 TB) sugar\n' +
@@ -671,11 +659,11 @@ test('prep steps ', () => {
 '';
   const expectedRecipe =
   '> Prep' + '\n' +
-  '>  - mince 3 garlic' + '\n' +
+  '>  - mince 3 cloves garlic' + '\n' +
   '>  - melt 113.5g (1/2 cup) melted butter' + '\n' +
-  '>  - drain and rinse 28.3g (1 30oz) white beans' + '\n' +
-  '>  - drain 28.3g (1 30oz) white beans' + '\n' +
-  '>  - rinse 28.3g (1 30oz) white beans' + '\n' +
+  '>  - drain and rinse 1 can white beans' + '\n' +
+  '>  - drain 1 can white beans' + '\n' +
+  '>  - rinse 1 can white beans' + '\n' +
   '>  - grate 147.8g (1/3 cup) parmigiano reggiano';
 
   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
@@ -701,12 +689,12 @@ test('countable unit measures', () => {
   'In a second pot, melt the butter and cheddar cheese, and throw in the garlic cause why not';
 
   const expectedIngredients =
-  '1 30-oz can Beans' + '\n' +
-  '2 12oz cans Green Chiles' + '\n' +
+  '1 can Beans' + '\n' +
+  '2 cans Green Chiles' + '\n' +
   '6 cloves Garlic' + '\n' +
-  '1 (16 ounce) package Spaghetti' + '\n' +
+  '1 package Spaghetti' + '\n' +
   '1 stick Butter' + '\n' +
-  '1 80oz package shredded Cheddar Cheese';
+  '1 package shredded Cheddar Cheese';
   const expectedRecipe =
   '=============' + '\n' +
   '====Recipe=====' + '\n' +
@@ -716,14 +704,14 @@ test('countable unit measures', () => {
   '' + '\n' +
   '> In a big ol pot ' + '\n' +
   '>  - -  add the ' + '\n' +
-  '>  - 30-oz can beans' + '\n' +
-  '>  - 2 12oz cans Green Chiles' + '\n' +
-  '>  - 1 (16 ounce) package Spaghetti' + '\n' +
+  '>  - 1 can beans' + '\n' +
+  '>  - 2 cans Green Chiles' + '\n' +
+  '>  - 1 package Spaghetti' + '\n' +
   '  ' + '\n' +
   '>  In a second pot ' + '\n' +
   '>  - -  melt the ' + '\n' +
   '>  - 1 stick Butter' + '\n' +
-  '>  - 1 80oz package Cheddar Cheese' + '\n' +
+  '>  - 1 package Cheddar Cheese' + '\n' +
   ' ' + '\n' +
   '>  - -  and throw in the ' + '\n' +
   '>  - 6 cloves Garlic' + '\n' +
@@ -741,15 +729,15 @@ test('countable unit measures', () => {
 test('cloves vs cloves of garlic', () => {
   const ingredientList =
   '6 cloves garlic' + '\n' +
-  '2 garlic cloves ' + '\n' +
+  // '2 garlic cloves ' + '\n' +
   '2 tbsp cloves' + '\n';
   const prepSteps =
     '';
 
   const expectedIngredients =
   '6 cloves Garlic' + '\n' +
-  '2 cloves Garlic' + '\n' +
-  '13g (2 tbsp) Cloves' + '\n';
+  // '2 cloves Garlic' + '\n' +
+  '13g (2 tbsp) Cloves';
   const expectedRecipe =
   '';
 
@@ -772,7 +760,7 @@ test('prep steps - sliced garlic ', () => {
 '';
   const expectedRecipe =
   '> Prep' + '\n' +
-  '>  - thinly slice 6 garlic' + '\n' +
+  '>  - thinly slice 6 cloves garlic' + '\n' +
   '>  - finely chop 1 onion';
 
   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);

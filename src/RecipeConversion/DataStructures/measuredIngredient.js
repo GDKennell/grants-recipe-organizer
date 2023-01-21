@@ -33,7 +33,15 @@ export class MeasuredIngredient {
         roundDecimalNumber(weight) + 'g' + ' (' + this.originalString + ')'
       );
     }
-    return roundDecimalNumber(this.unitQuantity.quantity);
+    const amount = roundDecimalNumber(this.unitQuantity.quantity);
+    if (this.unitQuantity.unitMeasure.isCountableUnitMeasure) {
+      let unitName = this.unitQuantity.unitMeasure.names[0];
+      if (unitName[unitName.length - 1] != 's' && amount != 1) {
+        unitName += 's';
+      }
+      return `${amount} ${unitName}`;
+    }
+    return amount;
   }
   prepString() {
     if (!this.preparationAction) {

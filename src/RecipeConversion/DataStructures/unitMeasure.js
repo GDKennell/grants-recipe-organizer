@@ -28,6 +28,9 @@ export class UnitMeasure {
   get isWeightMeasure() {
     return this.ratioToGram != null;
   }
+  get isCountableUnitMeasure() {
+    return !this.isVolumeMeasure && !this.isWeightMeasure && this.names != null;
+  }
 
   get isUnitMeasure() {
     return !this.isVolumeMeasure && !this.isWeightMeasure;
@@ -37,6 +40,41 @@ export class UnitMeasure {
 export const genericUnitMeasure = new UnitMeasure(/* names */ null,
 /* ratioToCup*/ null,
     /* ratioToGram*/ null);
+
+/** ***********************
+ * Countable Unit Measures
+ *************************/
+const canMeasure = new UnitMeasure(['can'], null, null);
+const cloveMeasure = new UnitMeasure(['clove'], null, null);
+const stickMeasure = new UnitMeasure(['stick'], null, null);
+const packageMeasure = new UnitMeasure(['package', 'pkg'], null, null);
+
+const allCountableUnitMeasurements = [
+  canMeasure,
+  cloveMeasure,
+  stickMeasure,
+  packageMeasure,
+];
+
+let allCountableUnitNameStrings = allCountableUnitMeasurements.flatMap((m) => m.names);
+allCountableUnitNameStrings = allCountableUnitNameStrings.flatMap((str) => [str, str + 's']);
+
+const nameToCountableUnit = {};
+for (const countableUnit of allCountableUnitMeasurements) {
+  for (const name of countableUnit.names) {
+    nameToCountableUnit[name] = countableUnit;
+    nameToCountableUnit[name + 's'] = countableUnit;
+  }
+}
+
+
+export function findCountableUnitByName(name) {
+  return nameToCountableUnit[name.toLocaleLowerCase()];
+}
+
+export function getAllCountableUnitNameStrings() {
+  return allCountableUnitNameStrings;
+}
 
 /** ***********************
  * Volume Measures
@@ -91,17 +129,6 @@ const gramMeasure = new UnitMeasure(['g', 'gram'], null, 1.0);
 const poundMeasure = new UnitMeasure(['lb', 'pound'], null, 453.5924);
 const kiloMeasure = new UnitMeasure(['kg', 'kilo', 'kilogram'], null, 1000.0);
 const ounceMeasure = new UnitMeasure(['oz', 'ounce'], null, 28.3495);
-const allUnitMeasurements = [
-  cupMeasure,
-  teaspoonMeasure,
-  tablespoonMeasure,
-  pintMeasure,
-  fluidOunceMeasure,
-  gramMeasure,
-  poundMeasure,
-  kiloMeasure,
-  ounceMeasure,
-];
 
 const allWeightMeasurements = [
   gramMeasure,
@@ -133,6 +160,11 @@ export function getAllWeightNameStrings() {
 /** ***********************
  * Generic Unit Measures
  *************************/
+const allUnitMeasurements = [
+  ...allCountableUnitMeasurements,
+  ...allVolumeMeasurements,
+  ...allWeightMeasurements,
+];
 
 
 let allUnitMeasureNameStrings = allUnitMeasurements.flatMap((m) => m.names);

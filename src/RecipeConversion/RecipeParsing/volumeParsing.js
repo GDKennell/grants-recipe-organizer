@@ -2,11 +2,14 @@ import {
   stringContainsWord,
   stringContains,
   wordBefore,
+  isValidNumberString,
 } from '../utilities/stringHelpers';
 import {
+  findCountableUnitByName,
   findVolumeByName,
   findWeightByName,
   genericUnitMeasure,
+  getAllCountableUnitNameStrings,
   getAllVolumeNameStrings,
   getAllWeightNameStrings,
   UnitQuantity,
@@ -43,42 +46,36 @@ export function findVolumeStringBefore(
 }
 
 function findUnitQuantityBefore(line, startCharIndex) {
-  const allowedNumberChars = '0123456789./ ';
-  // Step back from start of name string to find last non-number char\
-  let testIndex = startCharIndex - 1;
-  while (
-    testIndex >= 0 &&
-    stringContains(allowedNumberChars, line[testIndex])
-  ) {
-    testIndex--;
+  const searchString = line.substr(0, startCharIndex );
+  const words = searchString.split(' ').reverse();
+
+  for (const word of words) {
+    if (isValidNumberString(word)) {
+      const location = line.indexOf(word);
+      return [word, location];
+    }
   }
-  // Step forward to last actually valid char
-  if (!stringContains(allowedNumberChars, line[testIndex])) {
-    testIndex++;
-  }
-  // Step forward past any whitespace
-  while (line[testIndex] == ' ') {
-    testIndex++;
-  }
-  const numberString = line.substring(testIndex, startCharIndex);
-  return [numberString, testIndex];
+  return ['', -1];
 }
 
 export function findUnitMeasureString(line) {
   let unitStringStartIndex = -1;
   let unitQuantity = null;
   let unitStringendIndex = -1;
-  [unitStringStartIndex, unitQuantity, unitStringendIndex] =
-    findVolumeString(line);
 
-  if (!unitQuantity) {
+  const unitTypeFinders = [
+    findCountableUnitString,
+    findVolumeString,
+    findWeightString,
+    findUnitQuantityString];
+  for (const unitTypeFinder of unitTypeFinders) {
     [unitStringStartIndex, unitQuantity, unitStringendIndex] =
-      findWeightString(line);
+      unitTypeFinder(line);
+    if (unitQuantity) {
+      break;
+    }
   }
-  if (!unitQuantity) {
-    [unitStringStartIndex, unitQuantity, unitStringendIndex] =
-      findUnitQuantityString(line);
-  }
+
   return [
     unitStringStartIndex,
     unitQuantity,
@@ -122,6 +119,28 @@ export function findVolumeString(line) {
   return [unitStringStartIndex, unitQuantity, unitStringEndIndex];
 }
 
+export function findCountableUnitString(line) {
+  const [unitStringStartIndex, unitAmount, unitType, unitStringEndIndex] =
+  findGenericUnitMeasureString(
+      line,
+      findCountableUnitByName,
+      getAllCountableUnitNameStrings,
+  );
+  const unitQuantity = unitType ? new UnitQuantity(unitType, unitAmount) : null;
+  return [unitStringStartIndex, unitQuantity, unitStringEndIndex];
+}
+
+function specialCaseSkipUnitWord(word, lineIn) {
+  const words = lineIn
+      .toLocaleLowerCase()
+      .split(' ');
+
+  if ((word == 'clove' || word == 'cloves') && !words.includes('garlic')) {
+    return true;
+  }
+  return false;
+}
+
 export function findGenericUnitMeasureString(
     line,
     findByNameFn,
@@ -132,7 +151,7 @@ export function findGenericUnitMeasureString(
   let unitTypeString = '';
   let unitType = null;
   for (const str of getAllStringsFn()) {
-    if (stringContainsWord(lowerLine, str)) {
+    if (stringContainsWord(lowerLine, str) && !specialCaseSkipUnitWord(str, line)) {
       unitNamePos = lowerLine.indexOf(str);
       unitType = findByNameFn(str);
       unitTypeString = str;
