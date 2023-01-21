@@ -3,6 +3,7 @@ import {useId} from 'react';
 import {globalRecipesCollection, usersCollection, privateRecipesCollection, publicUserId} from '../DatabaseConstants';
 import {replaceUserRecipesList, replaceGlobalRecipesList, recipeChanged} from '../features/ingredientStore/ingredientStoreSlice';
 import {recipeFromDoc, recipeDocIdKey, recipeNameKey, prepRecipeForDb, recipeIsPublicKey} from '../RecipeConversion/DataStructures/Recipe';
+import {assert} from '../RecipeConversion/utilities/assertion';
 
 let userIdFetched = null;
 let globalFetched = false;
@@ -83,6 +84,8 @@ async function recipeDoc(recipeId, db, user) {
 }
 
 async function updateExistingRecipe(recipeId, recipeIn, db, user, dispatch) {
+  assert(typeof(recipeId) == 'string');
+
   if (!confirm(`Are you sure you want to overwrite saved recipe "${recipeIn[recipeNameKey]}"?`)) {
     return;
   }
@@ -136,7 +139,7 @@ export async function saveOrUpdateRecipe(recipeIn, db, user, dispatch) {
     if (recipeId == null) {
       await addNewRecipe(newRecipe, recipeCollection, db, user);
     } else {
-      await updateExistingRecipe(newRecipe, newRecipe, db, user, dispatch);
+      await updateExistingRecipe(recipeId, newRecipe, db, user, dispatch);
     }
   } catch (e) {
     console.error('Error adding document: ', e);
