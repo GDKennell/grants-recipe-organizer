@@ -105,7 +105,7 @@ function postProcessIngredientLine(line) {
 
 function findPreparationAction(lineIn) {
   const line = lineIn.toLocaleLowerCase();
-  const modifiers = ['thinly', 'finely'];
+  const modifiers = ['thinly', 'finely', 'coarsely'];
   const resultToSteps = {'melted': 'melt',
     'chopped': 'chop',
     'sliced': 'slice',

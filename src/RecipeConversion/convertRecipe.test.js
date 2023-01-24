@@ -652,6 +652,7 @@ test('prep steps ', () => {
   '1 30oz can white beans, drained and rinsed' + '\n' +
   '1 30oz can white beans, drained' + '\n' +
   '1 30oz can white beans, rinsed' + '\n' +
+  '4 cups pecans, coarsely chopped' + '\n' +
   '1/3 cup grated Parmigiano Reggiano, plus more for serving';
   const prepSteps =
     '';
@@ -664,6 +665,7 @@ test('prep steps ', () => {
   '>  - drain and rinse 1 can white beans' + '\n' +
   '>  - drain 1 can white beans' + '\n' +
   '>  - rinse 1 can white beans' + '\n' +
+  '>  - coarsely chop 448g (4 cups) pecans' + '\n' +
   '>  - grate 147.8g (1/3 cup) parmigiano reggiano';
 
   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
