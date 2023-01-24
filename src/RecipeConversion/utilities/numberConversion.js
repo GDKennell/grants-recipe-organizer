@@ -46,7 +46,7 @@ export function wordsToNumbers(str) {
 
 function unicodeFractionsToRegularFractions(strIn) {
   let str = strIn;
-  const unicodes = ['¼', '½', '⅐', '⅔', '⅖', '¾', '⅙', '⅞', '⅒', '⅑'];
+  const unicodes = ['¼', '⅓', '½', '⅐', '⅔', '⅖', '¾', '⅙', '⅞', '⅒', '⅑'];
   let hasUnicode = false;
   for (const char of unicodes) {
     if (strIn.indexOf(char) != -1) {

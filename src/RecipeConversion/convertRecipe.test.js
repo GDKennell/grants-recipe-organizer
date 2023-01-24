@@ -440,7 +440,7 @@ test('skip the next and thens', () => {
     '  \n' +
     '  \n' +
     '>  start wrapping the twine around the roll back toward the starting point \n' +
-    '>   Space each wrap ⅓ inch (1 cm) apart \n' +
+    '>   Space each wrap  0.33 inch (1 cm) apart \n' +
     '>   Make sure you wrap the roll as tightly as possible';
   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
   const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
@@ -667,6 +667,32 @@ test('prep steps ', () => {
   '>  - rinse 1 can white beans' + '\n' +
   '>  - coarsely chop 448g (4 cups) pecans' + '\n' +
   '>  - grate 147.8g (1/3 cup) parmigiano reggiano';
+
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
+  // expect(result).toEqual(expectedRecipe);
+
+  expectSubstring(result, expectedIngredients);
+  expectSubstring(result, expectedRecipe);
+});
+
+test('⅓ cup (67 grams) granulated sugar', () => {
+  const ingredientList =
+  '⅓ cup granulated sugar'+ '\n' +
+  '1 cup flour';
+
+  const prepSteps =
+  'In a bowl add sugar and flour';
+
+  const expectedIngredients =
+  '65.3g (1/3 cup) Granulated Sugar' + '\n' +
+  '125g (1 cup) Flour';
+
+  const expectedRecipe =
+  '> In a bowl add ' + '\n' +
+  '>  - 65.3g (1/3 cup) sugar' + '\n' +
+  '>  - 125g (1 cup) flour';
+
 
   const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
   const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
