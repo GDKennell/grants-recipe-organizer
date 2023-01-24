@@ -40,7 +40,8 @@ function RecipeConversion() {
     recipeChangedFn(linkedRecipe[recipeNameKey],
         linkedRecipe[ingredientTextKey],
         linkedRecipe[recipeTextKey],
-        linkedRecipe[recipeManualEditTextKey]);
+        linkedRecipe[recipeManualEditTextKey],
+        /* brandNew= */ true);
   }, [linkedRecipe]);
 
   const {firebaseDb, firebaseUser} = useFirebase();
@@ -77,11 +78,29 @@ function RecipeConversion() {
       return;
     }
     ingMgrKey = ingredientManager.key;
-    recipeChangedFn(recipeTitle, ingredientListText, recipeText, manualEditedOutputText);
+    recipeChangedFn(recipeTitle,
+        ingredientListText,
+        recipeText,
+        manualEditedOutputText,
+        /* brandNew= */ false);
   }, [ingredientManager]);
 
   const [outputNumRows, setOutputNumRows] = useState(minRows);
-  const recipeChangedFn = (title, ingredientsText, recipeText, recipeManualEditText) => {
+
+  const autoTextChangedFn = (newAutoText) => {
+    setAutoConvertedOutputText((oldConvertedText) => {
+      if (oldConvertedText != newAutoText) {
+        if (!manualEditing || confirm('Do you want to overwrite your manual edits?')) {
+          setManualEditedOutputText(newAutoText);
+          setManualEditing(false);
+          console.log(`Back to auto`);
+          setOutputType((oldType) => (oldType == outputTypeManualEdit ? outputTypeAutomatic : oldType));
+        }
+      }
+      return newAutoText;
+    });
+  };
+  const recipeChangedFn = (title, ingredientsText, recipeText, recipeManualEditText, brandNew) => {
     setRecipeTitle(title);
     setIngredientListText(ingredientsText);
     setRecipeText(recipeText);
@@ -91,16 +110,13 @@ function RecipeConversion() {
 
     const {ingredientsString, recipeString} = convertRecipe(ingredientsText, recipeText, ingredientManager);
     const newValue = combineIngredientsAndRecipe(ingredientsString, recipeString);
-    setAutoConvertedOutputText((oldConvertedText) => {
-      if (oldConvertedText != newValue) {
-        if (!manualEditing || confirm('Do you want to overwrite your manual edits?')) {
-          setManualEditedOutputText(newValue);
-          setManualEditing(false);
-          setOutputType((oldType) => (oldType == outputTypeManualEdit ? outputTypeAutomatic : oldType));
-        }
-      }
-      return newValue;
-    });
+    if (brandNew) {
+      const manualChanged = (newValue != recipeManualEditText);
+      setManualEditing(true);
+      setOutputType(manualChanged ? outputTypeBoth : outputTypeAutomatic);
+    } else {
+      autoTextChangedFn(newValue);
+    }
     setOutputNumRows(Math.max(minRows, newValue.split('\n').length));
     if (recipeManualEditText) {
       setManualEditedOutputText(recipeManualEditText);
@@ -109,7 +125,11 @@ function RecipeConversion() {
 
   const ingredientsChangedFn = (newIngredientsText) => {
     setIngredientListText(newIngredientsText);
-    recipeChangedFn(recipeTitle, newIngredientsText, recipeText);
+    recipeChangedFn(recipeTitle,
+        newIngredientsText,
+        recipeText,
+        /* recipeManualEditText= */ null,
+        /* brandNew = */ false);
   };
 
   const recipeStepsChangedFn = (newRecipeSteps) => {
