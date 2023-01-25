@@ -16,10 +16,31 @@ import {
   strIndexOfWord,
   capitalizeWordsInString,
   wordBefore,
+  isValidNumberString,
+  splitIntoWords,
 } from '../utilities/stringHelpers';
 
+function moveLoneNumbersToNextLine(ingredientsListString) {
+  const lines = ingredientsListString.split('\n');
+  let finalString = '';
+  for (const line of lines) {
+    finalString += line;
+    const words = splitIntoWords(line);
+    if (words.length == 1 && isValidNumberString(words[0])) {
+      finalString += ' ';
+    } else {
+      finalString += '\n';
+    }
+  }
+  return finalString;
+}
+
 export function parseIngredientList(ingredientListStringIn, ingredientManager) {
-  const lines = ingredientListStringIn.split('\n');
+  let linesString = wordsToNumbers(ingredientListStringIn);
+  linesString = convertFractionsToDecimals(linesString);
+  linesString = moveLoneNumbersToNextLine(linesString);
+
+  const lines = linesString.split('\n');
   const newLines = [];
   const measuredIngredients = [];
   for (const line of lines) {

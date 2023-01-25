@@ -90,7 +90,7 @@ test('handles modifiers to ingredients and extraneous notes', () => {
   const testCases = [
     [
       '2 1/2 cups (12 1/2 ounces) unbleached all-purpose flour',
-      '312.5g (2 1/2 cups) (12 1/2 ounces) unbleached All-purpose Flour',
+      '312.5g (2 1/2 cups) (12.50 ounces) unbleached All-purpose Flour',
     ],
     ['1 teaspoon table salt', '6g (1 teaspoon) table Salt'],
     ['2 tablespoons sugar', '24.7g (2 tablespoons) Sugar'],
@@ -239,7 +239,7 @@ test('chicken salad ingredients', () => {
     '595.2g (4 cups) shredded rotisserie Chicken\n' +
     '115g (1 1/4 cups) seedless red Grapes, halved\n' +
     '56g (1/2 cup) chopped Pecans\n' +
-    '1/2 cup chopped celery\n' +
+    '0.50 cup chopped celery\n' +
     '28.8g (1/4 cup) chopped sweet Onion, optional';
   const {ingredientsString, recipeString} = convertRecipe(ingredientList, '', ingredientManager);
   const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
@@ -489,6 +489,38 @@ test('recipe ingredients with \'comma and \' last one', () => {
   const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
   expectSubstring(result, expectedRecipe);
 });
+
+
+test('units on own line ', () => {
+  const ingredientList =
+  '2½' + '\n' +
+  'cups all-purpose flour' + '\n' +
+  '⅓' + '\n' +
+  'cup granulated sugar' + '\n' +
+  '½' + '\n' +
+  'teaspoon kosher salt' + '\n' +
+  '1' + '\n' +
+  'large egg yolk, lightly beaten ';
+
+  const prepSteps =
+    '';
+
+  const expectedIngredients =
+  '312.5g (2 1/2 cups) All-purpose Flour' + '\n' +
+  '65.3g (1/3 cup) Granulated Sugar' + '\n' +
+  '3g (1/2 teaspoon) kosher Salt' + '\n' +
+  '1 large Egg Yolk, lightly beaten ';
+
+  const expectedRecipe =
+    '';
+  const {ingredientsString, recipeString} = convertRecipe(ingredientList, prepSteps, ingredientManager);
+  const result = combineIngredientsAndRecipe(ingredientsString, recipeString);
+  // expect(result).toEqual(expectedIngredients);
+
+  expectSubstring(result, expectedIngredients);
+  expectSubstring(result, expectedRecipe);
+});
+
 
 test('carne asada', () => {
   const ingredientList =

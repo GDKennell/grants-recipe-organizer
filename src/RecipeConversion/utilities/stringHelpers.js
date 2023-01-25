@@ -121,6 +121,11 @@ function capitalizeWords(str) {
   return str.split(' ').map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 }
 
+export function splitIntoWords(string) {
+  const words = string.split(' ');
+  return words.filter((word) => word.length > 0);
+}
+
 export function capitalizeWordsInString(string, words) {
   const capitalized = capitalizeWords(words);
   return string.replace(words, capitalized);

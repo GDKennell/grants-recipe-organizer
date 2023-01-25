@@ -67,7 +67,7 @@ function unicodeFractionsToRegularFractions(strIn) {
     unicodeToString[char] = ' ' + num + '/' + denom;
   });
   for (const char of unicodes) {
-    str = str.replace(char, unicodeToString[char]);
+    str = str.replaceAll(char, unicodeToString[char]);
   }
   return str;
 }
@@ -137,10 +137,17 @@ export function convertDecimalsToFractions(strIn) {
   }
   return strIn;
 }
-
 export function convertFractionsToDecimals(strIn) {
-  const str = unicodeFractionsToRegularFractions(strIn);
-  const slashIndex = str.indexOf('/');
+  let str = unicodeFractionsToRegularFractions(strIn);
+  let slashIndex = str.indexOf('/');
+  while (slashIndex != -1) {
+    str = fractionsToDecimalsHelper(str, slashIndex);
+    slashIndex = str.indexOf('/', slashIndex+1);
+  }
+  return str;
+}
+
+function fractionsToDecimalsHelper(str, slashIndex) {
   if (
     slashIndex == -1 ||
     slashIndex == 0 ||
