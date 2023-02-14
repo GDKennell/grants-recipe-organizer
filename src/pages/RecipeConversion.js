@@ -151,6 +151,13 @@ function RecipeConversion() {
     saveOrUpdateRecipe(newRecipe, firebaseDb, firebaseUser, dispatch);
   };
 
+  const clearPressed = () => {
+    if (confirm('Are you sure you want to clear all contents?')) {
+      setIngredientListText('');
+      setRecipeText('');
+    }
+  };
+
 
   return (
     <div className="App">
@@ -176,6 +183,8 @@ function RecipeConversion() {
         <div className='horz-collection'>
           <button className='btn btn-primary'
             onClick={savePressed} disabled={!saveEnabled}>Save Recipe</button>
+          <button className='btn btn-primary'
+            onClick={clearPressed}>Clear</button>
         </div>
         <div className='horz-collection'>
           <button className='btn btn-primary'
