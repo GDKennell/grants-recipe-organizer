@@ -26,14 +26,14 @@ export class MeasuredIngredient {
     }
     return null;
   }
-  description() {
+  description(recipeScale = 1.0) {
     const weight = this.getWeightInGrams();
     if (weight != null) {
       return (
-        roundDecimalNumber(weight) + 'g' + ' (' + this.originalString + ')'
+        roundDecimalNumber(weight * recipeScale) + 'g' + ' (' + this.originalString + ')'
       );
     }
-    const amount = roundDecimalNumber(this.unitQuantity.quantity);
+    const amount = roundDecimalNumber(this.unitQuantity.quantity * recipeScale);
     if (this.unitQuantity.unitMeasure.isCountableUnitMeasure) {
       let unitName = this.unitQuantity.unitMeasure.names[0];
       if (unitName[unitName.length - 1] != 's' && amount != 1) {
@@ -43,10 +43,10 @@ export class MeasuredIngredient {
     }
     return amount;
   }
-  prepString() {
+  prepString(recipeScale = 1.0) {
     if (!this.preparationAction) {
       return null;
     }
-    return this.preparationAction + ' ' + this.description() + ' ' + this.ingredientName;
+    return this.preparationAction + ' ' + this.description(recipeScale) + ' ' + this.ingredientName;
   }
 }

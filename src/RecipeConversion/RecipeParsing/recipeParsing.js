@@ -13,7 +13,7 @@ import {
 import {convertFractionsToDecimals} from '../utilities/numberConversion';
 
 
-export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManager) {
+export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManager, recipeScale = 1.0) {
   let recipe = recipeStringIn;
   recipe = recipe.replaceAll('.', '\n');
   recipe = recipe.replaceAll(',', ' ,');
@@ -23,7 +23,7 @@ export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManag
   // Todo: pre-process removing all double spaces (should only be single spaces)
 
   recipe = putIngredientsOnOwnLine(recipe, ingredientManager);
-  recipe = addAndConvertIngredientUnits(recipe, measuredIngredients, ingredientManager);
+  recipe = addAndConvertIngredientUnits(recipe, measuredIngredients, ingredientManager, recipeScale);
   recipe = prepStepsForIngredients(measuredIngredients) + recipe;
   recipe = removeSimpleLines(recipe);
   recipe = removeRedundantWords(recipe);
@@ -33,7 +33,7 @@ export function parseRecipe(recipeStringIn, measuredIngredients, ingredientManag
 }
 
 
-function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingredientManager) {
+function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingredientManager, recipeScale = 1.0) {
   if (measuredIngredients == undefined) {
     return recipeStringIn;
   }
@@ -61,7 +61,7 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingre
     const startIndex = line.indexOf(ingredientName);
     newLine = strInsert(
         newLine,
-        measuredIngredient.description() + ' ',
+        measuredIngredient.description(recipeScale) + ' ',
         startIndex,
     );
     finalString += newLine + '\n';
@@ -69,14 +69,14 @@ function addAndConvertIngredientUnits(recipeStringIn, measuredIngredients, ingre
   return finalString;
 }
 
-function prepStepsForIngredients(measuredIngredients) {
+function prepStepsForIngredients(measuredIngredients, recipeScale = 1.0) {
   if (!measuredIngredients) {
     return '';
   }
   let result = '';
   const header = 'Prep';
   for (const measuredIngredient of measuredIngredients) {
-    const prepStep = measuredIngredient.prepString();
+    const prepStep = measuredIngredient.prepString(recipeScale);
     if (prepStep) {
       result += ` - ${prepStep}\n`;
     }

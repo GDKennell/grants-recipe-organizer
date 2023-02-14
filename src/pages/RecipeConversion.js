@@ -12,6 +12,7 @@ import useFirebase from '../hooks/useFirebase';
 import {ingredientTextKey, makeRecipe, recipeManualEditTextKey, recipeNameKey, recipeTextKey} from '../RecipeConversion/DataStructures/Recipe';
 import {useLocation} from 'react-router-dom';
 import {saveOrUpdateRecipe} from '../Database/DatabaseRecipes';
+import ScaleInput from '../Components/ScaleInput';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -57,6 +58,8 @@ function RecipeConversion() {
   const [ingredientListText, setIngredientListText] = useState(JSON.parse(localStorage.getItem(ingredientKey)) || '');
   const [recipeText, setRecipeText] = useState(JSON.parse(localStorage.getItem(recipeKey)) || '');
   const [recipeTitle, setRecipeTitle] = useState(JSON.parse(localStorage.getItem(titleKey)) || '');
+  const [recipeScale, setRecipeScale] = useState(1.0);
+
 
   // useEffect(() => {
   //   console.log(`useeffect anth changed -> recipeChangedFn`);
@@ -108,7 +111,10 @@ function RecipeConversion() {
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientsText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
 
-    const {ingredientsString, recipeString} = convertRecipe(ingredientsText, recipeText, ingredientManager);
+    const {ingredientsString, recipeString} = convertRecipe(ingredientsText,
+        recipeText,
+        ingredientManager,
+        recipeScale);
     const newValue = combineIngredientsAndRecipe(ingredientsString, recipeString);
     if (brandNew) {
       const manualChanged = (newValue != recipeManualEditText);
@@ -158,6 +164,9 @@ function RecipeConversion() {
     }
   };
 
+  const scaleChanged = (scale) => {
+    setRecipeScale(scale);
+  };
 
   return (
     <div className="App">
@@ -180,6 +189,7 @@ function RecipeConversion() {
           initRecipeText={recipeText}
           initTitleText={recipeTitle}/>
         <h3 className="section-header"> Converted Recipe:</h3>
+        <ScaleInput onScaleChange={scaleChanged} />
         <div className='horz-collection'>
           <button className='btn btn-primary'
             onClick={savePressed} disabled={!saveEnabled}>Save Recipe</button>

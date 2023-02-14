@@ -35,7 +35,7 @@ function moveLoneNumbersToNextLine(ingredientsListString) {
   return finalString;
 }
 
-export function parseIngredientList(ingredientListStringIn, ingredientManager) {
+export function parseIngredientList(ingredientListStringIn, ingredientManager, recipeScale = 1.0) {
   let linesString = wordsToNumbers(ingredientListStringIn);
   linesString = convertFractionsToDecimals(linesString);
   linesString = moveLoneNumbersToNextLine(linesString);
