@@ -35,7 +35,7 @@ function moveLoneNumbersToNextLine(ingredientsListString) {
   return finalString;
 }
 
-export function parseIngredientList(ingredientListStringIn, ingredientManager) {
+export function parseIngredientList(ingredientListStringIn, ingredientManager, recipeScale = 1.0) {
   let linesString = wordsToNumbers(ingredientListStringIn);
   linesString = convertFractionsToDecimals(linesString);
   linesString = moveLoneNumbersToNextLine(linesString);
@@ -44,7 +44,7 @@ export function parseIngredientList(ingredientListStringIn, ingredientManager) {
   const newLines = [];
   const measuredIngredients = [];
   for (const line of lines) {
-    const [newLine,, measuredIngredient] = parseIngredientListLine(line, ingredientManager);
+    const [newLine,, measuredIngredient] = parseIngredientListLine(line, ingredientManager, recipeScale);
     newLines.push(newLine);
     if (measuredIngredient != null) {
       measuredIngredients.push(measuredIngredient);
@@ -57,7 +57,7 @@ export function parseIngredientList(ingredientListStringIn, ingredientManager) {
 /**
  * @param {string} lineIn
  */
-export function parseIngredientListLine(lineIn, ingredientManager) {
+export function parseIngredientListLine(lineIn, ingredientManager, recipeScale = 1.0) {
   //  ------- Pre Processing ------------ //
   let newLine = wordsToNumbers(lineIn);
   newLine = convertFractionsToDecimals(newLine);
@@ -105,7 +105,7 @@ export function parseIngredientListLine(lineIn, ingredientManager) {
   const suffix = newLine.substring(unitStringEndIndex);
   const finalIngredient = new MeasuredIngredient(
       ingredient,
-      unitQuantity,
+      unitQuantity.scaledBy(recipeScale),
       oldUnitMeasurementString,
       ingredientName,
       preparationAction,

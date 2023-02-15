@@ -6,6 +6,9 @@ export class UnitQuantity {
     this.unitMeasure = unitMeasure;
     this.quantity = quantity;
   }
+  scaledBy(scaleFactor) {
+    return new UnitQuantity(this.unitMeasure, this.quantity * scaleFactor);
+  }
 }
 
 
