@@ -109,15 +109,20 @@ function decimalToFraction(decimal) {
 }
 
 export function scaleStringNumberByFactor(str, scaleFactor) {
-  const regex = /(\d+\.\d+)/; // match the first decimal number
+  console.log(`scaling string "${str}" by ${scaleFactor }`);
+  const regex = /(\d+(\.\d+)?)/; //  match the first decimal number
   const match = str.match(regex); // find the first decimal number in the string
 
   if (match) {
     const decimalNumber = parseFloat(match[0]); // extract the decimal number
     const scaledNumber = decimalNumber * scaleFactor; // scale the decimal number
     const scaledString = str.replace(regex, scaledNumber.toString()); // replace the decimal number with the scaled number
+    console.log(`\t scaled to   "${scaledString}" `);
+
     return scaledString;
   } else {
+    console.log(`\t no decimal, returning "${str}" `);
+
     return str; // if no decimal number is found, return the original string
   }
 }
