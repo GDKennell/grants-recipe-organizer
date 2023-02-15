@@ -96,7 +96,6 @@ function RecipeConversion() {
         if (!manualEditing || confirm('Do you want to overwrite your manual edits?')) {
           setManualEditedOutputText(newAutoText);
           setManualEditing(false);
-          console.log(`Back to auto`);
           setOutputType((oldType) => (oldType == outputTypeManualEdit ? outputTypeAutomatic : oldType));
         }
       }
@@ -111,6 +110,7 @@ function RecipeConversion() {
     localStorage.setItem(ingredientKey, JSON.stringify(ingredientsText));
     localStorage.setItem(recipeKey, JSON.stringify(recipeText));
 
+    console.log(`recipeChangedFn, scale: ${recipeScale}`);
     const {ingredientsString, recipeString} = convertRecipe(ingredientsText,
         recipeText,
         ingredientManager,
@@ -137,6 +137,14 @@ function RecipeConversion() {
         /* recipeManualEditText= */ null,
         /* brandNew = */ false);
   };
+
+  useEffect(() => {
+    recipeChangedFn(recipeTitle,
+        ingredientListText,
+        recipeText,
+        manualEditedOutputText,
+        /* brandNew*/ false);
+  }, [recipeScale]);
 
   const recipeStepsChangedFn = (newRecipeSteps) => {
     setRecipeText(newRecipeSteps);
@@ -165,12 +173,8 @@ function RecipeConversion() {
   };
 
   const scaleChanged = (scale) => {
+    console.log(`scaleChanged: ${scale}`);
     setRecipeScale(scale);
-    recipeChangedFn(recipeTitle,
-        ingredientListText,
-        recipeText,
-        manualEditedOutputText,
-        /* brandNew*/ false);
   };
 
   return (
