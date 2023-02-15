@@ -105,10 +105,11 @@ export function parseIngredientListLine(lineIn, ingredientManager, recipeScale =
   const suffix = newLine.substring(unitStringEndIndex);
   const finalIngredient = new MeasuredIngredient(
       ingredient,
-      unitQuantity.scaledBy(recipeScale),
+      unitQuantity,
       oldUnitMeasurementString,
       ingredientName,
       preparationAction,
+      recipeScale,
   );
   let finalString = prefix + finalIngredient.description() + suffix;
 

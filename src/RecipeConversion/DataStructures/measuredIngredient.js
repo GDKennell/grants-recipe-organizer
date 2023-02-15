@@ -1,4 +1,4 @@
-import {convertDecimalsToFractions} from '../utilities/numberConversion';
+import {convertDecimalsToFractions, scaleStringNumberByFactor} from '../utilities/numberConversion';
 import {roundDecimalNumber} from '../utilities/stringHelpers';
 
 export class MeasuredIngredient {
@@ -8,10 +8,12 @@ export class MeasuredIngredient {
       originalString,
       ingredientName,
       preparationAction,
+      recipeScale,
   ) {
     this.ingredient = ingredient;
-    this.originalString = convertDecimalsToFractions(originalString);
-    this.unitQuantity = unitQuantity;
+    this.originalString = convertDecimalsToFractions(
+        scaleStringNumberByFactor(originalString, recipeScale));
+    this.unitQuantity = unitQuantity.scaledBy(recipeScale);
     this.ingredientName = ingredientName;
     this.preparationAction = preparationAction;
   }

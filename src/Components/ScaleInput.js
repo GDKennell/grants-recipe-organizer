@@ -22,7 +22,7 @@ export default function ScaleInput({onScaleChange}) {
     <div>
       <label>
         Scale Factor:
-        <input type="text" value={scale} onChange={handleInputChange} />
+        <input className='grams-per-cup-input' type="text" value={scale} onChange={handleInputChange} />
       </label>
     </div>
   );
