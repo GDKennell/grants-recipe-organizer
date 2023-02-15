@@ -7,10 +7,13 @@ export default function ScaleInput({onScaleChange}) {
   function handleInputChange(event) {
     const input = event.target.value;
     const value = parseFloat(input);
-    const validInput = /^[0-9]*\.?[0-9]*$/.test(input) && !isNaN(value);
+    const validInput = /^[0-9]*\.?[0-9]*$/.test(input);
 
     if (validInput) {
       setScale(input);
+    }
+
+    if (!isNaN(value)) {
       onScaleChange(value);
     }
   }
