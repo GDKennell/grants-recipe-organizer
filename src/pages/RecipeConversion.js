@@ -198,7 +198,9 @@ function RecipeConversion() {
           initRecipeText={recipeText}
           initTitleText={recipeTitle}/>
         <h3 className="section-header"> Converted Recipe:</h3>
-        <ScaleInput onScaleChange={scaleChanged} />
+        <div className='horz-collection'>
+          <ScaleInput onScaleChange={scaleChanged} />
+        </div>
         <div className='horz-collection'>
           <button className='btn btn-primary'
             onClick={savePressed} disabled={!saveEnabled}>Save Recipe</button>
